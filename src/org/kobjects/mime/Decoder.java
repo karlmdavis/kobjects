@@ -18,7 +18,7 @@ public class Decoder {
     //int bufPos;
 
     // add some kind of buffering here!!!
-    private final String readLine () {
+    private final String readLine () throws IOException {
         
         StringBuffer result = new StringBuffer ();
         while (true) {
@@ -30,9 +30,62 @@ public class Decoder {
     }
 
 
-    public Decoder (InputStream is, String boundary) throws IOException {
+    /** The "main" element is returned in the hashtable with an empty key ("") */
+    
+
+    public static Hashtable getHeaderElements (String header) {
+	
+	String key = "";
+	int pos = 0;
+	Hashtable result = new Hashtable ();
+	int len = header.length ();
+
+	while (true) {
+	    // skip spaces
+
+	    while (pos < len && header.charAt (pos) <= ' ') pos++;
+	    if (pos >= len) break;
+	    
+	    if (header.charAt (pos) == '"') { 
+		pos++;
+		int cut = header.indexOf ('"', pos);
+		if (cut == -1) 
+		    throw new RuntimeException ("End quote expected in "+header);
+		
+		result.put (key, header.substring (pos, cut));
+		pos = cut+2;
+
+		if (pos >= len) break;
+		if (header.charAt (pos-1) != ';') 
+		    throw new RuntimeException ("; expected in "+header);
+	    }
+	    else {
+		int cut = header.indexOf (';', pos);
+		if (cut == -1) {
+		    result.put (key, header.substring (pos));
+		    break;
+		}
+		result.put (key, header.substring (pos, cut));
+		pos = cut+1;
+	    }
+
+	    int cut = header.indexOf ('=', pos);
+
+	    if (cut == -1) break;
+
+	    key = header.substring (pos, cut).toLowerCase().trim ();
+	    pos = cut +1;
+	}
+	return result;
+    }
+
+
+
+
+    public Decoder (InputStream is, String _bound) throws IOException {
 
         this.is = is;
+	this.boundary = "--"+_bound;
 
         StringBuffer buf = new StringBuffer ();
 
@@ -40,6 +93,10 @@ public class Decoder {
         while (true) {
             line = readLine ();
             if (line == null) throw new IOException ("Unexpected EOF");
+
+	    System.out.println ("line:  '"+line+"'");
+	    System.out.println ("bound: '"+boundary+"'");
+
             if (line.startsWith (boundary)) break;
             buf.append (line);
         }
@@ -58,6 +115,11 @@ public class Decoder {
     }
 
     
+    public Enumeration getHeaderNames () {
+	return header.keys ();
+    }
+
+
     public String getHeader (String key) {
         return (String) header.get (key.toLowerCase ());
     }
@@ -101,7 +163,7 @@ public class Decoder {
 	    StringBuffer buf = new StringBuffer ();
 
             while (true) {
-                line = reader.readLine ();
+                line = readLine ();
                 if (line == null) throw new IOException ("Unexpected EOF");
                 if (line.startsWith (boundary)) break;
                 
@@ -113,7 +175,7 @@ public class Decoder {
 	}
 
 
-        if (line.ensWith ("--")) 
+        if (line.endsWith ("--")) 
             eof = true;
 
         return true;
