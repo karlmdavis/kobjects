@@ -1,3 +1,4 @@
+package org.kobjects.samples.xml;
 import java.io.*;
 
 import org.kobjects.xml.*;

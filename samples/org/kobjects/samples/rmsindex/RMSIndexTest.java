@@ -1,5 +1,6 @@
 // provided by Andreas Merkle 
 
+package org.kobjects.samples.rmsindex;
 import javax.microedition.io.*;
 import java.io.*;
 import java.util.*;
