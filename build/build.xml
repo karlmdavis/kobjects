@@ -28,7 +28,8 @@
     
     <javac srcdir="src;src_j2se"
     	   destdir="${classes.dir}"
-    	   debug="true"/>
+    	   debug="false"
+    	   target="1.1"/>
     
     <mkdir dir="${dist.dir}"/>    
     <jar jarfile="${dist.dir}/kobjects-j2se.jar">
@@ -69,7 +70,7 @@
     </target>
 
 
-	<target name="build" depends="build_src" />
+	<target name="build" depends="clean,build_src" />
 
  
   
