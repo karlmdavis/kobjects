@@ -108,6 +108,8 @@ public class Decoder {
 //        data = buf.toString().getBytes();
         if (line.endsWith("--"))
             eof = true;
+
+		consumed = true;
     }
 
 
