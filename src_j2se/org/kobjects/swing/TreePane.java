@@ -1,11 +1,8 @@
 package org.kobjects.swing;
 
-import java.io.*;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
 
 
 public class TreePane extends JSplitPane implements TreeSelectionListener {

@@ -1,7 +1,5 @@
 package org.kobjects.util;
 
-import java.io.*;
-
 /** This class is intended to be thrown in an exception handler, e.g.
     in order to wrap an IOException.  It adds the original exception
     stack trace to it's own stack trace output when printed. */
@@ -16,7 +14,7 @@ public class ChainedRuntimeException extends RuntimeException {
 		  	("org.kobjects.util.ChainedRuntimeExceptionSE").newInstance ())._create (e, s);
 		}
 		catch (Exception x) {
-			System.out.println (""+x);
+	//	System.out.println (""+x);
 		}
 		return new ChainedRuntimeException (e, s);
 	}
