@@ -8,7 +8,7 @@ import org.kobjects.util.Strings;
  * A simple tokenizer. 
  * Manages the peek queue and the file position. */
 
-class Tokenizer {
+public class Tokenizer {
 
 	String expr;
 	Vector next = new Vector();
@@ -18,9 +18,9 @@ class Tokenizer {
 	int lstart;
 	int line;
 
-	static final String EOF = " ";
+	public static final String EOF = " ";
 
-	Tokenizer(String expr) {
+	public Tokenizer(String expr) {
 		if (expr == null)
 			throw new NullPointerException("Cannot initialize Tokeninzer without expression");
 		this.expr = expr;
