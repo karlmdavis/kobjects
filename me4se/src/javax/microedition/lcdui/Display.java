@@ -49,6 +49,25 @@ public class Display {
     
     public static Display getDisplay (MIDlet midlet) {
 
+	// set up a simple application manager if not existing..
+	
+	if (ApplicationManager.manager == null) {
+	    new ApplicationManager (null, new java.util.Properties ());
+
+	    ApplicationManager.manager.active = midlet;
+	    
+	    Display d = Display.getDisplay (midlet);
+	    Canvas c = new Canvas () {
+		    public void paint (Graphics g) {
+			
+		    }
+		};
+	    
+	    d.setCurrent (c);
+	    c.getWidth ();
+	    c.getHeight ();   
+	}
+
 	Display display = (Display) midlets.get (midlet);
 	if (display == null) {
 	    display = new Display (midlet);

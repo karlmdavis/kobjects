@@ -40,7 +40,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
     public boolean hasNextElement () {
 	try {
-	    if (nextId >= store.getNextRecordID ()) return false;
+	    if (nextId == store.getNextRecordID ()) return false;
 	    if (nextId != -1) return true;
 	    
 	    if (currentId == -1) currentId = 0;
@@ -64,7 +64,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
     public boolean hasPreviousElement () {
 	try {
-	    if (prevId <= 0) return false;
+	    if (prevId == 0) return false;
 	    if (prevId != -1) return true;
 	    
 	    if (currentId == -1) 
