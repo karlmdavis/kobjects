@@ -4,7 +4,7 @@
 //
 // Contributors:
 //
-// STATUS: 
+// STATUS: API Complete
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as
@@ -71,6 +71,94 @@ public class Form extends Screen {
 	fc.fill = java.awt.GridBagConstraints.HORIZONTAL;
     }
 
+    public Form (String title, Item [] items) {
+	this (title);
+	for (int i = 0; i < items.length; i++) 
+	    append (items [i]);
+    }
+
+    
+    public int append (Item item) {
+	appendImpl (item);
+	validate ();
+	return items.size ()-1;
+    }
+    
+
+    void appendImpl (Item item) {
+	if (item.form != null) throw new IllegalStateException ();
+	item.form = this;
+	
+	lc.gridy = items.size() * 2;
+	itemPanel.add (item.label, lc);
+	
+	fc.gridy = lc.gridy+1;
+	itemPanel.add (item.getField (), fc);
+	items.addElement (item);
+    }
+	
+    public int append (String s) {
+	return append (new StringItem (null, s));
+    }
+
+
+    public int append (Image img) {
+	return append (new ImageItem (null, img, 0, null));
+    }
+
+
+    public void insert (int index, Item item) {
+	Vector tmp = pop (index);
+	appendImpl (item);
+	append (tmp);
+	validate ();
+    }
+
+
+	
+    void append (Vector v) {
+	for (int i = v.size()-1; i >= 0; i--) {
+	    appendImpl ((Item) v.elementAt (i));
+	}
+	validate ();
+    }
+
+
+    public void delete (int index) {
+	Vector tmp = pop (index);
+	tmp.removeElementAt (tmp.size ()-1);
+	append (tmp);
+	validate ();
+    }
+
+
+    public Item get (int index) {
+	return (Item) items.elementAt (index);
+    }
+
+    Vector pop (int index) {
+	Vector tmp = new Vector ();
+	for (int i = items.size ()-1; i >= index; i--) {
+	    tmp.addElement (items.elementAt (i));
+	    itemPanel.remove (i*2+1);
+	    itemPanel.remove (i*2);
+	}
+	return tmp;
+    }
+	    
+
+    public void set (int index, Item item) {
+	Vector tmp = pop (index);
+	appendImpl (item);
+	tmp.removeElementAt (tmp.size()-1);
+	append (tmp);
+	validate ();
+    }
+
+    public int size () {
+	return items.size ();
+    }
+
     void validate () {
 	/*	bar.setMaximum (itemPanel.getMinimumSize ().height);
 
@@ -85,23 +173,15 @@ public class Form extends Screen {
 	panel.validate ();
     }
 
-    
-    public int append (Item item) {
-	if (item.form != null) throw new IllegalStateException ();
-	item.form = this;
 
-	lc.gridy = items.size () * 2;
-	itemPanel.add (item.label, lc);
-
-	fc.gridy = lc.gridy+1;
-	itemPanel.add (item.getField (), fc);
-	items.addElement (item);
-	validate ();
-
-	return items.size ()-1;
-    }
-	
-    public int append (String s) {
-	return append (new StringItem ("", s));
-    }
 }
+
+
+
+
+
+
+
+
+
+

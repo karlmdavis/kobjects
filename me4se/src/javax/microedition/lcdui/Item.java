@@ -52,4 +52,8 @@ public abstract class Item {
 	return labelText;
     }
 
+
+    void validate () {
+	if (form != null) form.validate ();
+    }
 }
