@@ -26,8 +26,15 @@ public class BibtexParser {
 		if (reader == null)
 			throw new RuntimeException("Read past end of bibtex file");
 
-		readTo("@<");
+		readTo("@<*");
 		int i = read();
+		
+		if (i == '*') {
+			Hashtable del = new Hashtable();
+			del.put ("key", "*" + readTo("\n\r\t "));
+			return del;
+		}
+		
 		if (i != '@') {
 			reader.close();
 			reader = null;
