@@ -99,7 +99,7 @@ public class LookAheadReader extends Reader {
 
         while (delta >= bufValid) {
             int startPos = (bufPos + bufValid) % buf.length;
-            int count = Math.max(buf.length - bufPos, buf.length - bufValid);
+            int count = Math.min(buf.length - startPos, buf.length - bufValid);
             
             count = reader.read(buf, startPos, count);
             

@@ -2,6 +2,7 @@ package org.kobjects.pim;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Vector;
 
 import org.kobjects.io.LookAheadReader;
 
@@ -14,16 +15,31 @@ import org.kobjects.io.LookAheadReader;
 public class PimParser {
 
     LookAheadReader reader;
+	Class type;
 
-    public PimParser(Reader reader) {
+    public PimParser(Reader reader, Class type) {
         this.reader = new LookAheadReader(reader);
+        this.type = type;
     }
 
     public PimItem readItem() throws IOException {
-        if (!readName().equals("begin"))
+
+    	String beg = readName();
+    	if (beg == null) return null;
+    	
+        if (!beg.equals("begin"))
             throw new RuntimeException("'begin:' expected");
 
-        PimItem item = new PimItem((String) readValue());
+    	PimItem item;
+		try {
+			item = (PimItem) type.newInstance();
+		}
+		catch(Exception e) {
+    		throw new RuntimeException(e.toString());
+    	}
+			
+       if (!item.getType().equals(readStringValue().toLowerCase()))
+       		throw new RuntimeException ("item types do not match!");
 
         while (true) {
             String name = readName();
@@ -31,20 +47,67 @@ public class PimParser {
             
             PimField field = new PimField(name);
             readProperties(field);
-            field.setValue(readValue());
+            Object value;
+            switch (item.getType(name)) {
+            	case PimItem.TYPE_STRING_ARRAY: 
+            		value = readArrayValue(); 
+            		break;
+            	default: 
+            		value = readStringValue();
+            }
+            field.setValue(value);
+        	System.out.println("value:"+value);
+            item.addField(field);
         }
 
-        readValue();
+        readStringValue();
 
         return item;
     }
 
     String readName() throws IOException {
-        return reader.readTo(":;").trim().toLowerCase();
+    	String name = reader.readTo(":;").trim().toLowerCase();
+		System.out.println("name:"+name);
+        return reader.peek(0) == -1 ? null : name;
     }
 
-    Object readValue() throws IOException  {
-        return reader.readLine();
+	String[] readArrayValue() throws IOException {
+		Vector values = new Vector();
+		reader.read(); // :
+		
+		StringBuffer buf = new StringBuffer();
+		boolean stay = true;
+		do {
+			buf.append(reader.readTo(";\n\r"));
+			switch(reader.read()) {
+			case ';': values.addElement(buf.toString());
+					 buf.setLength(0);
+				  	 break;
+			case '\r': if (reader.peek(0)=='\n') reader.read();
+			case '\n': if (reader.peek(0) > ' ') stay = false; 
+		}
+		}
+		while(stay);
+		
+		if(buf.length() != 0) 
+			values.addElement(buf.toString());
+		
+		String[] ret = new String[values.size()];
+		for(int i = 0; i < ret.length; i++) {
+			ret[i] = (String) values.elementAt(i);
+		}
+		return ret;
+	}
+
+
+    String readStringValue() throws IOException  {
+    	reader.read();
+        String value = reader.readLine();
+        while (reader.peek(0) < 33 && reader.peek(0) != -1){ 
+        	reader.read();
+        	value = value + reader.readLine();
+    	}
+    	return value;
     }
 
     void readProperties(PimField field) throws IOException {

@@ -12,16 +12,14 @@ import java.util.*;
  */
 
 
-public class PimItem {
+public abstract class PimItem {
 
     Hashtable fields = new Hashtable();
-    String type;
-
-    public PimItem(String type){
-        this.type = type;
-        
-    }
     
+    public static final int TYPE_STRING = 0;
+    public static final int TYPE_STRING_ARRAY = 1;
+    
+        
     public Enumeration fieldNames() {
         return fields.keys();
     }
@@ -46,12 +44,16 @@ public class PimItem {
         Vector v = (Vector) fields.get(name);
         return v == null ? 0 : v.size();
     }
-    /**
-     * Method getType.
-     * @return int
-     */
-    public String getType() {
-        return type;
-    }
+
+    public abstract String getType();
+
+	public int getType(String name){
+		return TYPE_STRING;
+	}
+
+	public String toString() {
+			return getType()+":"+fields.toString();
+		}
+
 
 }

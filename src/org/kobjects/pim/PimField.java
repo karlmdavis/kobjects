@@ -45,4 +45,9 @@ public class PimField {
         return value;
     }
 
+	public String toString () {
+		return name + (properties != null ? (";" + properties) : "") + ":" + value;
+	}
+
+
 }
