@@ -1,6 +1,6 @@
 package org.kobjects.crypt;
 
-/****************************************************************************
+/*
  * I found this on the internet, and I hope it's free. Unfortunately,
  * I did not find out the java author. The original header is as follows:
  *
@@ -10,7 +10,7 @@ package org.kobjects.crypt;
  *
  * Based upon C source code written by Eric Young, eay@psych.uq.oz.au
  *
- ****************************************************************************/
+ */
 
 public class Crypt
 {
@@ -641,10 +641,11 @@ public class Crypt
       return(buffer.toString());
    }
 
+    /*
    public static void main(String args[])
    {
        System.out.println (generate (args [0]));
-   }
+       }*/
     /*
       if(args.length >= 2)
       {
