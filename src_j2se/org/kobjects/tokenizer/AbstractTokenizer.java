@@ -8,7 +8,7 @@ import org.kobjects.util.Strings;
  * A simple tokenizer. 
  * Manages the peek queue and the file position. */
 
-public class AbstractTokenizer {
+public abstract class AbstractTokenizer {
 
 	String expr;
 	Vector next = new Vector();
@@ -59,96 +59,18 @@ public class AbstractTokenizer {
 	}
 
 	protected int readChar() {
-		return peekChar(pos++);
+		return pos >= expr.length() ? -1 : expr.charAt(pos++);
+	}
+	
+	public void setLocation(String location){
+		this.location = location;
 	}
 
 	/** Precodition: whitespace was skipped 
 	 * please return null value for comments */
 
-	protected String readImpl() {
-		int len = expr.length();
-
-		char c = expr.charAt(pos++);
-		StringBuffer buf = new StringBuffer();
-
-		if ("<>-:".indexOf(c) != -1) {
-			buf.append(c);
-			if (pos < len && ":=>".indexOf(expr.charAt(pos)) != -1)
-				buf.append(expr.charAt(pos++));
-		}
-		else if ("+*/=(){}[]|,;".indexOf(c) != -1)
-			buf.append(c);
-
-		else if (c == '\'' || c == '"') {
-			buf.append(c);
-			while (pos < len && expr.charAt(pos) != c) {
-				char d = expr.charAt(pos++);
-				if (d == '\\') {
-					d = expr.charAt(pos++);
-					switch (d) {
-						case 't' :
-							d = '\t';
-							break;
-						case 'n' :
-							d = '\n';
-							break;
-						case 'r' :
-							d = '\r';
-							break;
-						case '\\' :
-						case '\'' :
-							break;
-						default :
-							throw new ParsingException(this, "Illegal escape sequence: \\" + d);
-					}
-				}
-				buf.append(d);
-			}
-			pos++;
-		}
-		else if ((c >= '0' && c <= '9') || c == '.') {
-			if (c == '.' && pos < len && (expr.charAt(pos) < '0' || expr.charAt(pos) > '9'))
-				buf.append('.');
-			else {
-				buf.append('0');
-				buf.append(c);
-
-				while (pos < len) {
-					c = expr.charAt(pos);
-					if ((c < '0' || c > '9') && (c != '.') && (c != 'e') && c != 'E')
-						break;
-					buf.append(c);
-					pos++;
-				}
-			}
-		}
-
-		else if (
-			(c >= 'a' && c <= 'z')
-				|| (c >= 'A' && c <= 'Z')
-				|| (c == '_')
-				|| (c == '#')
-				|| c > 127) {
-
-			buf.append(c);
-			while (pos < len) {
-				c = expr.charAt(pos);
-				if ((c < 'a' || c > 'z')
-					&& (c < 'A' || c > 'Z')
-					&& (c < '0' || c > '9')
-					&& (c != '_')
-					&& (c <= 127))
-					break;
-				buf.append(c);
-				pos++;
-			}
-		}
-		else
-			throw new ParsingException(this, "Illegal char: " + c);
-
-		return buf.toString();
-	}
-
+	protected abstract String readImpl();
+	
 	public void require(String token) {
 		if (!read().equals(token))
 			throw new ParsingException(this, "expected: " + token);
@@ -157,6 +79,7 @@ public class AbstractTokenizer {
 	public String read() {
 		String result = peek();
 		next.removeElementAt(0);
+		System.out.println("read token: '"+result+"'");
 		return result;
 	}
 
