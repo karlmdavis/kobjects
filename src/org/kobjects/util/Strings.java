@@ -63,4 +63,30 @@ public class Strings {
 	    }
 	    return s + buf.toString();
 	}
+	
+	public static String beautify(String s) {
+		StringBuffer buf = new StringBuffer();
+
+		if (s.length() > 0) {
+			buf.append(Character.toUpperCase(s.charAt(0)));
+
+			for (int i = 1; i < s.length() - 1; i++) {
+
+				char c = s.charAt(i);
+				if (Character.isUpperCase(c)
+					&& Character.isLowerCase(s.charAt(i - 1))
+					&& Character.isLowerCase(s.charAt(i + 1)))
+					buf.append(" ");
+
+				buf.append(c);
+			}
+
+			if (s.length() > 1)
+				buf.append(s.charAt(s.length() - 1));
+		}
+
+		return buf.toString();
+	}
+
+	
 }
