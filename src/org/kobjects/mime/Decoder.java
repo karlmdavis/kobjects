@@ -9,8 +9,7 @@ public class Decoder {
 
     InputStream is;
     Hashtable header;
-    byte [] binary;
-    String text;
+    byte [] data;
     boolean eof;
     String boundary;
     //byte [] buf = new byte [128];
@@ -101,17 +100,18 @@ public class Decoder {
             buf.append (line);
         }
 
-        text = buf.toString ();
+        data = buf.toString ().getBytes ();
         if (line.endsWith ("--")) eof = true;
     }
 
 
-    public String getText () {
-        return text;
+    public String getText () { 
+        // should try to use content-type before default here
+        return new String (data);
     }
 
-    public byte [] getBinary () {
-        return binary;
+    public byte [] getData () {
+        return data;
     }
 
     
@@ -144,7 +144,17 @@ public class Decoder {
 
 	    header.put (line.substring (0, cut).trim ().toLowerCase (),
 			line.substring (cut+1).trim ());
-	}
+
+            System.out.println 
+                ("key: '"+line.substring (0, cut).trim ().toLowerCase () 
+                 + "' value: '" + line.substring (cut+1).trim ());
+
+ 	}
+
+        System.out.println 
+            ("cte-head: "+ getHeader ("Content-Transfer-Encoding"));
+
+        String contentType = getHeader ("Content-Type");
 
 	if ("base64".equals (getHeader ("Content-Transfer-Encoding"))) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream ();
@@ -156,23 +166,40 @@ public class Decoder {
                 Base64.decode (line, bos);
             }
 
-            text = null;
-            binary = bos.toByteArray ();
+            data = bos.toByteArray ();
 	}
-	else {
-	    StringBuffer buf = new StringBuffer ();
+	else { 
 
+            ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+            String deli = "\r\n" + boundary;
+            int match = 0;
+            
             while (true) {
-                line = readLine ();
-                if (line == null) throw new IOException ("Unexpected EOF");
-                if (line.startsWith (boundary)) break;
+                int i = is.read ();
+                if (i >= 32 && i <= 127) 
+                    System.out.print ((char) i);
+                else System.out.print ("#"+i+";");
+                if (i == -1) throw new RuntimeException ("Unexpected EOF");
                 
-                buf.append (line);
+                if (((char) i) == deli.charAt (match)) {
+                    match++;
+                    if (match == deli.length ()) 
+                        break;
+                }
+                else { 
+                    if (match > 0) {
+                        for (int j = 0; j < match; j++) 
+                            bos.write ((byte) deli.charAt (j));
+
+                        match = ((char) i == deli.charAt (0)) ? 1 : 0;
+                    }
+                    bos.write ((byte) i);
+                }
             }
 
-            text = buf.toString ();
-            binary = null;
-	}
+            data = bos.toByteArray ();
+            line = readLine (); // read crlf and possibly remaining --
+        }
 
 
         if (line.endsWith ("--")) 
