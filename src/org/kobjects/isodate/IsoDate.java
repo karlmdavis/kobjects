@@ -71,7 +71,7 @@ public class IsoDate {
 	    dd (buf, c.get (Calendar.SECOND));
 	    buf.append ('.');
 	    int ms = c.get (Calendar.MILLISECOND);
-	    dd (buf, ms / 100);
+	    buf.append ((char) (((int) '0') + (ms / 100)));
 	    dd (buf, ms % 100);
 	    buf.append ('Z');
 	}
