@@ -24,27 +24,6 @@ import java.io.*;
 
 public final class Util {
 
-    public static String fill(String s, int len, char c) {
-        boolean left = len < 0;
-        len = Math.abs(len);
-
-        if (s.length() >= len)
-            return s;
-
-        StringBuffer buf = new StringBuffer();
-        len -= s.length();
-        while (len > 0) {
-            buf.append(c);
-            len--;
-        }
-
-        if (left) {
-            buf.append(s);
-            return buf.toString();
-        }
-        return s + buf.toString();
-    }
-
 /** 
  * Writes the contents of the input stream to the 
  * given output stream and closes the input stream.
@@ -90,5 +69,6 @@ public static String buildUrl(String base, String local) {
 
     return base + local;
 }
+
 
 }
