@@ -46,8 +46,9 @@ public class TextBox extends Screen {
     }
 
 
-    public void setMaxSize (int maxSize) {
+    public int setMaxSize (int maxSize) {
 	this.maxSize = maxSize;
+    return maxSize;
     }
 
 
