@@ -16,7 +16,7 @@ public class TokenizerException extends RuntimeException {
 
 		Tokenizer tokenizer;
         
-		TokenizerException(Tokenizer tokenizer, String text) {
+		public TokenizerException(Tokenizer tokenizer, String text) {
 			super (text+"\r\n"+tokenizer.toString());
 			this.tokenizer = tokenizer;
 		}
