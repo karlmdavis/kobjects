@@ -8,7 +8,8 @@
 
     <tr>
      <td bgcolor="#ddddff">
-       <a href="/index.shtml">About</a>
+       <a href="/index.shtml">News</a><br />
+       <a href="/about.shtml">About</a>
      </td>
     </tr>
     
@@ -49,13 +50,8 @@
 	    <li><a href="http://sourceforge.net/tracker/?group_id=30528&amp;atid=400118">Bugs</a></li>
 	    </ul>
 	  </small> 
-	 </td>
-	</tr>
 
-
-	<tr>
-	 <td bgcolor="#ddddff">
-	  <a href="http://sourceforge.net/projects/kobjects/"><img src="http://sourceforge.net/sflogo.php?group_id=9157&amp;type=2" alt="SF Logo" /></a>
+	  <a href="http://sourceforge.net/projects/kobjects/"><img border="0" src="http://sourceforge.net/sflogo.php?group_id=9157&amp;type=2" alt="SF Logo" /></a>
      </td>
     </tr>
    </table>
