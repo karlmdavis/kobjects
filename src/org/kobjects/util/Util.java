@@ -133,4 +133,19 @@ public final class Util {
         System.arraycopy(tmp, 0, arr, start, tmp.length);
     }
 
+
+/*
+	public static String readLine(InputStream is, byte[] buf){
+		int start = ((int) buf[0]) & 255;
+		int end = ((int) buf[0]) & 255;
+
+		int pos = start;
+
+		while(true){
+
+
+			StringBuffer result =	
+		}
+	}
+*/
 }

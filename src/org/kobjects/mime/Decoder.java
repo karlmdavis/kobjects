@@ -132,8 +132,10 @@ public class Decoder {
         }
 
 //        data = buf.toString().getBytes();
-        if (line.endsWith("--"))
-            eof = true;
+        if (line.endsWith("--")){
+			eof = true;
+			is.close();
+        }
 
 		consumed = true;
     }
