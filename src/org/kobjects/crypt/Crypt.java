@@ -642,11 +642,11 @@ public class Crypt
       return(buffer.toString());
    }
 
-    /*
+    
    public static void main(String args[])
    {
        System.out.println (generate (args [0]));
-       }*/
+       }
     /*
       if(args.length >= 2)
       {
