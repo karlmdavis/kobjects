@@ -23,6 +23,9 @@ package javax.microedition.midlet;
 import org.kobjects.me4se.impl.JadFile;
 import java.util.Vector;
 
+/** this class is needed *here* in order to be able to call the protected MIDlet startApp()
+    method (etc.). It should perhaps be hidden from the documentation. */
+
 public class ApplicationManager {
 
     public static ApplicationManager manager;
@@ -33,6 +36,7 @@ public class ApplicationManager {
     public java.awt.Container displayContainer; 
     public int canvasWidth;
     public int canvasHeight;
+
 
 
     public ApplicationManager (java.awt.Container dc) {
@@ -65,6 +69,7 @@ public class ApplicationManager {
 
     public void init (String jadFile, String midlet) {
 
+
 	if (jadFile != null) {
 	    try {
 		jad = new JadFile (jadFile);
@@ -92,6 +97,24 @@ public class ApplicationManager {
 	}	
     }
 
+
+    public String getRmsDir () {
+
+	if (jad != null) {
+	    String name = jad.getName ();
+	    int end = name.lastIndexOf ('.');
+	    if (end == 1) end = name.length ();
+	    int start = Math.max (Math.max 
+		(name.lastIndexOf ('/', end),
+		 name.lastIndexOf (':', end)),
+				  name.lastIndexOf ('\\', end));
+
+	    if (start < 0) start = 0;
+	    return name.substring (start, end);
+	}
+	else
+	    return active.getClass ().getName ();
+    }
 
 
     public void start () {

@@ -19,11 +19,13 @@ import javax.microedition.io.*;
 public class JadFile  {
 
     private Hashtable properties = new Hashtable();
-    
+    String name;
 
     /** Creates new JadFile */
 
     public JadFile (String name) throws IOException {
+
+	this.name = name;
 
 	BufferedReader reader = new BufferedReader 
 	    ((name.indexOf (':') < 2)
@@ -79,6 +81,12 @@ public class JadFile  {
          */
         return midletlist;
     }
+
+    
+    public String getName () {
+	return name;
+    }
+
 
     /*
     //For testing only...

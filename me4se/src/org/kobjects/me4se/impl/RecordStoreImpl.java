@@ -38,15 +38,19 @@
 package org.kobjects.me4se.impl;
 
 import javax.microedition.rms.*;
+import javax.microedition.midlet.ApplicationManager;
 import java.util.*;
 import java.io.*;
 import org.kobjects.me4se.*;
+
 
 public class RecordStoreImpl extends RecordStore {
 
     private Vector records;
     private String recordStoreName;
     private int refCount;
+
+    File file;
     
     private void checkOpen () throws RecordStoreNotOpenException {
 	if (refCount == 0) 
@@ -82,9 +86,12 @@ public class RecordStoreImpl extends RecordStore {
 	    records = new Vector ();
 	}
 	else {
+	    File dir = new File (ApplicationManager.manager.getRmsDir ());
+	    dir.mkdir ();
+	    file = new File (dir, recordStoreName + ".rms");
+	    
 	    try {
-		File file = new File (recordStoreName);
-		
+
 		ObjectInputStream ois = new ObjectInputStream 
 		    (new FileInputStream (file));
 		
@@ -137,7 +144,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	try {
 	    ObjectOutputStream p = new ObjectOutputStream 
-		(new FileOutputStream (recordStoreName)); 
+		(new FileOutputStream (file)); 
 
 	    //System.out.println ("writing: "+records);
 	    p.writeObject(records); 
