@@ -12,7 +12,7 @@ public class Csv {
 		StringBuffer buf = new StringBuffer();
 		
 		for (int i = 0; i < value.length(); i++) {
-			char c = buf.charAt(i);
+			char c = value.charAt(i);
 			if (c == quote || c == '^') {
 				buf.append(c);
 				buf.append(c);
