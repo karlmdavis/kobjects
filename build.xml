@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="kobjects" default="build" basedir=".">
+  
+  <target name="javadoc">
+    <delete dir="doc/api"/>
+    <mkdir dir="doc/api"/>    
+    <javadoc packagenames="org.kobjects.*"
+             public="yes"
+             sourcepath="src"
+             destdir="doc/api"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="kObjects API"
+             doctitle="kObjects API"
+    />
+  </target>
+  
+
+    <target name="build">
+    	<delete dir="tmpclasses"/>
+    	<mkdir dir="tmpclasses"/>
+    	
+    	<javac srcdir="src;src_j2se"
+    	       destdir="tmpclasses"
+    	       debug="true"/>
+	
+        <mkdir dir="dist"/>    
+		<jar jarfile="dist/kobjects-j2se.jar">
+			<fileset dir="tmpclasses">
+				<include name="**/*.class"/>
+				<include name="META-INF/**"/>
+			</fileset>
+		</jar>
+
+    	<delete dir="tmpclasses"/>
+	</target>
+
+<!--
+    <target name="deploy" depends="build,deployinfo">
+
+		<deploy target="http://pleumann.dyndns.org/kobjects"
+				project="Infolayer"
+				login="admin"
+				password="admin"
+				tag="${tag}"
+				date=""
+				title="Version ${tag} released"
+				text="${text}">
+				
+			<item file="build/infolayer.jar" type="application/java-archive"/>
+				
+		</deploy>
+		
+	</target>
+-->
+    
+</project>
