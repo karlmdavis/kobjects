@@ -12,11 +12,11 @@ package org.kobjects.tokenizer;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class TokenizerException extends RuntimeException {
+public class ParsingException extends RuntimeException {
 
-		Tokenizer tokenizer;
+		AbstractTokenizer tokenizer;
         
-		public TokenizerException(Tokenizer tokenizer, String text) {
+		public ParsingException(AbstractTokenizer tokenizer, String text) {
 			super (text+"\r\n"+tokenizer.toString());
 			this.tokenizer = tokenizer;
 		}

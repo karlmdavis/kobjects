@@ -8,7 +8,7 @@ import org.kobjects.util.Strings;
  * A simple tokenizer. 
  * Manages the peek queue and the file position. */
 
-public class Tokenizer {
+public class AbstractTokenizer {
 
 	String expr;
 	Vector next = new Vector();
@@ -20,7 +20,7 @@ public class Tokenizer {
 
 	public static final String EOF = " ";
 
-	public Tokenizer(String expr) {
+	public AbstractTokenizer(String expr) {
 		if (expr == null)
 			throw new NullPointerException("Cannot initialize Tokeninzer without expression");
 		this.expr = expr;
@@ -46,7 +46,8 @@ public class Tokenizer {
 			if (pos >= len)
 				next.addElement(EOF);
 			else {
-				next.addElement(readImpl());
+				String n = readImpl();
+				if(n != null) next.addElement(n);
 			}
 		}
 
@@ -61,7 +62,8 @@ public class Tokenizer {
 		return peekChar(pos++);
 	}
 
-	/** Precodition: whitespace was skipped */
+	/** Precodition: whitespace was skipped 
+	 * please return null value for comments */
 
 	protected String readImpl() {
 		int len = expr.length();
@@ -97,7 +99,7 @@ public class Tokenizer {
 						case '\'' :
 							break;
 						default :
-							throw new TokenizerException(this, "Illegal escape sequence: \\" + d);
+							throw new ParsingException(this, "Illegal escape sequence: \\" + d);
 					}
 				}
 				buf.append(d);
@@ -142,14 +144,14 @@ public class Tokenizer {
 			}
 		}
 		else
-			throw new TokenizerException(this, "Illegal char: " + c);
+			throw new ParsingException(this, "Illegal char: " + c);
 
 		return buf.toString();
 	}
 
 	public void require(String token) {
 		if (!read().equals(token))
-			throw new TokenizerException(this, "expected: " + token);
+			throw new ParsingException(this, "expected: " + token);
 	}
 
 	public String read() {

@@ -43,6 +43,13 @@ public static OutputStream streamcopy(InputStream is, OutputStream os)
     return os;
 }
 
+public static int indexOf(Object[] arr, Object find) {
+	for(int i = 0; i < arr.length; i++) {
+		if (arr[i].equals(find)) return i;
+	}
+	return -1;
+}
+
 public static String buildUrl(String base, String local) {
 
     int ci = local.indexOf(':');
