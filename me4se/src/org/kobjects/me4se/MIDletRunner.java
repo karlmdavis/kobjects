@@ -31,15 +31,16 @@ public class MIDletRunner extends Applet {
     public static boolean isApplet;
 
     public void start () {
-
+        System.out.println("test");
 	if (!running) {
 	    isApplet = true;
 	    running = true;
 
 	    if (ApplicationManager.manager != null) 
 		ApplicationManager.manager.destroy ();
-	   
-	    new ApplicationManager (this).init (getParameter ("MIDlet"));
+            //String[] param = {getParameter ("MIDlet"), getParameter("JAD-File")};
+            String[] param = {getParameter("JAD-File")};
+	    new ApplicationManager (this).init (param);
 	}
 
 	ApplicationManager.manager.start ();
@@ -58,7 +59,7 @@ public class MIDletRunner extends Applet {
 
 
     public static void main (String [] argv)  {
-	new ApplicationManager (null).init (argv [0]);
+	new ApplicationManager (null).init (argv);
 	ApplicationManager.manager.start ();
     }
 }
