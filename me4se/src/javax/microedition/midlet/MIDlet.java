@@ -21,7 +21,7 @@
 package javax.microedition.midlet;
 
 import javax.microedition.lcdui.*;
-import org.kobjects.me4se.MIDletRunner;
+import org.me4se.MIDletRunner;
 
 public abstract class MIDlet {
 

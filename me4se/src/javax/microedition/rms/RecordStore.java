@@ -48,20 +48,21 @@ import org.kobjects.me4se.*;
 
 public abstract class RecordStore {
     
-    static Hashtable recordStores = new Hashtable ();
-    
 
-    /**
-     * Adds a new record to the record store.
-     * @param data The data to be stored in this record. If the record should
-     *             have zero-length - no data - this parameter may be set to null
-     * @param offset The index of the data buffer of the first databyte for this
-     *               record
-     * @return The recordid of the new record
-     * @exception RecordStoreNotOpenException if the record store is not yet open.
-     * @exception InvalidRecordIDException if the recordId is invalid.
-     * @exception RecordStoreException if a general recordstoreexception occurs.
-     */
+    /** Adds a new record to the record store.
+
+        @param data The data to be stored in this record. If the
+                    record should have zero-length - no data - this
+                    parameter may be set to null
+	@param offset The index of the data buffer of the first
+	              databyte for this record
+	@return The recordid of the new record
+	@exception RecordStoreNotOpenException if the record store is
+	           not yet open.
+	@exception InvalidRecordIDException if the recordId is invalid.
+	@exception RecordStoreException if a general
+	           recordstoreexception occurs.  */
+
     public abstract int addRecord (byte[] data, int offset, int count) 
 	throws RecordStoreNotOpenException,
 	       RecordStoreException,
@@ -70,30 +71,31 @@ public abstract class RecordStore {
 
     /**
      * Adds the specified RecordListener.
-     * 
-     * NOT YET IMPLEMENTED
      *
      * @param listener The RecordChangedListener
      */
     public abstract void addRecordListener (RecordListener listener);
     
 
-    /**
-     * This method is called when the MIDlet requests to have the record store closed.
-     * @exception RecordStoreNotOpenException if the record store is not open
-     * @exception RecordStoreException if another record store related Exception occurs
-     */
+    /** This method is called when the MIDlet requests to have the
+       record store closed.
+
+       @exception RecordStoreNotOpenException if the record store is
+                  not open
+       @exception RecordStoreException if another record store related
+                  Exception occurs */
+
     public abstract void closeRecordStore ()
 	throws RecordStoreNotOpenException,
 	       RecordStoreException;
+
     
-    /**
-     * The record is deleted from the record store.
-     *
-     * @param recordId The ID of the record to be deleted
-     * @exception RecordStoreNotOpenException if the record store is not open
-     * @exception RecordStoreException if a different record store-related exception occurs
-     */
+    /** The record is deleted from the record store.
+	@param recordId The ID of the record to be deleted
+	@exception RecordStoreNotOpenException if the record store is not open
+	@exception RecordStoreException if a different record
+	           store-related exception occurs */
+
     public abstract void deleteRecord (int recordId) 
 	throws RecordStoreNotOpenException,
 	       InvalidRecordIDException,
@@ -111,26 +113,29 @@ public abstract class RecordStore {
 	throws RecordStoreException,
 	       RecordStoreNotFoundException {
 
-
 	((RecordStoreImpl) openRecordStore 
 	 (recordStoreName, false)).deleteRecordStoreImpl ();
-	recordStores.remove (recordStoreName);
+
+	RecordStoreImpl.recordStores.remove (recordStoreName);
     }
     
 
-    //public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) {
-    //return null;
-    //}
+    public RecordEnumeration enumerateRecords (RecordFilter filter, 
+					       RecordComparator comparator, 
+					       boolean keepUpdated) {
+	return new RecordEnumerationImpl 
+	    (this, filter, comparator, keepUpdated);
+    }
 
 
-     /**
-     * Returns the last time the record store was modified, in the format used by System.currentTimeMillis().
-     *
-     * NOT YET IMPLEMENTED
-     *
-     * @return the last time the record store was modified, in the same format used by System.currentTimeMillis ();
-     * @exception RecordStoreNotOpenException if the record store is not open.
-     */
+     /** Returns the last time the record store was modified, in the
+         format used by System.currentTimeMillis().
+     
+     @return the last time the record store was modified, in the same
+             format used by System.currentTimeMillis ();
+     @exception RecordStoreNotOpenException if the record store is not
+                open. */
+
     public abstract long getLastModified () throws RecordStoreNotOpenException;
 
 
@@ -174,20 +179,23 @@ public abstract class RecordStore {
 	       RecordStoreException;
     
 
-    /**
-     * Returns the data stored in the given record.
-     *
-     * NOT YET IMPLEMENTED     
-     *
-     * @param recordId The ID of the record to be used in this operation.
-     * @param buffer The byte array to copy the data.
-     * @param offset The index index into the buffer i which to start copiying.
-     * @return the number of bytes copied into the buffer, startting at index offset
-     * @exception RecordStoreNotOpenException if the record store is not open.
-     * @exception InvalidRecordIDException if the record store is invalid.
-     * @exception RecordStoreException if a general record store exception occurs.
-     * @exception ArrayIndexOutOfBoundsException if the record is larger that the buffer supplied
-     */
+    /** Returns the data stored in the given record.
+     
+      @param recordId The ID of the record to be used in this
+                      operation.
+      @param buffer The byte array to copy the data.
+      @param offset The index index into the buffer i which to start copiying.
+      @return the number of bytes copied into the buffer, startting at
+              index offset
+      @exception RecordStoreNotOpenException if the record store is
+                 not open.
+      @exception InvalidRecordIDException if the record store is
+                 invalid.
+      @exception RecordStoreException if a general record store
+                 exception occurs.
+      @exception ArrayIndexOutOfBoundsException if the record is larger 
+                 that the buffer supplied */
+
     public abstract int getRecord (int recordId, byte[] buffer, int offset) 
 	throws RecordStoreNotOpenException,
 	       InvalidRecordIDException,
@@ -235,40 +243,10 @@ public abstract class RecordStore {
      *
      * @return an array of the names of record stores.
      */
-    public static String[] listRecordStores () {
+    public static String[] listRecordStores ()  {
 
-	String[] databases;
+	return metaStore.listRecordStoresImpl ();
 
-        if (MIDletRunner.isApplet) {
-	    databases = new String [recordStores.size ()];
-	    int i = 0;
-	    for (Enumeration e = recordStores.keys (); e.hasMoreElements (); ) 
-		databases [i++] = (String) e.nextElement ();
-	}
-	else {
-	    File directory = ApplicationManager.manager.getRmsDir ();
-	    // SV: We could add a file-extension to every saved RMS and filter then 
-	    // (look at private class below).
-	    // Otherwise this solution is not very intelligent because it lists every File in
-	    // the current Dirctory as RMS.
-	    
-
-	    // SH: I have created a special dir for RMS, so a special extension should not
-	    // be necessary. However, perhaps it would make sense to shift some of the 
-	    // static functions to non-static functions in a "meta" RMS, in order to allow
-	    // different "org.kobjects.me4se.impl.RecordStoreImpl_" classes for record
-	    // stores in files and accessing servlets (mechanism similar to 
-	    // Connection_http etc: RecordStoreImpl_file, RecordStoreImpl_http). 
-	    //
-	    // A command line/applet parameter specifying the RMS location/impl. would 
-	    // probably also be a good idea....
-	    
-
-	    databases =  directory.isDirectory()
-		? directory.list() : new String [0];
-	}
-
-	return databases;
     }
     /*       private class FileNameIdx implements FilenameFilter {
         public boolean accept(File dir, String name) {
@@ -288,6 +266,8 @@ public abstract class RecordStore {
      * @exception RecordStoreNotFoundException if the record store could not be found
      *
      */
+
+
     public static RecordStore openRecordStore (String recordStoreName, boolean createIfNecessary) 
 	throws RecordStoreException,
 	       RecordStoreFullException,
@@ -297,7 +277,7 @@ public abstract class RecordStore {
 	    (recordStoreName);
 
 	if (store == null) {
-	    store = new org.kobjects.me4se.impl.RecordStoreImpl ();
+	    store = newInstance ();
 	    recordStores.put (recordStoreName, store);
 	}
 

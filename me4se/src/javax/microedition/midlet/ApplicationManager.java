@@ -20,12 +20,13 @@
 
 package javax.microedition.midlet;
 
-import org.kobjects.me4se.impl.JadFile;
+import org.me4se.impl.JadFile;
 import java.util.*;
 import java.io.File;
 
-/** this class is needed *here* in order to be able to call the protected MIDlet startApp()
-    method (etc.). It should perhaps be hidden from the documentation. */
+/** this class is needed *here* in order to be able to call the
+    protected MIDlet startApp() method (etc.). It should perhaps be
+    hidden from the documentation. */
 
 public class ApplicationManager {
 

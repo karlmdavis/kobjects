@@ -23,7 +23,7 @@ package javax.microedition.lcdui;
 import javax.microedition.midlet.*;
 import java.util.*;
 import java.awt.event.*;
-import org.kobjects.me4se.*;
+import org.me4se.*;
 
 public class Display {
 

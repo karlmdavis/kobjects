@@ -4,7 +4,7 @@
  * Created on 6. August 2001, 09:55
  */
 
-package org.kobjects.me4se.impl;
+package org.me4se.impl;
 
 import java.util.*;
 import java.io.*;
