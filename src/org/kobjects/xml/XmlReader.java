@@ -10,7 +10,9 @@ import java.io.*;
 import java.util.*;
 
 /** A minimalistic XML pul parser, similar to kXML, but
-    not supporting namespaces or legacy events.  */
+    not supporting namespaces or legacy events. If you need
+    support for namespaces, or access to XML comments or
+    processing instructions, please use kXML(2) instead. */
 
 public class XmlReader {
     
