@@ -1,6 +1,6 @@
 // kObjects 
 //
-// Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
+// Copyright (C) 2001, 2002 Stefan Haustein, Oberhausen (Rhld.), Germany
 //
 // Contributors: Liam Quinn, Christian Scheer
 //
