@@ -4,6 +4,51 @@ import java.util.Vector;
 
 public class Csv {
 
+	/** Performs escaping only. Occuring quote characters are duplicated,
+	 * 	control characters are escaped by  */
+
+	public static String encode(String value, char quote) {
+		
+		StringBuffer buf = new StringBuffer();
+		
+		for (int i = 0; i < value.length(); i++) {
+			char c = buf.charAt(i);
+			if (c == quote || c == '^') {
+				buf.append(c);
+				buf.append(c);
+			}
+			else if (c < ' ') {
+				buf.append('^');
+				buf.append((char) (((int) c) + 64));
+			}
+			else buf.append(c);
+		}
+		return buf.toString();	
+	}
+
+
+	public static String encode(Object[] values) {
+	
+		StringBuffer buf = new StringBuffer();
+	
+		for (int i = 0; i < values.length; i++) {
+			if (i != 0) buf.append(',');
+			
+			Object v = values[i];
+			if ((v instanceof Number) || (v instanceof Boolean))
+				buf.append (v.toString());
+			else {
+				buf.append ('"');
+				buf.append(encode(v.toString(), '"'));
+				buf.append ('"');
+			}
+		}
+		
+		return buf.toString ();
+	}
+
+
+
 
 	public static String[] decode(String line) {
 		Vector tmp = new Vector();
