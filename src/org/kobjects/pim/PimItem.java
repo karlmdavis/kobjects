@@ -100,7 +100,7 @@ public abstract class PimItem {
 	}
 
 	public void removeField(String name, int index) {
-		((Vector) fields.get(name)).remove(index);
+		((Vector) fields.get(name)).removeElementAt(index);
 	}
 	
 	public String toString() {
