@@ -41,7 +41,11 @@ public class BoundInputStream extends InputStream {
 
 
     public void close () {
-	is.close ();
+    	try {
+			is.close ();
+    	}
+    	catch (IOException ignored) {
+    	}
     }
 }
 
