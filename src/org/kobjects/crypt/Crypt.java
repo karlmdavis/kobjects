@@ -1,5 +1,7 @@
 package org.kobjects.crypt;
 
+import java.io.IOException;
+
 /*
  * I found this on the internet. Unfortunately, I did not find out the java
  * author. The original header is as follows:
@@ -643,10 +645,17 @@ public class Crypt
    }
 
     
-   public static void main(String args[])
+   public static void main(String args[]) throws IOException
    {
-       System.out.println (generate (args [0]));
-       }
+   	
+   		StringBuffer buf = new StringBuffer();
+   		while (true) {
+   			int i = System.in.read();
+   			if(i<32) break;
+   			buf.append((char) i);
+   		}
+       System.out.println (generate (buf.toString()));
+   }
     /*
       if(args.length >= 2)
       {
