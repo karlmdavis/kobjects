@@ -25,7 +25,7 @@ public abstract class Table {
     public Field addField (String name, int type) {
         int idx = findField (name);
         if (idx == -1) {
-            fields.addElement (new Field (type, name));
+            fields.addElement (new Field (name, type));
             idx = fields.size ()-1;
         }
 
@@ -69,15 +69,16 @@ public abstract class Table {
 
         
     /** refreshes the given record from the database. Throws an
-        IllegalArgumentException if the given record id is invalid. */
+        IllegalArgumentException if the given record id is invalid. 
+        Please NEVER call this method directly, use record.update instead */
 
-    protected abstract void saveRecord (Record record);
+    public abstract void saveRecord (Record record);
 
     /** updates the database from the given record. If the record is
         newly created, the ID is updated to the real position of the
-        record.  */
+        record. Please NEVER call this method directly, use record.refresh instead  */
 
-    protected abstract void loadRecord (Record record); 
+    public abstract void loadRecord (Record record); 
 
 
     public Field getField(int i) {

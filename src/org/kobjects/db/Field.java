@@ -28,7 +28,7 @@ public class Field {
     Object initial;
     
 
-    Field (int type, String name) {
+    Field (String name, int type) {
         this.type = type;
         this.name = name;
         this.label = name;

@@ -12,6 +12,7 @@ public class FieldStatistics {
     int count;
     int nullCount;
     boolean numeric = true;
+    int decimals;
     
     
     public void update (Object v) {
@@ -28,6 +29,13 @@ public class FieldStatistics {
 
             if (numeric) {
                 value = value.trim ();
+                
+                int dot = value.indexOf ('.');
+                if (dot != -1) {
+                    if (value.length () - dot > decimals) 
+                        decimals = value.length () - dot;
+                }
+
                 if (value.equals ("")) 
                     nullCount++;
                 else {

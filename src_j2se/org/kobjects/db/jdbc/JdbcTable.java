@@ -12,12 +12,29 @@ public class JdbcTable extends Table {
     Connection connection;
     PreparedStatement insertStatement;
     
+
+    public JdbcTable () {
+    }
+
     public JdbcTable (Connection connection, String name) {
-        
-        this.name = name;
         this.connection = connection;
+        this.name = name;
+    }
+
+
+    public void init (String [] params) {
+
+        if (params.length != 4) 
+            throw new RuntimeException ("params expected: url user pw tablename");
 
         try {
+
+        
+            connection = DriverManager.getConnection 
+                (params [0], params [1], params [2]);
+            
+            name = name;
+
             Statement statement = connection.createStatement ();
             //statement.executeUpdate ("DELETE FROM "+tableName);
 
@@ -39,7 +56,8 @@ public class JdbcTable extends Table {
                 switch (meta.getColumnType (i)) {
                 case Types.VARCHAR: type = Field.STRING; break;
                 case Types.REAL: type = Field.DOUBLE; break;
-                default: throw new RuntimeException ("unsupported field type: "+meta.getColumnType (i));
+                default: throw new RuntimeException 
+                             ("unsupported field type: "+meta.getColumnType (i));
                 }
             }
             statement.close ();
@@ -53,7 +71,7 @@ public class JdbcTable extends Table {
     
 
     
-    public void refresh (Record record) {
+    public void loadRecord (Record record) {
         throw new RuntimeException ("NYI");
     }
 
@@ -83,12 +101,15 @@ public class JdbcTable extends Table {
             buf.append (f.getName ());
             switch (f.getType ()) {
             case Field.DOUBLE:
-                buf.append ("NUMBER ("+f.getSize () + ", 2)");
-                break;
             case Field.INTEGER:
-            case Field.LONGINT:
-                buf.append ("NUMBER ("+f.getSize () + ")");
+            case Field.LONG:
+                if (f.getConstraints () == 0) 
+                    buf.append ("NUMBER ("+f.getSize () + ")");
+                else 
+                    buf.append 
+                        ("NUMBER ("+f.getSize () + ", "+f.getConstraints ()+")");
                 break;
+
             case Field.STRING:
                 buf.append ("VARCHAR ("+f.getSize () + ")");
                 break;
@@ -105,7 +126,7 @@ public class JdbcTable extends Table {
             statement.execute (buf.toString ());
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e);
+            throw new ChainedRuntimeException (e, "failed: "+buf);
         }
     }
     
@@ -123,7 +144,7 @@ public class JdbcTable extends Table {
 
     
 
-    public void update (Record record) {
+    public void saveRecord (Record record) {
         
         if (record.getId () != -1) throw new RuntimeException ("update NYI");
 

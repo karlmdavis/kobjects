@@ -9,10 +9,21 @@ public class SpkTable extends TextFixed {
 
     String tableName;
 
+    
+
+
     public SpkTable (String spkFileName) {
+        init (new String [] {spkFileName});
+    }
+
+
+    public void init (String[] param) {
+
+        String spkFileName = param [0]; 
         
-        super (spkFileName.substring (0, spkFileName.length () - 4)
-               + (spkFileName.endsWith (".SPK") ? ".DAT" : ".dat"));
+        super.init (new String [] 
+            {spkFileName.substring (0, spkFileName.length () - 4)
+               + (spkFileName.endsWith (".SPK") ? ".DAT" : ".dat")});
 
         try {
 
@@ -40,11 +51,11 @@ public class SpkTable extends TextFixed {
                     int c2 = value.indexOf (',', c1+1);
                     
                     String name = value.substring (0, c0);
-                    int length = Integer.parseInt (value.substring (c2+1).trim ()); 
+                    int length = Integer.parseInt 
+                        (value.substring (c2+1).trim ()); 
                     
-                    helpTable.addField 
-                        (new Field 
-                         (Field.STRING, name, name, length, null, null));
+                    Field f = helpTable.addField (name, Field.STRING);
+                    f.setSize (length);
                     
                     /*
                       ColumnDef c = new ColumnDef ();
@@ -79,4 +90,9 @@ public class SpkTable extends TextFixed {
     }
 
 */
+
+
+    public String getTableName () {
+        return tableName;
+    }
 }

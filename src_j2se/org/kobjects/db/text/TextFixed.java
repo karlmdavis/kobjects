@@ -11,12 +11,25 @@ public class TextFixed extends Table {
     BufferedReader reader;
     int recordCount;
 
+
+    public TextFixed () {
+    }
+
+
     public TextFixed (String fileName) {
         this.fileName = fileName;
     }
 
 
-    public void refresh (Record record) {
+    public void init (String [] param) {
+        if (param.length != 1) 
+            throw new IllegalArgumentException ("param count must be 1");
+
+        this.fileName = param [0];
+    }
+
+
+    protected void loadRecord (Record record) {
 
         String line;
 
@@ -49,7 +62,7 @@ public class TextFixed extends Table {
     } 
         
 
-    public void update (Record record) {
+    public void saveRecord (Record record) {
         throw new RuntimeException ("Readonly!");
     }
     
