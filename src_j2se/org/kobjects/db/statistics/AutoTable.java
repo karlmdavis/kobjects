@@ -34,6 +34,10 @@ public class AutoTable extends Table {
     }
 
 
+    public FieldStatistics getFieldStatistics (int i) {
+        return stats [i];
+    }
+
     public void init (String [] argv) {
         throw new RuntimeException ("please use constructor");
     }

@@ -3,7 +3,7 @@ package org.kobjects.db.jdbc;
 import org.kobjects.db.*;
 import org.kobjects.util.*;
 import java.sql.*;
-
+import java.util.*;
 
 public class JdbcTable extends Table {
     
@@ -19,6 +19,8 @@ public class JdbcTable extends Table {
     public JdbcTable (Connection connection, String name) {
         this.connection = connection;
         this.name = name;
+
+        open ();
     }
 
 
@@ -35,6 +37,16 @@ public class JdbcTable extends Table {
             
             name = name;
 
+            open ();
+        }
+        catch (SQLException e) {
+            throw new ChainedRuntimeException (e);
+        }
+    }
+
+
+    private void open () {
+        try {
             Statement statement = connection.createStatement ();
             //statement.executeUpdate ("DELETE FROM "+tableName);
 
@@ -55,10 +67,13 @@ public class JdbcTable extends Table {
                 int type;
                 switch (meta.getColumnType (i)) {
                 case Types.VARCHAR: type = Field.STRING; break;
+                case Types.INTEGER: type = Field.INTEGER; break;
+                case Types.NUMERIC: 
                 case Types.REAL: type = Field.DOUBLE; break;
                 default: throw new RuntimeException 
                              ("unsupported field type: "+meta.getColumnType (i));
                 }
+                addField (meta.getColumnName (i), type);
             }
             statement.close ();
         }
@@ -78,10 +93,12 @@ public class JdbcTable extends Table {
 
     public void drop () {
         if (!existing) return;
-
+        
         try {
             Statement statement = connection.createStatement ();
             statement.execute ("DROP TABLE "+name); 
+            existing = false;
+            fields = new Vector ();
         }
         catch (SQLException e) {
             throw new ChainedRuntimeException (e);
@@ -99,6 +116,7 @@ public class JdbcTable extends Table {
             Field f = getField (i);
             buf.append (i == 0 ? " (" : ", ");
             buf.append (f.getName ());
+            buf.append (' ');
             switch (f.getType ()) {
             case Field.DOUBLE:
             case Field.INTEGER:
@@ -124,6 +142,7 @@ public class JdbcTable extends Table {
         try {
             Statement statement = connection.createStatement ();
             statement.execute (buf.toString ());
+            existing = true;
         }
         catch (SQLException e) {
             throw new ChainedRuntimeException (e, "failed: "+buf);
@@ -148,8 +167,47 @@ public class JdbcTable extends Table {
         
         if (record.getId () != -1) throw new RuntimeException ("update NYI");
 
-        
-        
+        if (!existing) create ();
+
+        try {
+
+            if (insertStatement == null) {
+                StringBuffer buf = new StringBuffer ("INSERT INTO ");
+                buf.append (name);
+                for (int i = 0; i < getFieldCount (); i++) {
+                    buf.append (i == 0 ? " (" : ", ");
+                    buf.append (getField (i).getName ());
+                }
+
+                buf.append (") VALUES ");
+
+                for (int i = 0; i < getFieldCount (); i++) { 
+                     buf.append (i == 0 ? " (?" : ", ?");
+                     // buf.append (i == 0 ? "( " : ", ");
+                     // buf.append (""+record.getObject (i));
+                } 
+                
+                
+                buf.append (")");
+                insertStatement = connection.prepareStatement (buf.toString ());
+            }
+
+            // connection.createStatement ().executeUpdate (buf.toString ());
+
+           
+
+            for (int i = 0; i < getFieldCount (); i++) 
+                insertStatement.setObject (i+1, record.getObject (i));
+
+            insertStatement.executeUpdate ();
+
+        }
+        catch (SQLException e) {
+            throw new ChainedRuntimeException (e); //, "failed: "+buf.toString () );
+        }
+
+
+        //ins
 
     }
 

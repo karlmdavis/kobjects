@@ -29,7 +29,7 @@ public class TextFixed extends Table {
     }
 
 
-    protected void loadRecord (Record record) {
+    public void loadRecord (Record record) {
 
         String line;
 
@@ -56,7 +56,8 @@ public class TextFixed extends Table {
         for (int i = 0; i < getFieldCount (); i++) {
             Field f = getField (i);
             
-            record.setObject (i, line.substring (start, start + f.getSize ()));
+            record.setObject (i, line.substring 
+                              (start, start + f.getSize ()).trim ());
             start += f.getSize ();
         }
     } 

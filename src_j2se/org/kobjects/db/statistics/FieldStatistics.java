@@ -22,27 +22,34 @@ public class FieldStatistics {
             nullCount++;
         else {
             String value = v.toString ();
-            Integer count = (Integer) values.get (value);
-            if (count == null) count = new Integer (1);
-            else count = new Integer (count.intValue () + 1);
-            values.put (value, count);
-
+            
+            if (values != null) {
+                
+                if (values.size () > 1000) 
+                    values = null;
+                else { 
+                    Integer count = (Integer) values.get (value);
+                    if (count == null) count = new Integer (1);
+                    else count = new Integer (count.intValue () + 1);
+                    values.put (value, count);
+                }                
+            }   
             if (numeric) {
                 value = value.trim ();
-                
+                        
                 int dot = value.indexOf ('.');
                 if (dot != -1) {
                     if (value.length () - dot > decimals) 
                         decimals = value.length () - dot;
                 }
-
+                
                 if (value.equals ("")) 
-                    nullCount++;
+                            nullCount++;
                 else {
                     try {
                         double d = Double.parseDouble (value);
                         if (d > max) max = d;
-                        if (d < min) min = d;
+                                if (d < min) min = d;
                     }
                     catch (NumberFormatException e) {
                         numeric = false;
@@ -52,11 +59,15 @@ public class FieldStatistics {
         }
     }
 
-
+    
 
     public String toString () {
         return "count: "+count + " nullCount: "+ nullCount 
-            + " distinct values: "+(values.size() < 10 ? ""+values : ""+values.size ()) + "numeric: " 
+            + " distinct values: "
+            + (values == null 
+               ? " >1000" 
+               : (values.size() < 10 ? ""+values : ""+values.size ()))
+            + "numeric: " 
             + (numeric ? ("yes;  min: "+ min + " max: "+ max) : "no");
     }
 

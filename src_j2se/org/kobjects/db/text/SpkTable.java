@@ -31,8 +31,6 @@ public class SpkTable extends TextFixed {
                 (new FileReader (spkFileName));
             
             
-            TextFixed helpTable = new TextFixed (fileName);
-            
             while (true) { 
                 String line = reader.readLine ();
                 if (line == null) break;
@@ -54,8 +52,9 @@ public class SpkTable extends TextFixed {
                     int length = Integer.parseInt 
                         (value.substring (c2+1).trim ()); 
                     
-                    Field f = helpTable.addField (name, Field.STRING);
+                    Field f = addField (name, Field.STRING);
                     f.setSize (length);
+
                     
                     /*
                       ColumnDef c = new ColumnDef ();
