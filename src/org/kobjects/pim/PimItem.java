@@ -22,6 +22,10 @@ public class PimItem {
         
     }
     
+    public Enumeration fieldNames() {
+        return fields.keys();
+    }
+    
     public void addField(PimField field) {
         Vector v = (Vector) fields.get(field.name);
 
@@ -41,6 +45,13 @@ public class PimItem {
     public int getFieldCount(String name) {
         Vector v = (Vector) fields.get(name);
         return v == null ? 0 : v.size();
+    }
+    /**
+     * Method getType.
+     * @return int
+     */
+    public String getType() {
+        return type;
     }
 
 }

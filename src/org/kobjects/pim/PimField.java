@@ -41,4 +41,8 @@ public class PimField {
         value = object;
     }
 
+    public Object getValue() {
+        return value;
+    }
+
 }

@@ -43,7 +43,7 @@ public class PimParser {
         return reader.readTo(":;").trim().toLowerCase();
     }
 
-    Object readValue() {
+    Object readValue() throws IOException  {
         return reader.readLine();
     }
 

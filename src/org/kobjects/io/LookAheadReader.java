@@ -114,8 +114,11 @@ public class LookAheadReader extends Reader {
      * Method readLine.
      * @return Object
      */
-    public String readLine() {
-        throw new RuntimeException("NYI");
+    public String readLine() throws IOException{
+        String s = readTo("\r\n");
+        if (read() == '\r' && peek(0) == '\n')
+            read();
+        return s;
     }
 
 }
