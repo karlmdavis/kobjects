@@ -11,6 +11,7 @@ public class JdbcTable extends Table {
     boolean existing = false;
     Connection connection;
     PreparedStatement insertStatement;
+    boolean ownConnection;
     
 
     public JdbcTable () {
@@ -34,6 +35,9 @@ public class JdbcTable extends Table {
         
             connection = DriverManager.getConnection 
                 (params [0], params [1], params [2]);
+
+            connection.setAutoCommit (false);
+            ownConnection = true;
             
             name = name;
 
@@ -46,6 +50,7 @@ public class JdbcTable extends Table {
 
 
     private void open () {
+        
         try {
             Statement statement = connection.createStatement ();
             //statement.executeUpdate ("DELETE FROM "+tableName);
@@ -194,11 +199,9 @@ public class JdbcTable extends Table {
 
             // connection.createStatement ().executeUpdate (buf.toString ());
 
-           
-
             for (int i = 0; i < getFieldCount (); i++) 
                 insertStatement.setObject (i+1, record.getObject (i));
-
+            
             insertStatement.executeUpdate ();
 
         }
@@ -213,6 +216,15 @@ public class JdbcTable extends Table {
 
 
     public void close () {
+        try {
+            if (insertStatement != null) 
+                insertStatement.close ();
+            if (ownConnection)
+                connection.close ();
+        }
+        catch (SQLException e) {
+            throw new ChainedRuntimeException (e);
+        }
     }
 
 }

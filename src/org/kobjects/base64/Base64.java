@@ -116,9 +116,16 @@ public class Base64 {
 
 
     public static byte [] decode (String s) {
-
-	int i = 0;
+        
 	ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+        decode (s, bos);
+	return bos.toByteArray ();
+    }
+
+
+    public static void decode (String s, ByteArrayOutputStream bos) {
+	int i = 0;
+
 	int len = s.length ();
 	
 	while (true) { 
@@ -139,7 +146,6 @@ public class Base64 {
 
 	    i += 4;
 	}
-	return bos.toByteArray ();
     }
 }
 
