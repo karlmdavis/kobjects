@@ -156,6 +156,12 @@ public class RecordStoreImpl extends RecordStore {
     }
     
 
+    public void deleteRecordStoreImpl () throws RecordStoreException {
+	if (refCount != 1) throw new RecordStoreException ("RecordStore is open!");
+	if (!MIDletRunner.isApplet) file.delete ();
+    }
+
+
     public void deleteRecord (int recordId) 
 	throws RecordStoreNotOpenException,
 	       InvalidRecordIDException,

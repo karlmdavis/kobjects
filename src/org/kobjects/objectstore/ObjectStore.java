@@ -5,7 +5,7 @@ import java.util.*;
 import java.io.*; 
 import javax.microedition.rms.*;
 
-import org.kobjects.serialization.SimpleSerializable;
+import org.kobjects.serialization.*;
 
 public class ObjectStore {
     
@@ -76,11 +76,16 @@ public class ObjectStore {
 	    for (int i = 0; i < name.length; i++)
 		dos.writeUTF (name [i]);
 	
-	    if (obj instanceof SimpleSerializable) {
-		SimpleSerializable sobj = (SimpleSerializable) obj;
+	    if (obj instanceof KvmSerializable) {
+		KvmSerializable sobj = (KvmSerializable) obj;
 		int cnt = sobj.getPropertyCount ();
-		for (int i = 0; i < cnt; i++) 
-		    writeProperty (dos, sobj.getProperty (i), multiRef);
+		PropertyInfo info = new PropertyInfo ();
+		for (int i = 0; i < cnt; i++) {
+		    info.nonpermanent = false;
+		    sobj.getPropertyInfo (i, info);
+		    if (!info.nonPermanent)
+			writeProperty (dos, sobj.getProperty (i), multiRef);
+		}
 	    }
 	    else if (obj instanceof Vector) {
 		Vector v = (Vector) obj;
@@ -174,12 +179,16 @@ public class ObjectStore {
 		obj = newInstance (name[0], name[1], name [2]);
 	    
 	    
-	    if (obj instanceof SimpleSerializable) {
-		SimpleSerializable kobj = (SimpleSerializable) obj; 
+	    if (obj instanceof KvmSerializable) {
+		KvmSerializable kobj = (KvmSerializable) obj; 
 		int cnt = kobj.getPropertyCount ();
-		for (int i = 0; i < cnt; i++) 
-		    kobj.setProperty (i, readProperty (dis));
-		
+		PropertyInfo info = new PropertyInfo ();
+		for (int i = 0; i < cnt; i++) {
+		    info.nonpermanent = false;
+		    kobj.getPropertyInfo (i);
+		    if (!info.nonpermanent) 
+			kobj.setProperty (i, readProperty (dis));
+		}
 	    }
 	    else if (obj instanceof Vector) {
 		int cnt = dis.readInt ();
