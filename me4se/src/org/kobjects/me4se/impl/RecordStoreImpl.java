@@ -78,6 +78,8 @@ public class RecordStoreImpl extends RecordStore {
 		refCount = 0;
 		throw new RecordStoreNotFoundException ();
 	    }
+
+	    records = new Vector ();
 	}
 	else {
 	    try {
@@ -87,6 +89,8 @@ public class RecordStoreImpl extends RecordStore {
 		    (new FileInputStream (file));
 		
 		records = (Vector) ois.readObject ();
+
+		//System.out.println ("read: "+records);
 		ois.close ();
 	    } 
 	    catch (Exception ioe) {
@@ -98,8 +102,6 @@ public class RecordStoreImpl extends RecordStore {
 		
 	    }
 	}
-	
-	records = new Vector ();
     }
 
 
@@ -126,6 +128,8 @@ public class RecordStoreImpl extends RecordStore {
 	throws RecordStoreNotOpenException,
 	       RecordStoreException {
 
+	//System.out.println ("closeRecordStore "+recordStoreName + " / "+refCount);
+
 	if (refCount > 0) refCount--;
 
 	if (MIDletRunner.isApplet) return;
@@ -134,7 +138,9 @@ public class RecordStoreImpl extends RecordStore {
 	    ObjectOutputStream p = new ObjectOutputStream 
 		(new FileOutputStream (recordStoreName)); 
 
+	    //System.out.println ("writing: "+records);
 	    p.writeObject(records); 
+	    p.close ();
 	    records = null; 
 	}  
 	catch (IOException ioe) { 
