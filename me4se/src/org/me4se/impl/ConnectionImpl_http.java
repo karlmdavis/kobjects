@@ -37,6 +37,10 @@ public class ConnectionImpl_http extends ConnectionImpl
     HttpURLConnection con;
 
 
+    public static String httpProxyHost;
+    public static int httpProxyPort;
+
+
     public void open (String url, int mode, 
 		      boolean timeouts) throws IOException {
 

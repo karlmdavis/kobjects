@@ -40,15 +40,15 @@ public class ApplicationManager {
     public int canvasHeight;
     public Properties properties;
 
-	public String socketProxyHost = null;
-	public int socketProxyPort = -1;	
-	public String httpProxyHost = null;
-	public int httpProxyPort = -1;	
-
+    public String socketProxyHost = null;
+    public int socketProxyPort = -1;	
+    public String httpProxyHost = null;
+    public int httpProxyPort = -1;	
+    
     public ApplicationManager (java.awt.Container dc, Properties properties) {
 
 	this.properties = properties;
-
+	
 	if (manager != null) 
 	    manager.destroy ();
 	
