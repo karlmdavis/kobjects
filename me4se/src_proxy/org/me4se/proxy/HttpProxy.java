@@ -1,5 +1,5 @@
 // added by andre
-package org.me4se.impl;
+package org.me4se.proxy;
 
 import java.net.*;
 import java.io.*;

@@ -49,22 +49,24 @@ public class Graphics {
 	setFont (Font.DEFAULT_FONT);
     }
 
-
+    
     public void drawArc (int x, int y, int w, int h, int sa, int aa) {
 	g.drawArc (x, y, w, h, sa, aa);
     }
     
-    public void drawChars (char [] chars, int ofs, int len, int x, int y, int align) {
+    
+    public void drawChars (char [] chars, int ofs, int len, 
+			   int x, int y, int align) {
 	drawString (new String (chars, ofs, len), x, y, align);
     }
     
     
 
-   public void drawImage (Image img, int x, int y, int align) {
+    public void drawImage (Image img, int x, int y, int align) {
 	
 	if( align == 0 )
-		align = TOP | LEFT;
-		
+	    align = TOP | LEFT;
+	
 	switch (align & (TOP|BOTTOM|BASELINE|VCENTER)) {
 	case TOP: break;
 	case BOTTOM: y -= img.getHeight (); break;
@@ -78,13 +80,32 @@ public class Graphics {
 	case HCENTER: x -= img.getWidth ()/2; break;
 	default: throw new IllegalArgumentException ();
 	} 
-
+	
 	g.drawImage (img.image, x, y, null);
     }     
 
     
     public void drawLine (int x0, int y0, int x1, int y1) {
-	g.drawLine (x0, y0, x1, y1);
+	
+	if (strokeStyle == SOLID) 
+	    g.drawLine (x0, y0, x1, y1);
+	
+	else {
+	    int dx = x1 - x0;
+	    int dy = y1 - y0;
+	    int steps = Math.max (Math.abs (dx), Math.abs (dy)) / 4;
+	    dx = (dx << 16) / steps;
+	    dy = (dy << 16) / steps;
+	    x0 = x0 << 16;
+	    y0 = y0 << 16;
+	    
+	    while (steps > 0) {
+		g.drawLine (x0 >> 16, y0 >> 16, (x0+dx) >> 16, (y0+dy) >> 16);
+		x0 += dx+dx;
+		y0 += dy+dy;
+		steps -= 2;
+	    }
+	}
     }
 
 
@@ -123,27 +144,32 @@ public class Graphics {
 	g.drawRoundRect (x, y, w, h, r1, r2);
     }
 
+
     public void fillArc (int x, int y, int w, int h, int sa, int aa) {
 	g.fillArc (x, y, w, h, sa, aa);
     }
 
+
     public void fillRect (int x, int y, int w, int h) {
 	g.fillRect (x, y, w, h);
     }
-    
 
+    
     public void fillRoundRect (int x, int y, int w, int h, int r1, int r2) {
 	g.fillRoundRect (x, y, w, h, r1, r2);
     }
+
 
     public Font getFont () {
 	return font;
     }
 
+
     public int getClipX () {
 	java.awt.Rectangle r = g.getClipBounds ();
 	return r == null ? 0 : r.x;
     }
+
 
     public int getClipY () {
 	java.awt.Rectangle r = g.getClipBounds ();
@@ -155,6 +181,7 @@ public class Graphics {
 	java.awt.Rectangle r = g.getClipBounds ();
 	return r == null ? ApplicationManager.manager.canvasWidth : r.width;
     }
+
 
     public int getClipHeight () {
 	java.awt.Rectangle r = g.getClipBounds ();
@@ -180,9 +207,11 @@ public class Graphics {
 	g.translate (x, y);
     }
 
+
     public void clipRect (int x, int y, int w, int h) {
 	g.clipRect (x, y, w, h);
     }
+
 
     public void setClip (int x, int y, int w, int h) {
 	g.setClip (x, y, w, h);
@@ -193,77 +222,70 @@ public class Graphics {
 	g.setColor (new java.awt.Color (color));
     }
 
+
     public void setColor (int cr, int cg, int cb) {
 	g.setColor (new java.awt.Color (cr, cg, cb));
     }
 
 
-
     public void setGrayScale (int gsc) {
 	setColor (gsc | (gsc << 8) | (gsc << 16)); 
     }
+
+    
+    public void drawSubstring (String str, int offset, int len,
+			       int x, int y, int anchor) {
+
+	drawString (str.substring (offset , offset + len - 1), 
+		    x, y, anchor);
+    }
 	
-	public void drawSubstring(String str,
-                          int offset,
-                          int len,
-                          int x,
-                          int y,
-                          int anchor)
-	{
-		drawString( str.substring( offset , offset + len - 1 ) , x , y , anchor );
-}
+    
+    public void drawChar (char character, int x, int y, int anchor) {
+	char characters[] = new char[1];
+	characters[0] = character;
+	drawString (new String (characters), x, y, anchor);
+    }
 	
-	public void drawChar(char character,
-                     int x,
-                     int y,
-                     int anchor)
-	{
-		char characters[] = new char[1];
-		characters[0] = character;
-		drawString( new String( characters ) , x , y , anchor );
-	}
-	
-	public int getBlueComponent() 
-	{
-		return g.getColor().getBlue();
+
+    public int getBlueComponent () {
+	return g.getColor().getBlue();
     }
 
-	public int getGreenComponent() 
-	{
-		return g.getColor().getGreen();
+    
+    public int getGreenComponent ()  {
+	return g.getColor().getGreen();
     }
 
-	public int getRedComponent() 
-	{
-		return g.getColor().getRed();
+
+    public int getRedComponent () {
+	return g.getColor().getRed();
     }
 
-	public int getGrayScale()
-	{
-		return getRedComponent();
-	}	
+    
+    public int getGrayScale () {
+	return getRedComponent();
+    }	
 
-	public int getTranslateX()
-	{
-		return translateX;
-}
 	
-	public int getTranslateY()
-	{
-		return translateY;
-	}	
+    public int getTranslateX () {
+	return translateX;
+    }
+	
+    
+    public int getTranslateY () {
+	return translateY;
+    }	
 
-	public void setStrokeStyle(int style)
-	{
-		//TBD does nothing at the moment
-		strokeStyle = style;
-	}
 	
-	public int getStrokeStyle()
-	{
-		//TBD does nothing at the moment
-		return strokeStyle;
-	}
+    public void setStrokeStyle (int style) {
+	strokeStyle = style;
+    }
 	
+
+    public int getStrokeStyle () {
+	return strokeStyle;
+    }	
 }
+
 

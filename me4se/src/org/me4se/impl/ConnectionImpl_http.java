@@ -18,62 +18,35 @@
 // to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA 02111-1307, USA.
 
+
+// Andre, this is the old version; I have shifted your version
+// to src_applet in order to be able to build a "simple" version
+// for execution on PJava devices. 
+
 package org.me4se.impl;
         
 import java.io.*;
-import HTTPClient.*;
-import HTTPClient.http.*;
-
+import java.net.*;
 import javax.microedition.io.*;
-import javax.microedition.midlet.*;
              
 
 public class ConnectionImpl_http extends ConnectionImpl 
     implements HttpConnection {
-	public static Handler handler;
-    java.net.URL url;
+
+    URL url;
     HttpURLConnection con;
 
-	public static String httpProxyHost = null;
-	public static int httpProxyPort = -1;
-
-	static
-	{
-		try
-		{
-			handler = new Handler();
-		}
-		catch( SecurityException e )
-		{
-//			e.printStackTrace();
-		}		
-		catch( Exception e )
-		{
-//			e.printStackTrace();
-		}		
-	}
 
     public void open (String url, int mode, 
 		      boolean timeouts) throws IOException {
 
-		if( httpProxyHost == null )
-		{
-	
-			this.url = new java.net.URL (url);
-			con = (HttpURLConnection) handler.openConnection( this.url );
+	this.url = new URL (url);
+	con = (HttpURLConnection) this.url.openConnection ();
 
+	con.setUseCaches (false);
 	con.setDoOutput ((mode & Connector.WRITE) != 0);
 	con.setDoInput ((mode & Connector.READ) != 0);
-    }
-		else
-		{
-			this.url = new java.net.URL (url);
-			HTTPConnection.setProxyServer( httpProxyHost , httpProxyPort );
-			con = (HttpURLConnection) handler.openConnection( this.url );
-
-	con.setDoOutput ((mode & Connector.WRITE) != 0);
-	con.setDoInput ((mode & Connector.READ) != 0);
-		}		
+	con.setRequestProperty ("connection", "close");
     }
 
 
@@ -184,7 +157,16 @@ public class ConnectionImpl_http extends ConnectionImpl
 
     
     public InputStream openInputStream () throws IOException {
+	//	con.getOutputStream ().flush ();
+	
+	try {
 	    return con.getInputStream ();
+	}
+	catch (IOException e) {
+	    InputStream is = con.getErrorStream ();
+	    if (is == null) throw e;
+	    return is;
+	}
     }
 
     public DataInputStream openDataInputStream () throws IOException {
