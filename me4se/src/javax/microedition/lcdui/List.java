@@ -48,6 +48,18 @@ public class List extends Screen implements Choice {
 		}
 	    });
     }
+    
+    public List (String title, int listType, String[] stringElements, Image[] imageElements) {
+        this(title, listType);
+        if (imageElements != null) {
+            for (int i=0; i<stringElements.length; i++) 
+                append(stringElements[i],imageElements[i]);
+        }
+        else {
+            for (int i=0; i<stringElements.length; i++) 
+                append(stringElements[i],Image.createImage(1,1));
+        }
+    }
 
     public int append (String s, Image i) {
 	list.add (s);
@@ -58,7 +70,8 @@ public class List extends Screen implements Choice {
 
     public void delete (int index) {
 	panel.remove (index);
-	images.remove (index);
+        if (!images.isEmpty()) 
+	    images.remove (index);
     }
     
     
