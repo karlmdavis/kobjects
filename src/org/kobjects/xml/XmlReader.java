@@ -2,7 +2,7 @@
 //
 // Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
 //
-// Contributors: Liam Quinn
+// Contributors: Liam Quinn, Christian Scheer
 //
 // License: LGPL
 //
@@ -571,13 +571,13 @@ public class XmlReader {
  
     public String getAttributeName(int index) {
 	if (index >= attributeCount) throw new IndexOutOfBoundsException ();
-	return attributes [index >> 1];
+	return attributes [index << 1];
     }
     
     
     public String getAttributeValue(int index) {
 	if (index >= attributeCount) throw new IndexOutOfBoundsException ();
-	return attributes [(index >> 1) + 1];
+	return attributes [(index << 1) + 1];
     }
     
     
