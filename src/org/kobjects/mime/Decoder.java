@@ -31,7 +31,7 @@ public class Decoder {
     boolean eof;
     boolean consumed;
     String boundary;
-
+	String characterEncoding;
 
     // add some kind of buffering here!!!
 
@@ -100,12 +100,18 @@ public class Decoder {
             key = header.substring(pos, cut).toLowerCase().trim();
             pos = cut + 1;
         }
+   //     System.out.println("header: "+result);
+        
         return result;
     }
 
+	public Decoder(InputStream is, String _bound) throws IOException{
+		this(is, _bound, null);
+	}
 
-    public Decoder(InputStream is, String _bound) throws IOException {
+    public Decoder(InputStream is, String _bound, String characterEncoding) throws IOException {
 
+		this.characterEncoding = characterEncoding;
         this.is = is;
         this.boundary = "--" + _bound;
 
@@ -117,8 +123,8 @@ public class Decoder {
             if (line == null)
                 throw new IOException("Unexpected EOF");
 
-            System.out.println("line:  '" + line + "'");
-            System.out.println("bound: '" + boundary + "'");
+      //      System.out.println("line:  '" + line + "'");
+      //      System.out.println("bound: '" + boundary + "'");
 
             if (line.startsWith(boundary))
                 break;
@@ -144,7 +150,9 @@ public class Decoder {
 	public String readContent () throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream ();
 		readContent (bos);
-		return new String (bos.toByteArray());
+		return characterEncoding == null 
+			? new String(bos.toByteArray()) 
+			: new String (bos.toByteArray(), characterEncoding);
 	}
 	
 	public void readContent (OutputStream os) throws IOException {
@@ -153,9 +161,11 @@ public class Decoder {
 
 		String line = "";
 
-        System.out.println("cte-head: " + getHeader("Content-Transfer-Encoding"));
 
         String contentType = getHeader("Content-Type");
+		System.out.println("header: " + header);
+//		System.out.println("Content-Type: "+contentType);
+		
 
         if ("base64".equals(getHeader("Content-Transfer-Encoding"))) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
