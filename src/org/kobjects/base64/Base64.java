@@ -9,7 +9,9 @@ public class Base64 {
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"; 
 
 
-    public static void encode (byte [] data, Writer w) throws IOException {
+    public static String encode (byte [] data) throws IOException {
+
+	StringBuffer buf = new StringBuffer (data.length * 3 / 2);
 
 	int i = 0;
 	int end = data.length - 3;
@@ -19,31 +21,77 @@ public class Base64 {
 		| ((((int) data [i+1]) & 0x0ff) << 8)
 		| (((int) data [i+2]) & 0x0ff);
 
-	    w.write (charTab.charAt ((d >> 18) & 63));
-	    w.write (charTab.charAt ((d >> 12) & 63));
-	    w.write (charTab.charAt ((d >> 6) & 63));
-	    w.write (charTab.charAt (d & 63));
+	    buf.append (charTab.charAt ((d >> 18) & 63));
+	    buf.append (charTab.charAt ((d >> 12) & 63));
+	    buf.append (charTab.charAt ((d >> 6) & 63));
+	    buf.append (charTab.charAt (d & 63));
 
 	    i += 3;
 
-	    if (i % 45 == 0) w.write ("\r\n");
+	    if (i % 45 == 0) buf.append ("\r\n");
 	}
 
 	if (i == data.length - 2) {
 	    int d = ((((int) data [i]) & 0x0ff) << 16) 
 		| ((((int) data [i+1]) & 255) << 8);
 
-	    w.write (charTab.charAt ((d >> 18) & 63));
-	    w.write (charTab.charAt ((d >> 12) & 63));
-	    w.write (charTab.charAt ((d >> 6) & 63));
-	    w.write ("=");
+	    buf.append (charTab.charAt ((d >> 18) & 63));
+	    buf.append (charTab.charAt ((d >> 12) & 63));
+	    buf.append (charTab.charAt ((d >> 6) & 63));
+	    buf.append ("=");
 	}
 	else if (i == data.length - 1) {
 	    int d = (((int) data [i]) & 0x0ff) << 16;
 
-	    w.write (charTab.charAt ((d >> 18) & 63));
-	    w.write (charTab.charAt ((d >> 12) & 63));
-	    w.write ("==");
+	    buf.append (charTab.charAt ((d >> 18) & 63));
+	    buf.append (charTab.charAt ((d >> 12) & 63));
+	    buf.append ("==");
+	}
+	return buf.toString ();
+    }
+
+    static int decode (char c) {
+	if (c >= 'A' && c <= 'Z') 
+	    return ((int) c) - 65;
+	else if (c >= 'a' && c <= 'z') 
+	    return ((int) c) - 97 + 26;
+	else if (c >= '0' && c <= '9')
+	    return ((int) c) - 48 + 26 + 26;
+	else switch (c) {
+	case '+': return 62;
+	case '/': return 63;
+	case '=': return 0;
+	default:
+	    throw new RuntimeException ("unexpected code: "+c);
 	}
     }
+		
+
+
+    public static byte [] decode (String s) {
+
+	int i = 0;
+	ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+	int len = s.length ();
+	
+	while (true) { 
+	    while (i < len && s.charAt (i) <= ' ') i++;
+
+	    if (i == len) break;
+
+	    int tri = (decode (s.charAt (i)) << 18)
+		+ (decode (s.charAt (i+1)) << 12)
+		+ (decode (s.charAt (i+2)) << 6)
+		+ (decode (s.charAt (i+3)));
+	    
+	    bos.write ((tri >> 16) & 255);
+	    if (s.charAt (i+2) == '=') break;
+	    bos.write ((tri >> 8) & 255);
+	    if (s.charAt (i+3) == '=') break;
+	    bos.write (tri & 255);
+	}
+	return bos.toByteArray ();
+    }
 }
+
+
