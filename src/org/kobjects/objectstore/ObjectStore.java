@@ -15,7 +15,7 @@ public class ObjectStore {
     static final byte STRING = (byte) 3;
     static final byte IDREF = (byte) 4;
 
-    RecordStore store;
+    protected RecordStore store;
 
     
     public ObjectStore (String rmsName) throws RecordStoreException {
@@ -197,5 +197,10 @@ public class ObjectStore {
 	default:
 	    throw new RuntimeException ("unknown type code: "+dis);
 	}
+    }
+
+
+    public void close () throws RecordStoreException {
+	store.closeRecordStore ();
     }
 }

@@ -89,6 +89,8 @@ public class Base64 {
 	    bos.write ((tri >> 8) & 255);
 	    if (s.charAt (i+3) == '=') break;
 	    bos.write (tri & 255);
+
+	    i += 4;
 	}
 	return bos.toByteArray ();
     }
