@@ -100,4 +100,30 @@ public class Strings {
 	}
 
 	
+	public static String lTrim(String s, String chars){
+		int i = 0;
+		int len = s.length();
+		while(i < len 
+			&& (chars == null 
+				? (s.charAt(i) <= ' ') 
+				: (chars.indexOf(s.charAt(i)) != -1))){
+			i++;
+		}
+		return i == 0 ? s : s.substring(i);
+	}
+
+	public static String rTrim(String s, String chars){
+		int i = s.length()-1;
+		while(i >= 0 
+			&& (chars == null 
+				? (s.charAt(i) <= ' ') 
+				: (chars.indexOf(s.charAt(i)) != -1))){
+			i--;
+		}
+		return i == s.length()-1 
+			? s 
+			: s.substring(0, i+1);
+	}
+
+	
 }
