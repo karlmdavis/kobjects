@@ -181,10 +181,10 @@ public class Decoder {
 
             while (true) {
                 int i = is.read();
-                if (i >= 32 && i <= 127)
+/*                if (i >= 32 && i <= 127)
                     System.out.print((char) i);
                 else
-                    System.out.print("#" + i + ";");
+                    System.out.print("#" + i + ";"); */
                 if (i == -1)
                     throw new RuntimeException("Unexpected EOF");
 
@@ -200,7 +200,6 @@ public class Decoder {
 
                         match = ((char) i == deli.charAt(0)) ? 1 : 0;
                     }
-                    
                     if (match == 0) bos.write((byte) i);
                 }
             }

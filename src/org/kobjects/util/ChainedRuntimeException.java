@@ -2,68 +2,67 @@ package org.kobjects.util;
 
 import java.io.*;
 
-
 /** This class is intended to be thrown in an exception handler, e.g.
     in order to wrap an IOException.  It adds the original exception
     stack trace to it's own stack trace output when printed. */
 
-
 public class ChainedRuntimeException extends RuntimeException {
 
-    Exception chain;
+	Exception chain;
+
+	public static ChainedRuntimeException create (Exception e, String s) {
+		try {
+		  return ((ChainedRuntimeException) Class.forName 
+		  	("org.kobjects.util.ChainedRuntimeExceptionSE").newInstance ())._create (e, s);
+		}
+		catch (Exception x) {
+	//	System.out.println (""+x);
+		}
+		return new ChainedRuntimeException (e, s);
+	}
+
+ 
+	ChainedRuntimeException () {
+	}
 
 
-
-    /** creates a new chained runtime exception with 
+	/** creates a new chained runtime exception with 
 	additional information */
 
-    public ChainedRuntimeException (Exception e, String s) { 
-	super (((s==null) ? "rethrown" : s) + ": " + e.toString ()); 
-	chain = e;
-    }
-    
+    ChainedRuntimeException(Exception e, String s) {
+		super(((s == null) ? "rethrown" : s) + ": " + e.toString());
+		chain = e;
+	}
 
-    /** creates a new chained runtime exception from the
-	given exception. */
+	/*creates a new chained runtime exception from the
+	given exception. 
 
-    public ChainedRuntimeException (Exception e) {
-	this (e, null);
-    }
-
-
-    /** returns the original exception */
-
-    public Exception getChained () {
-	return chain;
-    }
-
-
-    /* prints the own stack trace followed by the stack trace of the
-	original exception to the given PrintStream 
-
-    public void printStackTrace (PrintStream p) {
-	super.printStackTrace (p);
-	if (chain != null) 
-	    chain.printStackTrace (p);
-    } */
+	public ChainedRuntimeException(Exception e) {
+		this(e, null);
+	}
+    */
+	
+	/** Helper method to preserve stack trace in J2SE */
+	
+	ChainedRuntimeException _create (Exception e, String s) {
+		throw new RuntimeException ("ERR!");	
+	}
 
 
-    /* prints the own stack trace followed by the stack trace of the
-	original exception to the given PrintWriter 
+	/** returns the original exception */
 
-    public void printStackTrace (PrintWriter p) {
-	super.printStackTrace (p);
-	if (chain != null)
-	    chain.printStackTrace (p);
-    }*/
+	public Exception getChained() {
+		return chain;
+	}
 
-    /** prints the own stack trace followed by the stack trace of the
+
+
+	/** prints the own stack trace followed by the stack trace of the
 	original exception. */
 
-    public void printStackTrace () {
-	super.printStackTrace ();
-	if (chain != null) 
-	    chain.printStackTrace ();
-    }
+	public void printStackTrace() {
+		super.printStackTrace();
+		if (chain != null)
+			chain.printStackTrace();
+	}
 }
-
