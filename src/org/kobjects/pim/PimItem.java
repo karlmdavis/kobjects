@@ -39,7 +39,15 @@ public abstract class PimItem {
     public static final int TYPE_STRING = 0;
     public static final int TYPE_STRING_ARRAY = 1;
     
-        
+    public PimItem () {
+    }
+    
+    public PimItem(PimItem orig) {
+    	for (Enumeration e = orig.fields(); e.hasMoreElements();) {
+			addField(new PimField((PimField) e.nextElement()));
+    	}
+    }    
+
     public Enumeration fieldNames() {
         return fields.keys();
     }
@@ -55,6 +63,24 @@ public abstract class PimItem {
         v.addElement(field);        
     }
 
+	public Enumeration fields() {
+		Vector v = new Vector();
+		for (Enumeration e = fieldNames(); e.hasMoreElements();) {
+			String name = (String) e.nextElement();
+			for (Enumeration f = fields(name); f.hasMoreElements();) {
+				v.addElement(f);
+			}		 
+		}
+		return v.elements();
+	}
+	
+	public Enumeration fields(String name) {
+		Vector v = (Vector) fields.get(name);
+		if (v == null) v = new Vector();
+		return v.elements();
+	}
+	
+	
     public PimField getField(String name, int index) {
         return (PimField) ((Vector) fields.get(name)).elementAt(index);
     }
@@ -73,6 +99,10 @@ public abstract class PimItem {
 		return getArraySize(name) == -1 ? TYPE_STRING : TYPE_STRING_ARRAY;
 	}
 
+	public void removeField(String name, int index) {
+		((Vector) fields.get(name)).remove(index);
+	}
+	
 	public String toString() {
 			return getType()+":"+fields.toString();
 		}

@@ -34,6 +34,22 @@ public class PimField {
     Object value;
     Hashtable properties;
 
+	public PimField(PimField orig) {
+			this(orig.name);
+			if (orig.value instanceof String[]){
+				String[] val = new String[((String[]) orig.value).length];
+				System.arraycopy ((String[]) orig.value, 0, val, 0, val.length);				
+				value = val;
+			}
+			else
+			 	value = orig.value;
+			
+			for(Enumeration e = orig.properties.keys(); e.hasMoreElements();){
+				String name = (String) e.nextElement();
+				properties.put(name, orig.properties.get(name));
+			}		
+	}
+
     
     public PimField (String name) {    
         this.name = name;

@@ -10,7 +10,13 @@ package org.kobjects.pim;
  */
 public class VCard extends PimItem {
 
-	
+	public VCard() {
+	   }
+
+
+	public VCard(VCard orig) {
+		super(orig);
+	   }
 
 	
 	public String getType() {
