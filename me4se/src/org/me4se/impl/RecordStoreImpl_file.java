@@ -22,7 +22,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	return rmsDir == null;
     }
 
-    public boolean accept(File dir, String name) {
+    public boolean accept (File dir, String name) {
 	return name.endsWith (".rms") ? true : false;
     }
 
@@ -50,18 +50,17 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	    file = new File (rmsDir, this.recordStoreName);
 	    
 	    try {
-
-		records = new Vector();
-
 		DataInputStream dis = new DataInputStream 
 		    (new FileInputStream (file));
 		
-		version = dis.readInt();
+		version = dis.readInt ();
 		lastModified = dis.readLong();
+		int count = dis.readInt ();
+		records = new Vector();
 
-		while (true) {
+		for (int i = 0; i < count; i++) {
 		    int length = dis.readInt();
-		    if (length > 0) {
+		    if (length >= 0) {
 			byte[] buffer = new byte[length];
 			dis.readFully(buffer, 0, length);
 			records.addElement (buffer);
@@ -71,9 +70,6 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 		    }
 		}
 	    } 
-	    catch (EOFException eof) {
-		//System.out.println ("Read <" + records.size() + "> records.");
-	    }
 	    catch (Exception ioe) {
 		
 		if (!create) {
@@ -133,8 +129,10 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	    
 	    dos.writeInt (version);
 	    dos.writeLong (lastModified);
-	    
-	    for (int i = 0; i < records.size(); i++) {
+	    int cnt = records.size ();
+	    dos.writeInt (cnt);
+
+	    for (int i = 0; i < cnt; i++) {
 				
 		Object obj = records.elementAt(i);
 		
