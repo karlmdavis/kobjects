@@ -1,3 +1,27 @@
+// kObjects 
+//
+// Copyright (C) 2001, 2002 Stefan Haustein, Oberhausen (Rhld.), Germany
+//
+// Contributors: Robert D. Birch, Sean McDaniel
+//
+// License: LGPL
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public License
+// as published by the Free Software Foundation; either version 2.1 of
+// the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA
+
+
 package org.kobjects.objectstore;
 
 
@@ -15,6 +39,9 @@ public class ObjectStore {
     static final byte STRING = (byte) 3;
     static final byte IDREF = (byte) 4;
     static final byte VECTOR = (byte) 5;
+    static final byte BOOLEAN = (byte) 6;
+    static final byte LONG = (byte)7;
+    static final byte DATE = (byte)10;
 
     protected RecordStore store;
 
@@ -129,6 +156,10 @@ public class ObjectStore {
 	    dos.writeByte (ObjectStore.STRING);
 	    dos.writeUTF ((String) obj);
         }
+        else if (obj instanceof Date) {
+          dos.writeByte(ObjectStore.DATE);
+          dos.writeLong(((Date)obj).getTime());
+        }
 	else if (obj instanceof Vector) {
 	    dos.writeByte (ObjectStore.VECTOR);
 	    Vector v = (Vector) obj;
@@ -137,6 +168,14 @@ public class ObjectStore {
 	    for (int i = 0; i < len; i++)
 		writeProperty (dos, v.elementAt (i), multiRef);
 	}
+        else if (obj instanceof Long) {
+          dos.writeByte(ObjectStore.LONG);
+          dos.writeLong(((Long)obj).longValue());
+        }
+        else if (obj instanceof Boolean) {
+          dos.writeByte(ObjectStore.BOOLEAN);
+          dos.writeBoolean(((Boolean)obj).booleanValue());
+        }
 	else {
 	    String [] name = getName (obj);
 
@@ -214,6 +253,10 @@ RecordStoreException {
 	switch (dis.readByte ()) {
 
 	case STRING: return dis.readUTF ();
+        case INT: return new Integer(dis.readInt());
+        case LONG: return new Long(dis.readLong());
+        case BOOLEAN: return new Boolean(dis.readBoolean());
+        case DATE: return new Date(dis.readLong());
 	case NULL: return null;
 	case IDXREF: return read (dis.readInt (), null);
 	case IDREF: {
