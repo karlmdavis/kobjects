@@ -33,17 +33,17 @@ public final class Util {
 		// slash or 2nd char colon: ignore base, return file://local
 
 		if (local.startsWith ("/") || ci == 1)
-			return "file://" + local;
+			return "file:///" + local;
 
 		// local contains colon, assume URL, return local
 
 		if (ci > 2 && ci < 6) 
 			return local;			
 		
-		if (base == null) base = "file://./";
+		if (base == null) base = "file:///./";
 		else {
 			if (base.indexOf(':') == -1)
-				base = "file://" + base;
+				base = "file:///" + base;
 
 			if (!base.endsWith("/")) 
 				base = base + ("/");				
