@@ -2,7 +2,7 @@
 //
 // Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
 //
-// Contributors:
+// Contributors: Sebastian Vastag 
 //
 // STATUS: API complete
 //
@@ -47,9 +47,12 @@ public abstract class MIDlet {
     
     protected abstract void destroyApp (boolean unconditional) throws MIDletStateChangeException;
 
+
+    // what about the manifest...?
     
     public String getAppProperty (String key) {
-	// XXXX does this really fit?? what about the JAD file?
+
+	return ApplicationManager.manager.jad.getProperty (key);
 	/*
 	if (key.equals ("microedition.configuration"))
 	    return "CLDC 1.0";
@@ -60,7 +63,6 @@ public abstract class MIDlet {
 	    return "UTF-8";
 	*/
 
-	return null;
     }
     
 

@@ -2,7 +2,7 @@
 //
 // Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
 //
-// Contributors:
+// Contributors: Sebastian Vastag 
 //
 // STATUS: 
 //
@@ -31,7 +31,8 @@ public class MIDletRunner extends Applet {
     public static boolean isApplet;
 
     public void start () {
-        System.out.println("test");
+	//        System.out.println("test");
+
 	if (!running) {
 	    isApplet = true;
 	    running = true;
@@ -39,8 +40,8 @@ public class MIDletRunner extends Applet {
 	    if (ApplicationManager.manager != null) 
 		ApplicationManager.manager.destroy ();
             //String[] param = {getParameter ("MIDlet"), getParameter("JAD-File")};
-            String[] param = {getParameter("JAD-File")};
-	    new ApplicationManager (this).init (param);
+	    new ApplicationManager (this).init 
+		(getParameter("JAD-File"), getParameter("MIDlet"));
 	}
 
 	ApplicationManager.manager.start ();
@@ -59,8 +60,23 @@ public class MIDletRunner extends Applet {
 
 
     public static void main (String [] argv)  {
-	new ApplicationManager (null).init (argv);
-	ApplicationManager.manager.start ();
+
+	String midlet = null;
+	String jadfile = null;
+	
+	for (int i = 0; i < argv.length; i++) {
+	    if (argv [i].indexOf (".jad") == argv [i].length() - 4)
+		jadfile = argv[i];
+	    else
+		midlet = argv[i];
+	}
+
+	if (midlet == null && jadfile == null) 
+	    System.err.println ("Please specify an .jad-file or a MIDlet class name.");
+	else {
+	    new ApplicationManager (null).init (jadfile, midlet);
+	    ApplicationManager.manager.start ();
+	}
     }
 }
 

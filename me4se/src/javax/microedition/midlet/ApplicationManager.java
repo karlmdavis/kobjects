@@ -1,17 +1,39 @@
+// ME4SE - A MicroEdition Emulation for J2SE 
+//
+// Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
+//
+// Contributors: Sebastian Vastag 
+//
+// STATUS: API complete
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as
+// published by the Free Software Foundation; either version 2 of the
+// License, or (at your option) any later version. This program is
+// distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+// License for more details. You should have received a copy of the
+// GNU General Public License along with this program; if not, write
+// to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+// Boston, MA 02111-1307, USA.
+
 package javax.microedition.midlet;
 
+import org.kobjects.me4se.impl.JadFile;
 import java.util.Vector;
 
 public class ApplicationManager {
 
     public static ApplicationManager manager;
     
-    public JAD_Parser jad;
+    public JadFile jad;
 
     public MIDlet active;
     public java.awt.Container displayContainer; 
     public int canvasWidth;
     public int canvasHeight;
+
 
     public ApplicationManager (java.awt.Container dc) {
 
@@ -41,13 +63,27 @@ public class ApplicationManager {
     }
 
 
-    public void init (String[] args) {
-        jad = new JAD_Parser(args[0]);
-        Object[] midletlist = jad.getMIDletList();
-        String[] firstmidlet = (String[]) midletlist[0];
+    public void init (String jadFile, String midlet) {
+
+	if (jadFile != null) {
+	    try {
+		jad = new JadFile (jadFile);
+
+		if (midlet == null)
+		    midlet = ((String[]) jad.getMIDletList ().elementAt (0)) [2];
+	    }
+	    catch (Exception e) {
+		if (midlet != null)
+		    System.err.println ("Error opening JAD file:"+e);
+		else 
+		    throw new RuntimeException ("Error opening JAD file:"+e);
+	    }
+	}
+
+
 	try {
 	    //    System.out.println ("name:" +name);
-	    active = ((MIDlet) Class.forName (firstmidlet[2]).newInstance ()); 
+	    active = ((MIDlet) Class.forName (midlet).newInstance ()); 
 	    //  System.out.println ("midlez:" +midlet);
 	}
 	catch (Exception e) {
