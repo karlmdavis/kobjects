@@ -49,7 +49,7 @@ public class Connector {
 
 	try {
 	    ConnectionImpl connection = (ConnectionImpl)
-		Class.forName ("org.kobjects.me4se.impl.ConnectionImpl_"+protocol).newInstance ();
+		Class.forName ("org.me4se.impl.ConnectionImpl_"+protocol).newInstance ();
 	    
 	    connection.open (url, mode, timeOuts);
 	    return connection;

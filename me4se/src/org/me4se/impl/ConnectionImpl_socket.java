@@ -1,4 +1,4 @@
-package org.kobjects.me4se.impl;
+package org.me4se.impl;
 
 import javax.microedition.io.*;
 import java.io.*;
