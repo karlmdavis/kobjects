@@ -38,4 +38,11 @@ public class BoundInputStream extends InputStream {
 
         return actual;
     }
+
+
+    public void close () {
+	is.close ();
+    }
 }
+
+
