@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.Hashtable;
 
+import org.kobjects.xml.XmlReader;
 import org.kobjects.isodate.IsoDate;
 import org.kobjects.base64.Base64;
 
@@ -32,49 +33,54 @@ import org.kobjects.base64.Base64;
  */
 public class XmlRpcParser {
 
-    private XmlParser       parser = null;
+    private XmlReader       parser = null;
 
     /**
-     * @param parser    a XmlParser object
+     * @param parser    a XmlReader object
      */
-    public XmlRpcParser(XmlParser parser) {
+    public XmlRpcParser(XmlReader parser) {
         this.parser = parser;
     }
     
     /**
      * @return Maps XML-RPC structs to java.util.Hashtables
      */
-    private Hashtable parseStruct() throws IOException {
+    final private Hashtable parseStruct() throws IOException {
 	Hashtable result = new Hashtable();
         int type;
 	
-        // parser.require(XmlParser.START_TAG, "", "struct");
-        type = parser.nextTag();
-	while(type != XmlParser.END_TAG) {
-            // parser.require(XmlParser.START_TAG, "", "member");
-            parser.nextTag();
-	    // parser.require( XmlParser.START_TAG, "", "name" );
-            String name = parser.nextText();
-	    // parser.require( XmlParser.END_TAG, "", "name" );
-	    parser.nextTag();
+        // parser.require(XmlReader.START_TAG, "struct");
+        type = nextTag();
+	while(type != XmlReader.END_TAG) {
+            // parser.require(XmlReader.START_TAG, "member");
+            nextTag();
+	    // parser.require( XmlReader.START_TAG, "name" );
+            String name = nextText();
+	    // parser.require( XmlReader.END_TAG, "name" );
+	    nextTag();
 	    result.put( name, parseValue() ); // parse this member value
-	    // parser.require( XmlParser.END_TAG, "", "member" );
-	    type = parser.nextTag();
+	    // parser.require( XmlReader.END_TAG, "member" );
+	    type = nextTag();
 	}
-        // parser.require(XmlParser.END_TAG, "", "struct");
-        parser.nextTag();
+        // parser.require(XmlReader.END_TAG, "struct");
+        nextTag();
 	return result;
     }
 
 
-    private Object parseValue() throws IOException {
+    final private Object parseValue() throws IOException {
 	Object result = null;
         int event;
         
-	// parser.require(XmlParser.START_TAG, "", "value");
-	event = parser.nextTag();
+	// parser.require(XmlReader.START_TAG, "value");
 
-	if (event == XmlParser.START_TAG) {
+	event = parser.next();
+        if (event == parser.TEXT) {
+            result = parser.getText();
+            event  = parser.next();                
+        } 
+        
+        if (event == XmlReader.START_TAG) {
 	    String name = parser.getName();
             if(name.equals("array")) {
                 result = parseArray();
@@ -82,93 +88,132 @@ public class XmlRpcParser {
                 result = parseStruct(); 
             } else {
                 if( name.equals("string") ) {
-                    result = parser.nextText();
+                    result = nextText();
                 } else if( name.equals("i4") || name.equals("int") ) {
-                    result = new Integer (Integer.parseInt(parser.nextText().trim()));
+                    result = new Integer (Integer.parseInt(nextText().trim()));
                 } else if( name.equals("boolean") ) {
-                    result = new Boolean(parser.nextText().trim().equals("1"));
+                    result = new Boolean(nextText().trim().equals("1"));
                 } else if(name.equals("dateTime.iso8601")) {
-                    result = IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME );
+                    result = IsoDate.stringToDate(nextText(), IsoDate.DATE_TIME );
                 } else if( name.equals("base64") ) {
-                    result = Base64.decode(parser.nextText());
+                    result = Base64.decode(nextText());
                 } else if( name.equals("double") ) {
-                    result = parser.nextText();
+                    result = nextText();
                 }
-                // parser.require( XmlParser.END_TAG, "", name );
-                parser.nextTag();
+                // parser.require( XmlReader.END_TAG, name );
+                nextTag();
             }
 	}
-	// parser.require( XmlParser.END_TAG, "", "value" );
-        parser.nextTag();
+
+        // parser.require( XmlReader.END_TAG, "value" );
+        nextTag();
 	return result;
     }
 
-    private Vector parseArray() throws IOException {
-        // parser.require( XmlParser.START_TAG, "", "array" );
-	parser.nextTag();
-        // parser.require( XmlParser.START_TAG, "", "data" );
-        int type = parser.nextTag();
+    final private Vector parseArray() throws IOException {
+        // parser.require( XmlReader.START_TAG, "array" );
+	nextTag();
+        // parser.require( XmlReader.START_TAG, "data" );
+        int type = nextTag();
 
 	Vector vec = new Vector();
-	while( type != XmlParser.END_TAG ) {
+	while( type != XmlReader.END_TAG ) {
 	    vec.addElement( parseValue() ); 
             type = parser.getType();
 	}
 
-        // parser.require( XmlParser.END_TAG, "", "data" );
-        parser.nextTag();
-        // parser.require( XmlParser.END_TAG, "", "array" );
-        parser.nextTag();
+        // parser.require( XmlReader.END_TAG, "data" );
+        nextTag();
+        // parser.require( XmlReader.END_TAG, "array" );
+        nextTag();
 
 	return vec;
     }//end parseArray()
 
 
-    private Object parseFault() throws IOException {
-        // parser.require( XmlParser.START_TAG, "", "fault" );
-	parser.nextTag();
+    final private Object parseFault() throws IOException {
+        // parser.require( XmlReader.START_TAG, "fault" );
+	nextTag();
         Object value = parseValue();
-        // parser.require( XmlParser.END_TAG, "", "fault" );
-	parser.nextTag();
+        // parser.require( XmlReader.END_TAG, "fault" );
+	nextTag();
         return value;
     }
 
-    private Object parseParams() throws IOException {
+    final private Object parseParams() throws IOException {
         Vector params = new Vector();
         int type;
         
-	// parser.require( XmlParser.START_TAG, "", "params" );
-	type = parser.nextTag();
+	// parser.require( XmlReader.START_TAG, "params" );
+	type = nextTag();
         
-	while(type != XmlParser.END_TAG ) {
-	    // parser.require( XmlParser.START_TAG, "", "param" );
-	    parser.nextTag();
+	while(type != XmlReader.END_TAG ) {
+	    // parser.require( XmlReader.START_TAG, "param" );
+	    nextTag();
 	    params.addElement(parseValue());
-	    // parser.require( XmlParser.END_TAG, "", "param" );
-	    type = parser.nextTag();
+	    // parser.require( XmlReader.END_TAG, "param" );
+	    type = nextTag();
 	} 
 	
-	// parser.require( XmlParser.END_TAG, "", "params" );
-	parser.nextTag();
+	// parser.require( XmlReader.END_TAG, "params" );
+	nextTag();
 
         return params;
     }
 
-    public Object parseResponse() throws IOException {
+    final public Object parseResponse() throws IOException {
         Object result = null;
         int event;
 
-        parser.nextTag();
-        // parser.require(XmlParser.START_TAG, "", "methodResponse");
-        event = parser.nextTag();
-        if (event == XmlParser.START_TAG) {
+        nextTag();
+        // parser.require(XmlReader.START_TAG, "methodResponse");
+        event = nextTag();
+        if (event == XmlReader.START_TAG) {
             if ("fault".equals(parser.getName())) {
                 result = parseFault();
             } else if ("params".equals(parser.getName())) {
                 result = parseParams();
             } 
         } 
-        // parser.require(XmlParser.END_TAG, "", "methodResponse");
+        // parser.require(XmlReader.END_TAG, "methodResponse");
+        return result;
+    }
+
+
+    final private int nextTag() throws IOException {
+        int type = parser.getType();
+        type = parser.next();
+        if (type == parser.TEXT && parser.isWhitespace()) {
+            type = parser.next();
+        }
+        if (type != parser.END_TAG && type != parser.START_TAG) {
+            throw new IOException ("unexpected type: " + type);
+        }
+        return type;
+    }
+
+    final private String nextText() throws IOException {
+        int type = parser.getType();
+
+        if (type != parser.START_TAG) {
+            throw new IOException ("precondition: START_TAG");
+        }
+
+        type = parser.next();
+
+        String result;
+
+        if (type == parser.TEXT) {
+            result = parser.getText();
+            type = parser.next();
+        } else {
+            result = "";
+        }
+
+        if (type != parser.END_TAG) {
+            throw new IOException ("END_TAG expected");
+        }
+
         return result;
     }
 
