@@ -6,23 +6,33 @@ public class Decoder {
     Hashtable header;
     byte [] binary;
     String text;
+    boolean eof;
 
     public Decoder (Reader reader, String boundary) {
 
 	this.reader = (reader instanceof BufferedReader) 
 	    ? (BufferedReader) reader
 	    : new BufferedReader (reader);
+
+        
     }
 
+
+    public String getHeader (String key) {
+        return header.get (key.toLowerCase ());
+    }
     
     public boolean next () {
+
+        if (eof) return false;
 
 	// read header 
 
 	header = new Hashtable ();
+        String line;
 
 	while (true) {
-	    String line = reader.readLine ();
+	    line = reader.readLine ();
 	    if (line == null || line.equals ("")) break;
 	    int cut = line.indexOf (':');
 	    if (cut == -1) 
@@ -33,11 +43,29 @@ public class Decoder {
 			line.substring (cut+1).trim ());
 	}
 
-	if ("base64".equals (header.get ("Content-Transfer-Encoding"))) {
-
+	if ("base64".getHeader ("Content-Transfer-Encoding")) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+            while (true) {
+                line = reader.readLine ();
+                if (line.startsWith (boundary)) break;
+                
+            }
 	}
 	else {
-	    StringBuffer buf = new StringBuffe ();
+	    StringBuffer buf = new StringBuffer ();
+
+            while (true) {
+                line = reader.readLine ();
+                if (line.startsWith (boundary)) break;
+                
+                buf.append (line);
+            }
 	}
+
+
+        if (line.ensWith ("--")) 
+            eof = true;
+
+        return true;
     }
 }

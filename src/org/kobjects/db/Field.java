@@ -9,32 +9,60 @@ public class Field {
     public static final byte STRING  = 4; // nix
     public static final byte BINARY  = 5; // nix
     public static final byte DOUBLE  = 6;
-    public static final byte LONGINT = 7;
+    public static final byte LONG  = 7;
     /*
       public static final byte SET     = 6; // wie Integer behandeln, aber andere Anzeige (CheckBoxes)
     */
     
     
-    int id;
+    //    int id;
     int type;
     String name;
     
     String label;
-    int maxSize;
+    int size;
+    int constraints;
+
     //    int constraints;
     String[] values;
     Object initial;
     
-    public Field (int type, String name, String label, int maxSize, 
-           //int constraints, 
-           String[] values, Object initial) {
 
+    Field (int type, String name) {
         this.type = type;
         this.name = name;
+        this.label = name;
+    }
+
+
+    public void setLabel (String label) {
         this.label = label;
-        this.maxSize = maxSize;
-        //        this.constraints = constraints;
+    }
+
+
+
+    /** Overall size, including decimal digits */
+
+    public void setSize (int size) {
+        this.size = size;
+    }
+
+
+    /** For INT, LONG and DOUBLE fields, this is the number of decimal digits */
+
+    public void setConstraints (int constraints) {
+        this.constraints = constraints;
+    }
+
+
+
+    public void setValues  (String [] values) {
         this.values = values;
+    }
+
+
+
+    public void setInitial (Object initial) {
         this.initial = initial;
     }
     
@@ -52,17 +80,20 @@ public class Field {
     }
     
     public int getSize() {
-        return maxSize;
+        return size;
     }
     
-    /*    public int getConstraints() {
+
+    public int getConstraints() {
         return constraints;
-        }*/
+    }
     
+
     public String[] getValues() {
         return values;
     }
     
+
     public Object getInitial() {
         return initial;
     }

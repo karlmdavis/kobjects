@@ -109,11 +109,28 @@ public class Record {
     }
 
 
+    /** Makes changes persistent */
+
+    public void update () {
+        if (!modified) return;
+        table.saveRecord (this);
+        modified = false;
+    }
+
+    
+    /** Refreshes the record from the underlying persistent storage */
+
+    public void refresh () {
+        table.loadRecord (this);
+        modified = false;
+    }
+
+
     public boolean next () {
         int save = id;
         try {
             id++;
-            table.refresh (this);
+            refresh ();
             return true;
         }
         catch (IllegalArgumentException e) {

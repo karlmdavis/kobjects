@@ -18,20 +18,20 @@ public abstract class Table {
     protected Vector fields = new Vector ();
 
 
-    
-    public void addField (String name, int type) {
-        addField(new Field (type, name, name, 0, 
-                            //TextField.ANY, 
-                            null, null));
-    }
-    
-    
-    /** Add real functionality here */
-    
-    public void addField (Field field) {
-        fields.addElement (field);
-    }
 
+    public abstract void init (String [] param);
+
+    
+    public Field addField (String name, int type) {
+        int idx = findField (name);
+        if (idx == -1) {
+            fields.addElement (new Field (type, name));
+            idx = fields.size ()-1;
+        }
+
+        return getField (idx);
+    }
+    
     
     public int getFieldCount() {
         return fields.size ();
@@ -63,7 +63,7 @@ public abstract class Table {
 
     public Record select (int id) {
         Record r = new Record (this, id);
-        refresh (r);
+        r.refresh ();
         return r;
     }
 
@@ -71,13 +71,13 @@ public abstract class Table {
     /** refreshes the given record from the database. Throws an
         IllegalArgumentException if the given record id is invalid. */
 
-    public abstract void refresh (Record record);
+    protected abstract void saveRecord (Record record);
 
     /** updates the database from the given record. If the record is
         newly created, the ID is updated to the real position of the
         record.  */
 
-    public abstract void update (Record record); 
+    protected abstract void loadRecord (Record record); 
 
 
     public Field getField(int i) {
