@@ -24,6 +24,7 @@ import java.io.*;
 import java.util.*;
 import org.kobjects.base64.*;
 
+
 public class Decoder {
 
     InputStream is;
@@ -33,19 +34,29 @@ public class Decoder {
     String boundary;
 	String characterEncoding;
 
+   char[] buf = new char[256];
+   
     // add some kind of buffering here!!!
 
     private final String readLine() throws IOException {
 
-        StringBuffer result = new StringBuffer();
+		int cnt = 0;
+
         while (true) {
             int i = is.read();
-            if (i == -1 && result.length() == 0)
+            if (i == -1 && cnt == 0)
                 return null;
             else if (i == -1 || i == '\n')
-                return result.toString();
-            else if (i != '\r')
-                result.append((char) i);
+                return new String(buf, 0, cnt);
+            else if (i != '\r'){
+            	if(cnt >= buf.length){
+            		char[] tmp = new char[(buf.length*3)/2];
+            		System.arraycopy(buf, 0, tmp, 0, buf.length);
+            		buf = tmp;
+            	}
+            	
+            	buf[cnt++] = (char) i;
+            }
         }
     }
 
