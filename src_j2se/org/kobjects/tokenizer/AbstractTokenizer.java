@@ -72,14 +72,15 @@ public abstract class AbstractTokenizer {
 	protected abstract String readImpl();
 	
 	public void require(String token) {
-		if (!read().equals(token))
-			throw new ParsingException(this, "expected: " + token);
+		String read = read();
+		if (!read.equals(token))
+			throw new ParsingException(this, "expected: '" + token+ "' reading: '"+read+"'");
 	}
 
 	public String read() {
 		String result = peek();
 		next.removeElementAt(0);
-		System.out.println("read token: '"+result+"'");
+//		System.out.println("read token: '"+result+"'");
 		return result;
 	}
 
