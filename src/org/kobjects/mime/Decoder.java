@@ -8,14 +8,13 @@ public class Decoder {
 
     InputStream is;
     Hashtable header;
-    byte[] data;
     boolean eof;
+    boolean consumed;
     String boundary;
-    //byte [] buf = new byte [128];
-    //int bufCount;
-    //int bufPos;
+
 
     // add some kind of buffering here!!!
+
     private final String readLine() throws IOException {
 
         StringBuffer result = new StringBuffer();
@@ -30,7 +29,9 @@ public class Decoder {
         }
     }
 
-    /** The "main" element is returned in the hashtable with an empty key ("") */
+    /** 
+     * The "main" element is returned in the 
+     * hashtable with an empty key ("") */
 
     public static Hashtable getHeaderElements(String header) {
 
@@ -82,12 +83,13 @@ public class Decoder {
         return result;
     }
 
+
     public Decoder(InputStream is, String _bound) throws IOException {
 
         this.is = is;
         this.boundary = "--" + _bound;
 
-        StringBuffer buf = new StringBuffer();
+//        StringBuffer buf = new StringBuffer();
 
         String line = null;
         while (true) {
@@ -100,22 +102,14 @@ public class Decoder {
 
             if (line.startsWith(boundary))
                 break;
-            buf.append(line);
+//            buf.append(line);
         }
 
-        data = buf.toString().getBytes();
+//        data = buf.toString().getBytes();
         if (line.endsWith("--"))
             eof = true;
     }
 
-    public String getText() {
-        // should try to use content-type before default here
-        return new String(data);
-    }
-
-    public byte[] getData() {
-        return data;
-    }
 
     public Enumeration getHeaderNames() {
         return header.keys();
@@ -125,10 +119,82 @@ public class Decoder {
         return (String) header.get(key.toLowerCase());
     }
 
+	public String readContent () throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+		readContent (bos);
+		return new String (bos.toByteArray());
+	}
+	
+	public void readContent (OutputStream os) throws IOException {
+		if (consumed) 
+			throw new RuntimeException ("Content already consumed!");
+
+		String line = "";
+
+        System.out.println("cte-head: " + getHeader("Content-Transfer-Encoding"));
+
+        String contentType = getHeader("Content-Type");
+
+        if ("base64".equals(getHeader("Content-Transfer-Encoding"))) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            while (true) {
+                line = readLine();
+                if (line == null)
+                    throw new IOException("Unexpected EOF");
+                if (line.startsWith(boundary))
+                    break;
+
+                Base64.decode(line, os);
+            }
+        }
+        else {
+
+            String deli = "\r\n" + boundary;
+            int match = 0;
+
+            while (true) {
+                int i = is.read();
+/*                if (i >= 32 && i <= 127)
+                    System.out.print((char) i);
+                else
+                    System.out.print("#" + i + ";"); */
+                if (i == -1)
+                    throw new RuntimeException("Unexpected EOF");
+
+                if (((char) i) == deli.charAt(match)) {
+                    match++;
+                    if (match == deli.length())
+                        break;
+                }
+                else {
+                    if (match > 0) {
+                        for (int j = 0; j < match; j++)
+                            os.write((byte) deli.charAt(j));
+
+                        match = ((char) i == deli.charAt(0)) ? 1 : 0;
+                    }
+                    if (match == 0) os.write((byte) i);
+                }
+            }
+
+            line = readLine(); // read crlf and possibly remaining --
+        }
+
+        if (line.endsWith("--"))
+            eof = true;
+
+		consumed = true;
+	}
+
+
     public boolean next() throws IOException {
+
+		if(!consumed) 
+			readContent(null);
 
         if (eof)
             return false;
+
 
         // read header 
 
@@ -155,62 +221,8 @@ public class Decoder {
 
         }
 
-        System.out.println("cte-head: " + getHeader("Content-Transfer-Encoding"));
-
-        String contentType = getHeader("Content-Type");
-
-        if ("base64".equals(getHeader("Content-Transfer-Encoding"))) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            while (true) {
-                line = readLine();
-                if (line == null)
-                    throw new IOException("Unexpected EOF");
-                if (line.startsWith(boundary))
-                    break;
-
-                Base64.decode(line, bos);
-            }
-
-            data = bos.toByteArray();
-        }
-        else {
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            String deli = "\r\n" + boundary;
-            int match = 0;
-
-            while (true) {
-                int i = is.read();
-/*                if (i >= 32 && i <= 127)
-                    System.out.print((char) i);
-                else
-                    System.out.print("#" + i + ";"); */
-                if (i == -1)
-                    throw new RuntimeException("Unexpected EOF");
-
-                if (((char) i) == deli.charAt(match)) {
-                    match++;
-                    if (match == deli.length())
-                        break;
-                }
-                else {
-                    if (match > 0) {
-                        for (int j = 0; j < match; j++)
-                            bos.write((byte) deli.charAt(j));
-
-                        match = ((char) i == deli.charAt(0)) ? 1 : 0;
-                    }
-                    if (match == 0) bos.write((byte) i);
-                }
-            }
-
-            data = bos.toByteArray();
-            line = readLine(); // read crlf and possibly remaining --
-        }
-
-        if (line.endsWith("--"))
-            eof = true;
-
+		consumed = false;	
+	
         return true;
     }
 }
