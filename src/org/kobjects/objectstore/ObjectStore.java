@@ -83,7 +83,7 @@ public class ObjectStore {
 		for (int i = 0; i < cnt; i++) {
 		    info.nonpermanent = false;
 		    sobj.getPropertyInfo (i, info);
-		    if (!info.nonPermanent)
+		    if (!info.nonpermanent)
 			writeProperty (dos, sobj.getProperty (i), multiRef);
 		}
 	    }
@@ -185,7 +185,7 @@ public class ObjectStore {
 		PropertyInfo info = new PropertyInfo ();
 		for (int i = 0; i < cnt; i++) {
 		    info.nonpermanent = false;
-		    kobj.getPropertyInfo (i);
+		    kobj.getPropertyInfo (i, info);
 		    if (!info.nonpermanent) 
 			kobj.setProperty (i, readProperty (dis));
 		}
