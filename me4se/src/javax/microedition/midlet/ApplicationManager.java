@@ -174,7 +174,8 @@ public class ApplicationManager {
 	    if (active != null) 
 		active.destroyApp (true);
 	}
-	catch (MIDletStateChangeException e) {
+	catch (Exception e) {
+	    e.printStackTrace ();
 	}
 
 	active = null;

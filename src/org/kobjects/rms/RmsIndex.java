@@ -6,6 +6,8 @@ import java.io.*;
 
 public class RmsIndex {
 
+    static byte [] DUMMY = new byte [0];
+
     RecordStore store;
     Node root;
     int n = 4;
@@ -21,7 +23,7 @@ public class RmsIndex {
 	/** Create a new Node */
 
 	Node () throws RecordStoreException {
-	    index = store.addRecord (null, 0, 0);
+	    index = store.addRecord (DUMMY, 0, 0);
 	}
 
 	Node (Node split) throws RecordStoreException {
@@ -103,7 +105,7 @@ public class RmsIndex {
 	    children [i+1] = newIndex;
 	    size ++;
 
-	    if (size < n+n+1)
+	    if (size < n+n+1)  // otherwise, store will be performed by uplink
 		store ();
 	}
 
@@ -166,7 +168,7 @@ public class RmsIndex {
 	// split root....
 
 	Node left = root;
-	Node root = new Node ();
+	root = new Node ();
 
 	left.index = root.index;
 	root.index = 1;
