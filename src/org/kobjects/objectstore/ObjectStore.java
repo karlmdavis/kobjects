@@ -55,6 +55,7 @@ public class ObjectStore {
 	int idx = 0;
 	while (idx < multiRef.size ()) {
 	    write (idx + 1, multiRef.elementAt (idx), multiRef);
+	    idx++;
 	}
     }
     
