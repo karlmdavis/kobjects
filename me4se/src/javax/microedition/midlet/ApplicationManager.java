@@ -20,7 +20,7 @@
 
 package javax.microedition.midlet;
 
-import org.me4se.impl.JadFile;
+import org.me4se.impl.*;
 import java.util.*;
 import java.io.File;
 
@@ -40,6 +40,10 @@ public class ApplicationManager {
     public int canvasHeight;
     public Properties properties;
 
+	public String socketProxyHost = null;
+	public int socketProxyPort = -1;	
+	public String httpProxyHost = null;
+	public int httpProxyPort = -1;	
 
     public ApplicationManager (java.awt.Container dc, Properties properties) {
 
@@ -92,6 +96,19 @@ public class ApplicationManager {
 	
 	String jadFile = properties.getProperty ("jad");
 	String midlet = properties.getProperty ("MIDlet");
+
+	socketProxyHost = properties.getProperty ("socketProxyHost");
+	if( socketProxyHost != null )
+		socketProxyPort = Integer.parseInt( properties.getProperty("socketProxyPort") );	
+	httpProxyHost = properties.getProperty ("httpProxyHost");
+	if( httpProxyHost != null )
+		httpProxyPort = Integer.parseInt( properties.getProperty("httpProxyPort") );	
+	
+	ConnectionImpl_socket.socketProxyHost= socketProxyHost;
+	ConnectionImpl_socket.socketProxyPort= socketProxyPort;
+
+	ConnectionImpl_http.httpProxyHost= httpProxyHost;
+	ConnectionImpl_http.httpProxyPort= httpProxyPort;
 
 	if (jadFile != null) {
 	    try {

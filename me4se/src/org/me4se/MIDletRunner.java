@@ -20,6 +20,7 @@
 
 package org.me4se;
 
+import java.net.*;
 import java.applet.*;
 import java.awt.*;
 import javax.microedition.midlet.*;
@@ -52,6 +53,18 @@ public class MIDletRunner extends Applet {
 	    if (getParameter ("MIDlet") != null) 
 		param.put ("MIDlet", getParameter ("MIDlet"));
 			       
+	    if (getParameter ("socketProxyHost") != null)
+		param.put ("socketProxyHost", getParameter ("socketProxyHost"));
+
+	    if (getParameter ("socketProxyPort") != null)
+		param.put ("socketProxyPort", getParameter ("socketProxyPort"));
+
+	    if (getParameter ("httpProxyHost") != null)
+		param.put ("httpProxyHost", getParameter ("httpProxyHost"));
+
+	    if (getParameter ("httpProxyPort") != null)
+		param.put ("httpProxyPort", getParameter ("httpProxyPort"));
+
 	    new ApplicationManager (this, param).launch ();
 	}
 

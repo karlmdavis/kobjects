@@ -47,6 +47,7 @@ public class Form extends Screen {
 
     Vector items = new Vector ();
  
+	Vector stateListeners = new Vector(); 
 
     java.awt.ScrollPane scroll = new java.awt.ScrollPane (); 
 
@@ -173,8 +174,24 @@ public class Form extends Screen {
 	panel.validate ();
     }
 
+	public void setItemStateListener(ItemStateListener iListener)
+	{
+		if( stateListeners.indexOf( iListener ) >= 0 )
+			return;
+		stateListeners.addElement( iListener );
+	}
+
+	private void notifyItemChanged( Item item )
+	{
+		for( int i=0 ; i<stateListeners.size() ; i++ )
+		{
+			ItemStateListener itemStateListener = (ItemStateListener) stateListeners.elementAt( i );
+			itemStateListener.itemStateChanged( item ); 
+		}		
+}
 
 }
+
 
 
 

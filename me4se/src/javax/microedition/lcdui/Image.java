@@ -32,7 +32,7 @@ public class Image {
 
     java.awt.Image image;
     boolean mutable;
-    static java.awt.Component helper = new java.awt.Panel ();
+    java.awt.Component helper = new java.awt.Panel ();
     
     Image (int w, int h) {
 	image = ApplicationManager.manager.displayContainer.createImage 

@@ -15,6 +15,9 @@ public class TextField extends Item {
 
     public TextField (String label, String text, int maxSize, int constraints) {
 	super (label);
+	if( text == null )
+		text = "";
+	
 	field = new java.awt.TextField (text);
 	if (maxSize < 8) field.setColumns (maxSize);
     }

@@ -21,27 +21,59 @@
 package org.me4se.impl;
         
 import java.io.*;
-import java.net.*;
+import HTTPClient.*;
+import HTTPClient.http.*;
+
 import javax.microedition.io.*;
+import javax.microedition.midlet.*;
              
 
 public class ConnectionImpl_http extends ConnectionImpl 
     implements HttpConnection {
-
-    URL url;
+	public static Handler handler;
+    java.net.URL url;
     HttpURLConnection con;
 
+	public static String httpProxyHost = null;
+	public static int httpProxyPort = -1;
+
+	static
+	{
+		try
+		{
+			handler = new Handler();
+		}
+		catch( SecurityException e )
+		{
+//			e.printStackTrace();
+		}		
+		catch( Exception e )
+		{
+//			e.printStackTrace();
+		}		
+	}
 
     public void open (String url, int mode, 
 		      boolean timeouts) throws IOException {
 
-	this.url = new URL (url);
-	con = (HttpURLConnection) this.url.openConnection ();
+		if( httpProxyHost == null )
+		{
+	
+			this.url = new java.net.URL (url);
+			con = (HttpURLConnection) handler.openConnection( this.url );
 
-	con.setUseCaches (false);
 	con.setDoOutput ((mode & Connector.WRITE) != 0);
 	con.setDoInput ((mode & Connector.READ) != 0);
-	con.setRequestProperty ("connection", "close");
+    }
+		else
+		{
+			this.url = new java.net.URL (url);
+			HTTPConnection.setProxyServer( httpProxyHost , httpProxyPort );
+			con = (HttpURLConnection) handler.openConnection( this.url );
+
+	con.setDoOutput ((mode & Connector.WRITE) != 0);
+	con.setDoInput ((mode & Connector.READ) != 0);
+		}		
     }
 
 
@@ -152,16 +184,7 @@ public class ConnectionImpl_http extends ConnectionImpl
 
     
     public InputStream openInputStream () throws IOException {
-	//	con.getOutputStream ().flush ();
-	
-	try {
 	    return con.getInputStream ();
-	}
-	catch (IOException e) {
-	    InputStream is = con.getErrorStream ();
-	    if (is == null) throw e;
-	    return is;
-	}
     }
 
     public DataInputStream openDataInputStream () throws IOException {

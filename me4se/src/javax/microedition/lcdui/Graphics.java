@@ -35,6 +35,10 @@ public class Graphics {
     public static final int SOLID =  0;
     public static final int DOTTED = 1;
    
+	public int translateX = 0;
+	public int translateY = 0;
+	
+	public int strokeStyle = SOLID;
 
     java.awt.Graphics g;
     Font font;
@@ -58,6 +62,9 @@ public class Graphics {
 
    public void drawImage (Image img, int x, int y, int align) {
 	
+	if( align == 0 )
+		align = TOP | LEFT;
+		
 	switch (align & (TOP|BOTTOM|BASELINE|VCENTER)) {
 	case TOP: break;
 	case BOTTOM: y -= img.getHeight (); break;
@@ -82,6 +89,9 @@ public class Graphics {
 
 
     public void drawString (String text, int x, int y, int align) {
+	
+	if( align == 0 )
+		align = TOP | LEFT;
 	
 	java.awt.FontMetrics fm = g.getFontMetrics ();
 
@@ -164,6 +174,9 @@ public class Graphics {
     
 
     public void translate (int x, int y) {
+	translateX += x;
+	translateY += y;
+	
 	g.translate (x, y);
     }
 
@@ -189,4 +202,68 @@ public class Graphics {
     public void setGrayScale (int gsc) {
 	setColor (gsc | (gsc << 8) | (gsc << 16)); 
     }
+	
+	public void drawSubstring(String str,
+                          int offset,
+                          int len,
+                          int x,
+                          int y,
+                          int anchor)
+	{
+		drawString( str.substring( offset , offset + len - 1 ) , x , y , anchor );
 }
+	
+	public void drawChar(char character,
+                     int x,
+                     int y,
+                     int anchor)
+	{
+		char characters[] = new char[1];
+		characters[0] = character;
+		drawString( new String( characters ) , x , y , anchor );
+	}
+	
+	public int getBlueComponent() 
+	{
+		return g.getColor().getBlue();
+    }
+
+	public int getGreenComponent() 
+	{
+		return g.getColor().getGreen();
+    }
+
+	public int getRedComponent() 
+	{
+		return g.getColor().getRed();
+    }
+
+	public int getGrayScale()
+	{
+		return getRedComponent();
+	}	
+
+	public int getTranslateX()
+	{
+		return translateX;
+}
+	
+	public int getTranslateY()
+	{
+		return translateY;
+	}	
+
+	public void setStrokeStyle(int style)
+	{
+		//TBD does nothing at the moment
+		strokeStyle = style;
+	}
+	
+	public int getStrokeStyle()
+	{
+		//TBD does nothing at the moment
+		return strokeStyle;
+	}
+	
+}
+

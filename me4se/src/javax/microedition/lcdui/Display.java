@@ -79,6 +79,12 @@ public class Display {
 
     public void setCurrent (Displayable d) {
 
+	if( current == d )
+	{
+		// nothing to do
+		return;
+	}
+	
 	if (ApplicationManager.manager.active != midlet) 
 	    return;
 

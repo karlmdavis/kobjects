@@ -29,6 +29,7 @@ import java.util.Vector;
 
 public class ChoiceGroup extends Item implements Choice {
 
+	Object noImage = new Object();
 
     java.awt.Panel panel = new java.awt.Panel (new java.awt.GridLayout (0, 1));
     int type;
@@ -63,7 +64,14 @@ public class ChoiceGroup extends Item implements Choice {
     
     
     public int append (String stringItem, Image imageItem) {
-	insert (images.size ()-1, stringItem, imageItem);
+		panel.add (new java.awt.Checkbox (stringItem, group, false) );
+        if (!(imageItem == null)) {
+            images.insertElementAt(imageItem, images.size() );
+        }
+        else
+        {
+            images.insertElementAt(noImage , images.size() );
+        }        
         return images.size () - 1;
     }
     
@@ -75,7 +83,11 @@ public class ChoiceGroup extends Item implements Choice {
     
     
     public Image getImage (int index) {
-	return (Image) images.elementAt (index);
+	Object image = images.elementAt (index);
+	if( image == noImage )
+		return null;
+	else		
+		return (Image) image;
     }
     
 
@@ -111,6 +123,10 @@ public class ChoiceGroup extends Item implements Choice {
         if (!(imageItem == null)) {
             images.insertElementAt (imageItem, index);
         }
+        else
+        {
+            images.insertElementAt (noImage, index);
+        }        
     }
     
 

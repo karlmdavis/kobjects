@@ -22,6 +22,7 @@ package javax.microedition.lcdui;
 
 import java.util.*;
 import java.awt.event.*;
+import javax.microedition.midlet.*;
 
 public abstract class Displayable {
 
@@ -44,8 +45,17 @@ public abstract class Displayable {
 	};
 	    
     java.awt.Panel commandPanel = new java.awt.Panel (new java.awt.GridLayout (1,2));
+    java.awt.Panel moreCommandPanel = new java.awt.Panel (new java.awt.GridLayout (5,1));
+
     java.awt.Button button = new java.awt.Button ();
-    java.awt.Choice choice = new java.awt.Choice ();
+
+    java.awt.Button button2 = new java.awt.Button ();
+	java.awt.Button escButton = new java.awt.Button( "Esc" );
+
+    Command button2Command = null;
+	boolean displayCommandListScreen;
+    java.util.Vector commandButtons = new Vector ();
+	Helper h;
     
     CommandListener commandListener;
     java.util.Vector commands = new Vector ();
@@ -53,21 +63,58 @@ public abstract class Displayable {
     Display display;
 
 
-    class Helper implements ActionListener, ItemListener {
+    class Helper implements ActionListener/*, ItemListener*/ {
 	
 
-	public void actionPerformed (ActionEvent ev) {
-	    if (buttonCommand != null)
-		sendCommand (buttonCommand);
-	}
-
-	public void itemStateChanged (ItemEvent ev) {
+/*	public void itemStateChanged (ItemEvent ev) {
 	    if (ev.getStateChange () == ItemEvent.SELECTED) {
 		int i = choice.getSelectedIndex ();
 		if (i > 0) {
 		    sendCommand ((Command) commands.elementAt (i-1));
 		    choice.select (0);
 		}
+		}}*/
+
+		public void actionPerformed (ActionEvent ev) 
+		{
+			int index = -1;
+		    if( ev.getSource() == button )		
+		    {
+			    if (buttonCommand != null)
+					sendCommand (buttonCommand);
+			}
+		    else if( ev.getSource() == button2 )		
+		    {
+		    	if( displayCommandListScreen )
+		    	{
+					ApplicationManager.manager.displayContainer.removeAll ();
+					ApplicationManager.manager.displayContainer.add( "Center" , moreCommandPanel );
+					ApplicationManager.manager.displayContainer.validate ();					
+					ApplicationManager.manager.displayContainer.repaint ();		    			
+		    	}
+		    	else
+		    	{
+				    if (button2Command != null)
+						sendCommand (button2Command);
+				}
+			}
+		    else if( ev.getSource() == escButton )		
+		    {
+				ApplicationManager.manager.displayContainer.removeAll ();
+				ApplicationManager.manager.displayContainer.add( "Center" , panel );
+				ApplicationManager.manager.displayContainer.validate ();					
+				ApplicationManager.manager.displayContainer.repaint ();		    			
+			}
+			else if( ( index = commandButtons.indexOf( ev.getSource() ) ) >= 0 )
+			{
+				ApplicationManager.manager.displayContainer.removeAll ();
+				ApplicationManager.manager.displayContainer.add( "Center" , panel );
+				ApplicationManager.manager.displayContainer.validate ();					
+				ApplicationManager.manager.displayContainer.repaint ();		    			
+				sendCommand ( (Command) commands.elementAt( index ) );
+			}			
+			else
+			{
 	    }		
 	}
     }
@@ -75,13 +122,15 @@ public abstract class Displayable {
     Displayable () {
 	panel.add ("South", commandPanel);
 	commandPanel.add (button);
-	commandPanel.add (choice);
+	commandPanel.add (button2);
 
 
-	Helper h = new Helper ();
+	h = new Helper ();
 	button.addActionListener (h);
-	choice.addItemListener (h);
-	choice.add ("Menu");
+
+	button2.addActionListener (h);
+	setButtonCommands();
+
     }
 
     void sendCommand (Command cmd) {
@@ -92,23 +141,65 @@ public abstract class Displayable {
 
  
 
-    void checkButtonCommand (Command cmd) {
-	if (buttonCommand == null 
-	    || cmd.getPriority () < buttonCommand.getPriority ()) {
 
-	    button.setLabel (cmd.getLabel ());
-	    buttonCommand = cmd;
+
+	void setButtonCommands()
+	{
+		buttonCommand = null;
+		button2Command = null;
+		button.setVisible(false);
+		button2.setVisible(false);
+		displayCommandListScreen = false;
+		commandButtons.removeAllElements();
+		if( commands.size() > 0 )
+		{
+			buttonCommand = (Command) commands.elementAt( 0 );
+			button.setVisible(true);			
+			button.setLabel( buttonCommand.getLabel() );
+		}
+		if( commands.size() == 2 )
+		{
+			button2Command = (Command) commands.elementAt( 1 );
+			button2.setVisible(true);			
+			button2.setLabel( button2Command.getLabel() );
+		}
+		if( commands.size() > 2 )
+		{
+			displayCommandListScreen = true;
+			button2.setVisible(true);			
+			button2.setLabel( "Options" );
+			moreCommandPanel.removeAll();
+			commandButtons.addElement( button );
+			for( int i = 1 ; i < commands.size() ; i ++ )
+			{
+				Command curCmd = (Command) commands.elementAt( i );
+				java.awt.Button extraButton = new java.awt.Button( curCmd.getLabel() );
+				commandButtons.addElement( extraButton );
+				extraButton.addActionListener (h);
+				moreCommandPanel.add( "North" , extraButton );		
+			}			
+			moreCommandPanel.add( "South" , escButton );							
 	}
     }
 
+    public synchronized void addCommand (Command cmd) 
+    {
 
+		if (commands.indexOf (cmd) != -1) 
+			return;	
+		for( int i=0 ; i< commands.size() ; i++ )
+		{
+			Command curCmd = (Command) commands.elementAt( i );
+			if( cmd.getPriority () < curCmd.getPriority() )
+			{
+				commands.insertElementAt( cmd , i );
+				setButtonCommands();
+				return;
+			}				
+		}
+		commands.insertElementAt( cmd , commands.size() );
+		setButtonCommands();
 
-    public void addCommand (Command cmd) {
-	if (commands.indexOf (cmd) != -1) return;
-
-	commands.addElement (cmd);
-	choice.add (cmd.getLabel ());
-	checkButtonCommand (cmd);
     }
     
     void notifyDisplayed () {
@@ -130,11 +221,9 @@ public abstract class Displayable {
 	int idx = commands.indexOf (cmd);
 	if (idx == -1) return;
 	commands.removeElementAt (idx);
-	choice.remove (idx+1);
-	if (buttonCommand == cmd) 
-	    buttonCommand = null;
-	    for (int i = 0; i < commands.size (); i++) 
-		checkButtonCommand ((Command) commands.elementAt (i)); 
+
+		setButtonCommands();
+
     }
     
 }

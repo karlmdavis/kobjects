@@ -8,6 +8,7 @@ package org.me4se.impl;
 
 import java.util.*;
 import java.io.*;
+import java.net.*;
 import javax.microedition.io.*;
 
 /**
@@ -26,11 +27,18 @@ public class JadFile  {
     public JadFile (String name) throws IOException {
 
 	this.name = name;
-
-	BufferedReader reader = new BufferedReader 
-	    ((name.indexOf (':') < 2)
-	     ? new FileReader (name)
-	     : new InputStreamReader (Connector.openInputStream (name)));
+	BufferedReader reader = null;
+	try
+	{
+		if( name.startsWith( "http://" ) )
+		{
+			URL url = new URL( name );
+			reader = new BufferedReader( new InputStreamReader( url.openConnection().getInputStream() ) );
+		}
+		else
+		{
+			reader = new BufferedReader( new FileReader (name) );
+		}
 	
 	while (true) {
 	    String line = reader.readLine ();
@@ -41,8 +49,12 @@ public class JadFile  {
 		properties.put (line.substring (0, i).trim (),
 				line.substring (i+1).trim ());
 	}
-
-	reader.close ();
+	}
+	finally
+	{
+		if( reader != null )
+			try{ reader.close (); }catch( Exception e ){}
+	}
     }
     
     

@@ -25,9 +25,7 @@ import org.me4se.MIDletRunner;
 
 public abstract class MIDlet {
 
-    
     public MIDlet () {
-	/*
 	if (ApplicationManager.manager == null) 
 	    new ApplicationManager (null, new java.util.Properties ());
 
@@ -43,7 +41,6 @@ public abstract class MIDlet {
 	d.setCurrent (c);
 	c.getWidth ();
 	c.getHeight ();
-	*/
 	//	d.setCurrent (null);
     } 
     
@@ -99,6 +96,5 @@ public abstract class MIDlet {
     
 
     protected abstract void startApp () throws MIDletStateChangeException;
-    
 
 }

@@ -50,7 +50,6 @@ public class ImageItem extends Item {
 	setImage (img);
 	setLayout (layout);
 	this.alt = alt;
-	wrapper.setSize (img.getWidth (), img.getHeight ());
     }
     
 
@@ -78,11 +77,15 @@ public class ImageItem extends Item {
     }
 
     public void setImage (Image img) {
+	if( image == null )
+		return;
 	if (img.mutable)
 	    throw new IllegalArgumentException ();
 
 	this.image = img;
 	validate ();
+	
+	wrapper.setSize (img.getWidth (), img.getHeight ());
     }
 
 
