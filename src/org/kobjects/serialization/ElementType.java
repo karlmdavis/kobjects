@@ -29,6 +29,8 @@ public class ElementType {
     public static final Class OBJECT_CLASS = new Object ().getClass ();
     public static final Class STRING_CLASS = "".getClass ();
     public static final Class INTEGER_CLASS = new Integer (0).getClass ();
+    public static final Class LONG_CLASS = new Long (0).getClass ();
+    public static final Class BOOLEAN_CLASS = new Boolean (true).getClass ();
     public static final Class VECTOR_CLASS = new java.util.Vector ().getClass ();
 
     public static final ElementType OBJECT_TYPE = 
@@ -53,11 +55,11 @@ public class ElementType {
     }
 
 
-    public ElementType (Class type) {
+    public ElementType (Object type) {
 	this.type = type;
     }
 
-    public ElementType (Class type, boolean multiRef, 
+    public ElementType (Object type, boolean multiRef, 
 			ElementType elementType) {
 
 	this.type = type;
