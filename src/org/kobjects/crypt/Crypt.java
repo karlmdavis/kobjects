@@ -1,4 +1,4 @@
-package de.unido.ai.util;
+package org.kobjects.crypt;
 
 /****************************************************************************
  * I found this on the internet, and I hope it's free. Unfortunately,
@@ -572,7 +572,7 @@ public class Crypt
 
 
     /** checks if the given (readable) password matches the
-	second parameter consiting of a salt number and 
+	second parameter consisting of a salt number and 
 	an encrypted password */
 
     public static final boolean match (String test, String full) {
