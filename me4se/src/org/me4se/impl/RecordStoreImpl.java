@@ -73,10 +73,13 @@ public abstract class RecordStoreImpl extends RecordStore {
 
 
 
-    static RecordStoreImpl newInstance () {
+    public static RecordStoreImpl newInstance () {
 	return new org.me4se.impl.RecordStoreImpl_file ();
     }
 
     
     public abstract String [] listRecordStoresImpl ();
+
+    public abstract void open (String recordStoreName, 
+			       boolean create) throws RecordStoreNotFoundException;
 }

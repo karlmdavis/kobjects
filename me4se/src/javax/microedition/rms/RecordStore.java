@@ -40,8 +40,8 @@ package javax.microedition.rms;
 import javax.microedition.midlet.ApplicationManager;
 import java.util.*;
 import java.io.*;
-import org.kobjects.me4se.impl.*;
-import org.kobjects.me4se.*;
+import org.me4se.impl.*;
+import org.me4se.*;
 
 
 /** <font color="#ff0000">Incomplete Experimental Implementation</font>  */ 
@@ -245,7 +245,7 @@ public abstract class RecordStore {
      */
     public static String[] listRecordStores ()  {
 
-	return metaStore.listRecordStoresImpl ();
+	return RecordStoreImpl.metaStore.listRecordStoresImpl ();
 
     }
     /*       private class FileNameIdx implements FilenameFilter {
@@ -273,12 +273,13 @@ public abstract class RecordStore {
 	       RecordStoreFullException,
 	       RecordStoreNotFoundException {
 
-	RecordStoreImpl store = (RecordStoreImpl) recordStores.get 
+	RecordStoreImpl store = (RecordStoreImpl) 
+	    RecordStoreImpl.recordStores.get 
 	    (recordStoreName);
 
 	if (store == null) {
-	    store = newInstance ();
-	    recordStores.put (recordStoreName, store);
+	    store = RecordStoreImpl.newInstance ();
+	    RecordStoreImpl.recordStores.put (recordStoreName, store);
 	}
 
 	store.open (recordStoreName, createIfNecessary); 

@@ -109,11 +109,18 @@ public class ApplicationManager {
 	    e.printStackTrace ();
 	    throw new RuntimeException (e.toString ());
 	}	
+
+	setRmsDir ();
     }
 
 
-    public File getRmsDir () {
-	
+    void setRmsDir () {
+
+	if (org.me4se.MIDletRunner.isApplet) { 
+	    org.me4se.impl.RecordStoreImpl_file.rmsDir = null;
+	    return;
+	}
+
 	String name;
 
 	if (jad != null) {
@@ -133,7 +140,7 @@ public class ApplicationManager {
 
 	File rmsDir = new File (name, "rms");
 	rmsDir.mkdirs ();
-	return rmsDir;
+	org.me4se.impl.RecordStoreImpl_file.rmsDir = rmsDir;
     }
 
 

@@ -48,7 +48,11 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
 
     Vector records;
     File file;
-    
+    public static File rmsDir = new File ("."); // null for applet
+
+    boolean isApplet () {
+	return rmsDir == null;
+    }
 
     public void open (String recordStoreName, 
 		      boolean create) throws RecordStoreNotFoundException {
@@ -57,7 +61,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
 	
 	this.recordStoreName = recordStoreName;
 
-	if (MIDletRunner.isApplet) { 
+	if (isApplet ()) { 
 	    if (!create) {
 		refCount = 0;
 		throw new RecordStoreNotFoundException ();
@@ -66,7 +70,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
 	    records = new Vector ();
 	}
 	else {
-	    file = new File (ApplicationManager.manager.getRmsDir (), recordStoreName);
+	    file = new File (rmsDir, recordStoreName);
 	    
 	    try {
 
@@ -118,7 +122,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
 
 	if (refCount > 0) refCount--;
 
-	if (MIDletRunner.isApplet) return;
+	if (isApplet ()) return;
 
 	try {
 	    ObjectOutputStream p = new ObjectOutputStream 
@@ -140,7 +144,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
 	if (refCount != 1) 
 	    throw new RecordStoreException ("RecordStore is open!");
 
-	if (!MIDletRunner.isApplet) file.delete ();
+	if (!isApplet ()) file.delete ();
     }
 
 
@@ -236,14 +240,14 @@ public class RecordStoreImpl_file extends RecordStoreImpl {
     
 	String[] databases;
     
-	if (MIDletRunner.isApplet) {
+	if (isApplet ()) {
 	    databases = new String [recordStores.size ()];
 	    int i = 0;
 	    for (Enumeration e = recordStores.keys (); e.hasMoreElements (); ) 
 		databases [i++] = (String) e.nextElement ();
 	}
 	else {
-	    File directory = ApplicationManager.manager.getRmsDir ();
+	    File directory = rmsDir;
 	    // SV: We could add a file-extension to every saved RMS and filter then 
 	    // (look at private class below).
 	    // Otherwise this solution is not very intelligent because it lists every File in
