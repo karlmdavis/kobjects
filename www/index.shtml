@@ -5,47 +5,78 @@
 
 
   <h1>kObjects.org</h1>
+
+  <p>Welcome to the new kObjects web pages. The pages are now included in the CVS 
+  repository and hosted on sourceforge.net to simplify write access for sf.net
+  project members.</p>
   
   <p>kObjects is a collection of small ("kilobyte") projects. Most of the projects are
    suitable or designed for the Java 2 Micro Edition (J2ME/MIDP).</p>
-  
+
+  <h2>Sub-Projects</h2>
+
   <table> 
    <tr>
-    <td colspan="2"><h2>Sub-Projects</h2></td>
+    <td colspan="2"></td>
    </tr>
    <tr>
-    <td valign="top"><a href="http://kobjects.org/auto?self=$81d91ea1000000f5d0d2f7a6">Utils</a></td>
+    <td valign="top"><a href="/utils/">Utils</a></td>
     <td valign="top">A set of small utility classes (hence the name "kilobyte objects"). 
         Most of the utilities are also suitable for J2ME.</td>
    </tr>
-<!--   <tr>
+<!--   
+   <tr>
     <td valign="top"><a href="utils4me">Utils4ME</a></td>
     <td valign="top">A set of utilities specific to MIDP (depending on LCDUI).</td>
-   </tr> -->
+   </tr> 
+-->
+
    <tr>
-    <td valign="top"><a href="me4se">ME4SE</a></td>
+    <td valign="top"><a href="/me4se/">ME4SE</a></td>
     <td valign="top">A MIDP emulation based on J2SE. Designed to run in web 
         browsers (as Java Applet) or personal Java environments (PDAs)</td>
    </tr>
+
    <tr>
-     <td valign="top"><a href="http://ksoap.org">kSOAP</a></td>
+     <td valign="top"><a href="/ksoap2/">kSOAP</a></td>
      <td valign="top">A SOAP implementation for J2ME. Uses some of the utitlity classes (base64, isoDate).
          Requires kXML 2.</td>
    </tr>
+
    <tr>
-    <td colspan="2"><br /><h2>Related Projects</h2></td>
+     <td valign="top"><a href="http://devicedb.kobjects.org">MIDP DeviceDB</a></td>
+     <td valign="top">MIDP Device Database, based on the <a href="http://infolayer.org">Infolayer</a> 
+     system and filled with Data gatehered by J&ouml;rg Pleumann's SysInfo MIDlet.</td>
    </tr>
+ </table>
+
+<h2>Related Projects</h2>
+
+ <table>
    <tr> 
      <td valign="top"><a href="http://kxml.org">kXML</a></td>
      <td valign="top">A small XML pull parser</td>
    </tr>
-   
+   <tr> 
+     <td valign="top"><a href="http://mail4me.objectweb.org">Mail4ME</a></td>
+     <td valign="top">A small mail client library suitable for MIDP devices.</td>
+   </tr>
+   <tr>
+     <td valign="top"><a href="https://jdbcwrapper.dev.java.net/">JDBCwrapper</a></td>
+     <td valign="top">Provides JDBC access to various text file formats such as ARFF, XBase,
+       CSV, and BibTex. Uses several kObjects classes, kXML, and Mail4ME.</td>
+   </tr>
+   <tr>
+     <td valign="top"><a href="http://infolayer.org">Infolayer</a></td>
+     <td valign="top">UML runtime environment, uses several kObjects classes, JdbcWrapper, 
+     kXML, and Mail4ME.</td>
+   </tr>
   </table> 
 
 <p align="right"><small>(C) 2005 <a href="http://trantor.de/stefan.haustein/">Stefan Haustein</a></small></p>
 
 <!--#include virtual="epilog.shtml" -->
- </body>
+</body>
 
 
 </html>

@@ -7,35 +7,39 @@
     </tr>
 
     <tr>
-     <td bgcolor="#ccccff">
+     <td bgcolor="#ddddff">
        <a href="/index.shtml">About</a>
      </td>
     </tr>
     
     <tr>
-     <td bgcolor="#ccccff">Projects</a>
+     <td bgcolor="#ddddff">Projects</a>
       <small>
        <ul>
         <li><a href="/me4se/">ME4SE</a></li>
         <li><a href="/utils/">Utilities</a></li>
         <li><a href="/ksoap2/">kSOAP</a></li>
+        <li><a href="http://devicedb.kobjects.org">DeviceDB</a></li>
        </ul>
       </small>
      </td>
     </tr>
 
     <tr>
-     <td bgcolor="#ccccff">Related</a>
+     <td bgcolor="#ddddff">Related</a>
       <small>
        <ul>
         <li><a href="http://kxml.org">kXML</a></li>
+        <li><a href="http://mail4me.objectweb.org">Mail4ME</a></li>
+        <li><a href="https://jdbcwrapper.dev.java.net">JDBCwrapper</a></li>
+        <li><a href="http://infolayer.org">Infolayer</a></li>
        </ul>
       </small>
      </td>
     </tr>
 
     <tr>
-     <td bgcolor="#ccccff"> 
+     <td bgcolor="#ddddff"> 
 	  <a href="http://sourceforge.net/projects/kobjects/">Development</a>
       <small>
 	   <ul>
@@ -48,20 +52,9 @@
 	 </td>
 	</tr>
 
-<!--    <tr>
-     <td bgcolor="#ccccff">Links
-      <small>
-       <ul>
-	    <li><a href="http://kobjects.org">kObjects</a></li>
-	    <li><a href="http://xmlpull.org">XmlPull</a></li>
-	    <li><a href="http://stax-utils.dev.java.net">StAX</a></li>
-	   </ul>
-      </small>
-     </td>
-    </tr>-->
 
 	<tr>
-	 <td bgcolor="#ccccff">
+	 <td bgcolor="#ddddff">
 	  <a href="http://sourceforge.net/projects/kobjects/"><img src="http://sourceforge.net/sflogo.php?group_id=9157&amp;type=2" alt="SF Logo" /></a>
      </td>
     </tr>
