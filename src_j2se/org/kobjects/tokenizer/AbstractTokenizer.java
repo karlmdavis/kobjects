@@ -30,6 +30,14 @@ public abstract class AbstractTokenizer {
 		return peek(0);
 	}
 
+	public boolean peek(String token){
+		return peek(0).equals(token);
+	}
+
+	public void read(String token){
+		require(token);
+	}
+
 	public String peek(int ofs) {
 		int len = expr.length();
 
