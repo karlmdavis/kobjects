@@ -134,7 +134,7 @@ public class BibtexParser {
 		
 		if (i == '*') {
 			Hashtable del = new Hashtable();
-			del.put ("key", "*" + readTo("\n\r\t "));
+			del.put ("bibkey", "*" + readTo("\n\r\t "));
 			return del;
 		}
 		
@@ -210,8 +210,8 @@ public class BibtexParser {
 	void addEntry(String type, String key) {
 		currentEntry = new Hashtable();
 
-		addProperty("type", type);
-		addProperty("key", key);
+		addProperty("bibtype", type);
+		addProperty("bibkey", key);
 	}
 
 	void addProperty(String id, String value) {

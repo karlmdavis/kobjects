@@ -33,7 +33,7 @@ public class BibtexWriter {
 		StringBuffer buf = new StringBuffer();
 		boolean enclose = false;
 		
-		for (int k = value.length()-1; k >= 0; k--) {
+		for (int k = 0; k < value.length(); k ++) {
 			char c = value.charAt(k);
 			if ((c < '0' || c > '9')
 				&& (c < 'a' || c > 'z')
