@@ -167,7 +167,6 @@ public class ApplicationManager {
 	
 	if (active != null) 
 	    active.pauseApp ();
-
     }
 
     public void destroy () {

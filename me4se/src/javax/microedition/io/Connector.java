@@ -21,7 +21,7 @@
 package javax.microedition.io;
 
 import java.io.*;
-import org.kobjects.me4se.impl.*;
+import org.me4se.impl.*;
 
 public class Connector {
 
