@@ -9,6 +9,6 @@ public abstract class ConnectionImpl implements Connection {
     public abstract void open (String url, int mode, 
 			       boolean timeouts) throws IOException;
 
-    public abstract void close ();
+    public abstract void close () throws IOException;
     
 }

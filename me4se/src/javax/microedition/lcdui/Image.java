@@ -23,7 +23,7 @@ public class Image {
 
     
     Image (InputStream is) {
-	this.image = java.awt.Toolkit.getDefaultToolkit ().createImage 
+       	this.image = java.awt.Toolkit.getDefaultToolkit ().createImage 
 	    (new com.sixlegs.image.png.PngImage (is));
     }
 
