@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="kobjects" default="build" basedir=".">
+
+  <target name="init">
+    <property name="dist.dir"          value="${basedir}/dist"/>
+    <property name="classes.dir"       value="${basedir}/tmpclasses"/>
+  </target>
   
   <target name="javadoc">
     <delete dir="doc/api"/>
@@ -14,46 +19,56 @@
              use="true"
              windowtitle="kObjects API"
              doctitle="kObjects API"
-    />
+             />
   </target>
   
 
-    <target name="build">
-    	<delete dir="tmpclasses"/>
-    	<mkdir dir="tmpclasses"/>
-    	
-    	<javac srcdir="src;src_j2se"
-    	       destdir="tmpclasses"
-    	       debug="true"/>
-	
-        <mkdir dir="dist"/>    
-		<jar jarfile="dist/kobjects-j2se.jar">
-			<fileset dir="tmpclasses">
-				<include name="**/*.class"/>
-				<include name="META-INF/**"/>
-			</fileset>
-		</jar>
-
-    	<delete dir="tmpclasses"/>
-	</target>
-
-<!--
-    <target name="deploy" depends="build,deployinfo">
-
-		<deploy target="http://pleumann.dyndns.org/kobjects"
-				project="Infolayer"
-				login="admin"
-				password="admin"
-				tag="${tag}"
-				date=""
-				title="Version ${tag} released"
-				text="${text}">
-				
-			<item file="build/infolayer.jar" type="application/java-archive"/>
-				
-		</deploy>
-		
-	</target>
--->
+  <target name="build" depends="init">
+    <mkdir dir="${classes.dir}"/>
     
+    <javac srcdir="src;src_j2se"
+    	   destdir="${classes.dir}"
+    	   debug="true"/>
+    
+    <mkdir dir="${dist.dir}"/>    
+    <jar jarfile="${dist.dir}/kobjects-j2se.jar">
+      <fileset dir="${classes.dir}">
+	<include name="**/*.class"/>
+	<include name="META-INF/**"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${dist.dir}/xmlrpc-min.jar">
+      <fileset dir="${classes.dir}">
+	<include name="org/kobjects/xml/XmlReader.class"/>
+        <include name="org/kobjects/xmlrpc/XmlRpcParser.class"/>
+        <include name="org/kobjects/xmlrpc/XmlParser.class"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${classes.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <!--
+      <target name="deploy" depends="build,deployinfo">
+
+	<deploy target="http://pleumann.dyndns.org/kobjects"
+		project="Infolayer"
+		login="admin"
+		password="admin"
+		tag="${tag}"
+		date=""
+		title="Version ${tag} released"
+		text="${text}">
+	  
+	  <item file="build/infolayer.jar" type="application/java-archive"/>
+	  
+	</deploy>
+	
+      </target>
+      -->
+  
 </project>
