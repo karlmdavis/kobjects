@@ -5,7 +5,7 @@ import javax.microedition.rms.*;
 
 public class RecordEnumerationImpl implements RecordEnumeration {
 
-    RecordStore store;
+    RecordStoreImpl store;
     RecordFilter filter;
     RecordComparator comparator; 
     boolean keepUpdated;
@@ -14,10 +14,14 @@ public class RecordEnumerationImpl implements RecordEnumeration {
     int prevId = -1;
     int currentId = -1;
 
-    public RecordEnumerationImpl (RecordStore store, 
+    public RecordEnumerationImpl (RecordStoreImpl store, 
 				  RecordFilter filter, 
 				  RecordComparator comparator, 
-				  boolean keepUpdated) {
+				  boolean keepUpdated) 
+
+	throws RecordStoreNotOpenException {
+
+	store.checkOpen ();
 
 	this.store = store;
 	this.filter = filter;
@@ -98,19 +102,16 @@ public class RecordEnumerationImpl implements RecordEnumeration {
     }
 
 
-    public byte [] nextRecord () {
-	try {
-	    return store.getRecord (nextRecordId ());
-	}
-	catch (RecordStoreException e) {
-	    throw new RuntimeException (e.toString ());
-	}
+    public byte [] nextRecord () throws RecordStoreException {
+  
+	return store.getRecord (nextRecordId ());
     }
 
 
-    public int nextRecordId () {
+    public int nextRecordId () throws InvalidRecordIDException {
 	if (nextId == -1) {
-	    hasNextElement ();
+	    if (!hasNextElement ()) 
+		throw new InvalidRecordIDException ();
 	}
 
 	currentId = nextId;
@@ -124,19 +125,16 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 	throw new RuntimeException ("not yet supported!");
     }
 
-    public byte [] previousRecord () {
-	try {
-	    return store.getRecord (previousRecordId ());
-	}
-	catch (RecordStoreException e) {
-	    throw new RuntimeException (e.toString ());
-	}
+    public byte [] previousRecord () throws RecordStoreException {
+	
+	return store.getRecord (previousRecordId ());
     }
     
     
-    public int previousRecordId () {
+    public int previousRecordId () throws InvalidRecordIDException {
 	if (prevId == -1) {
-	    hasPreviousElement ();
+	    if (!hasPreviousElement ()) 
+		throw new InvalidRecordIDException ();
 	}
 
 	currentId = prevId;

@@ -83,9 +83,12 @@ public abstract class RecordStore {
 
     public RecordEnumeration enumerateRecords (RecordFilter filter, 
 					       RecordComparator comparator, 
-					       boolean keepUpdated) {
+					       boolean keepUpdated) 
+
+	throws RecordStoreNotOpenException {
+
 	return new RecordEnumerationImpl 
-	    (this, filter, comparator, keepUpdated);
+	    ((RecordStoreImpl) this, filter, comparator, keepUpdated);
     }
 
 

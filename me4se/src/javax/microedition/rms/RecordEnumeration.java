@@ -12,15 +12,19 @@ public interface RecordEnumeration {
 
     public void keepUpdated (boolean keepUpdated);
 
-    public byte [] nextRecord ();
+    public byte [] nextRecord ()
+	throws RecordStoreException, RecordStoreNotOpenException, 
+	       InvalidRecordIDException;
 
-    public int nextRecordId ();
+    public int nextRecordId () throws InvalidRecordIDException;
 
     public int numRecords ();
 
-    public byte [] previousRecord ();
+    public byte [] previousRecord ()
+	throws RecordStoreException, RecordStoreNotOpenException, 
+	       InvalidRecordIDException;
 
-    public int previousRecordId ();
+    public int previousRecordId () throws InvalidRecordIDException;
 
     public void rebuild ();
 
