@@ -4,52 +4,71 @@ import java.io.*;
 
 public final class Util {
 
-	/** 
-	 * Writes the contents of the input stream to the 
-	 * given output stream and closes the input stream.
-	 * The output stream is returned */
+    public static String fill(String s, int len, char c) {
+        boolean left = len < 0;
+        len = Math.abs(len);
 
-    public static OutputStream streamcopy(
-        InputStream is,
-        OutputStream os)
-        throws IOException {
-        byte[] buf = new byte[Runtime.getRuntime ().freeMemory () >= 1048576 
-         ? 16384 : 128];
-        while (true) {
-            int count = is.read(buf, 0, buf.length);
-            if (count == -1)
-                break;
-            os.write(buf, 0, count);
+        if (s.length() >= len)
+            return s;
+
+        StringBuffer buf = new StringBuffer();
+        len -= s.length();
+        while (len > 0) {
+            buf.append(c);
+            len--;
         }
-        is.close();        
-        return os;
+
+        if (left) {
+            buf.append(s);
+            return buf.toString();
+        }
+        return s + buf.toString();
     }
 
+/** 
+ * Writes the contents of the input stream to the 
+ * given output stream and closes the input stream.
+ * The output stream is returned */
 
-	public static String buildUrl (String base, String local) {
+public static OutputStream streamcopy(InputStream is, OutputStream os)
+    throws IOException {
+    byte[] buf =
+        new byte[Runtime.getRuntime().freeMemory() >= 1048576 ? 16384 : 128];
+    while (true) {
+        int count = is.read(buf, 0, buf.length);
+        if (count == -1)
+            break;
+        os.write(buf, 0, count);
+    }
+    is.close();
+    return os;
+}
 
-		int ci = local.indexOf(':');
+public static String buildUrl(String base, String local) {
 
-		// slash or 2nd char colon: ignore base, return file://local
+    int ci = local.indexOf(':');
 
-		if (local.startsWith ("/") || ci == 1)
-			return "file:///" + local;
+    // slash or 2nd char colon: ignore base, return file://local
 
-		// local contains colon, assume URL, return local
+    if (local.startsWith("/") || ci == 1)
+        return "file:///" + local;
 
-		if (ci > 2 && ci < 6) 
-			return local;			
-		
-		if (base == null) base = "file:///";
-		else {
-			if (base.indexOf(':') == -1)
-				base = "file:///" + base;
+    // local contains colon, assume URL, return local
 
-			if (!base.endsWith("/")) 
-				base = base + ("/");				
-		}
+    if (ci > 2 && ci < 6)
+        return local;
 
-		return base + local;		
-	}
+    if (base == null)
+        base = "file:///";
+    else {
+        if (base.indexOf(':') == -1)
+            base = "file:///" + base;
+
+        if (!base.endsWith("/"))
+            base = base + ("/");
+    }
+
+    return base + local;
+}
 
 }
