@@ -57,7 +57,7 @@ public final class Util {
 
         int ci = local.indexOf(':');
 
-        // slash or 2nd char colon: ignore base, return file://local
+        // slash or 2nd char colon: ignore base, return file:///local
 
         if (local.startsWith("/") || ci == 1)
             return "file:///" + local;
