@@ -27,7 +27,7 @@ import javax.microedition.midlet.*;
 
 public class MIDletRunner extends Applet {
 
-    boolean running;
+    boolean running = false;
     public static boolean isApplet;
 
     public void start () {
@@ -63,7 +63,7 @@ public class MIDletRunner extends Applet {
 
 	String midlet = null;
 	String jadfile = null;
-	
+        
 	for (int i = 0; i < argv.length; i++) {
 	    if (argv [i].indexOf (".jad") == argv [i].length() - 4)
 		jadfile = argv[i];
