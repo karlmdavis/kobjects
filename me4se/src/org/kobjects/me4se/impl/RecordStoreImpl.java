@@ -99,7 +99,8 @@ public class RecordStoreImpl extends RecordStore {
 		    refCount = 0;
 		    throw new RecordStoreNotFoundException ();
 		}
-		
+
+		records = new Vector ();		
 	    }
 	}
     }
