@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public class Csv {
 
+
 	public static String[] decode(String line) {
 		Vector tmp = new Vector();
 
@@ -31,7 +32,12 @@ public class Csv {
 							break;
 						p0++;
 					}
-					buf.append(c);
+                    else if (c == '^' && p0 < len) {
+                        char c2 = line.charAt (p0++);
+                        buf.append (c2 == '^' ? c2 : (char) (((int) c2)-64));
+                    }
+                    else
+					   buf.append(c);
 				}
 
 				tmp.addElement(buf.toString());
