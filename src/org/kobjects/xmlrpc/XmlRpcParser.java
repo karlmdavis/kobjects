@@ -71,7 +71,7 @@ public class XmlRpcParser {
 
 
     final private Object parseValue() throws IOException {
-	Object result = null;
+	Object result = "";
         int event;
         
 	// parser.require(XmlReader.START_TAG, "value");
