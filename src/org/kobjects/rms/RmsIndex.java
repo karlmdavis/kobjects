@@ -182,6 +182,11 @@ public class RmsIndex {
 	root.size = 1;
 	root.store ();
     }
+
+
+    public void close () throws RecordStoreException {
+	store.closeRecordStore ();
+    }
 }
 
 
