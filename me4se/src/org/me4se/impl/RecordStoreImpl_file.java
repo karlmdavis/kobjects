@@ -23,7 +23,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
     }
 
     public boolean accept (File dir, String name) {
-	return name.endsWith (".rms") ? true : false;
+	return name.endsWith (".rms");
     }
 
     private void changeVersion () {
