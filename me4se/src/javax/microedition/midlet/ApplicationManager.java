@@ -60,7 +60,16 @@ public class ApplicationManager {
 		(Integer.parseInt (properties.getProperty ("width", "150")), 
 		 Integer.parseInt (properties.getProperty ("height", "200")));
 
-	    frame.setResizable (false);
+
+	    // not fully supported yet
+
+	    frame.setResizable 
+		("|1|true|".indexOf ("|"+properties.getProperty ("resizable")+"|") != -1);
+	    /*
+	    System.out.println 
+		("resizable: "+ 
+		 ("|1|true|".indexOf ("|"+properties.getProperty ("resizable")+"|") != -1));
+	    */
 
 	    frame.addWindowListener (new java.awt.event.WindowAdapter () {
 		    public void windowClosing (java.awt.event.WindowEvent ev) {
