@@ -27,6 +27,8 @@ package org.kobjects.serialization;
 public class ElementType {
 
     public static final Class OBJECT_CLASS = new Object ().getClass ();
+    public static final Class STRING_CLASS = "".getClass ();
+    public static final Class INTEGER_CLASS = new Integer (0).getClass ();
 
     public static final ElementType OBJECT_TYPE = 
 	new ElementType (OBJECT_CLASS, false, null);
