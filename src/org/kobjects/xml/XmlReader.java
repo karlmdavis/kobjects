@@ -583,7 +583,7 @@ public class XmlReader {
     
     public String getAttributeValue(String name) {
 	
-	for (int i = (attributeCount << 1)-1; i >= 0; i -= 2) {
+	for (int i = (attributeCount << 1)-2; i >= 0; i -= 2) {
 	    if (attributes [i].equals (name)) 
 		return attributes [i+1];
 	}
