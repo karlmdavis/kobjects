@@ -21,7 +21,7 @@
 package javax.microedition.midlet;
 
 import org.kobjects.me4se.impl.JadFile;
-import java.util.Vector;
+import java.util.*;
 import java.io.File;
 
 /** this class is needed *here* in order to be able to call the protected MIDlet startApp()
@@ -37,10 +37,12 @@ public class ApplicationManager {
     public java.awt.Container displayContainer; 
     public int canvasWidth;
     public int canvasHeight;
+    public Properties properties;
 
 
+    public ApplicationManager (java.awt.Container dc, Properties properties) {
 
-    public ApplicationManager (java.awt.Container dc) {
+	this.properties = properties;
 
 	if (manager != null) 
 	    manager.destroy ();
@@ -52,8 +54,13 @@ public class ApplicationManager {
 	else if (displayContainer == null) {
 	    java.awt.Frame frame = new java.awt.Frame ("MIDlet");
 	    displayContainer = frame;
-	    frame.setSize (150, 200);
+
+	    frame.setSize 
+		(Integer.parseInt (properties.getProperty ("width", "150")), 
+		 Integer.parseInt (properties.getProperty ("height", "200")));
+
 	    frame.setResizable (false);
+
 	    frame.addWindowListener (new java.awt.event.WindowAdapter () {
 		    public void windowClosing (java.awt.event.WindowEvent ev) {
 			destroy ();
@@ -62,14 +69,19 @@ public class ApplicationManager {
 	    
 	    frame.show ();    
 	}
+
 	displayContainer.removeAll ();
 	displayContainer.setLayout (new java.awt.BorderLayout ());
 	displayContainer.setBackground (java.awt.Color.white);
     }
 
 
-    public void init (String jadFile, String midlet) {
+    /** not called if MIDlet provides a main method */
 
+    public void launch () {
+	
+	String jadFile = properties.getProperty ("jad");
+	String midlet = properties.getProperty ("MIDlet");
 
 	if (jadFile != null) {
 	    try {

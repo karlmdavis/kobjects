@@ -23,7 +23,7 @@ package org.kobjects.me4se;
 import java.applet.*;
 import java.awt.*;
 import javax.microedition.midlet.*;
-
+import java.util.*;
 
 public class MIDletRunner extends Applet {
 
@@ -40,8 +40,19 @@ public class MIDletRunner extends Applet {
 	    if (ApplicationManager.manager != null) 
 		ApplicationManager.manager.destroy ();
             //String[] param = {getParameter ("MIDlet"), getParameter("JAD-File")};
-	    new ApplicationManager (this).init 
-		(getParameter("JAD-File"), getParameter("MIDlet"));
+
+	    Properties param = new Properties ();
+
+	    if (getParameter ("jad") != null) 
+		param.put ("jad", getParameter ("jad"));
+	    
+	    if (getParameter ("jad-file") != null) 
+		param.put ("jad", getParameter ("jad-file"));
+			       
+	    if (getParameter ("MIDlet") != null) 
+		param.put ("MIDlet", getParameter ("MIDlet"));
+			       
+	    new ApplicationManager (this, param).launch ();
 	}
 
 	ApplicationManager.manager.start ();
@@ -61,20 +72,27 @@ public class MIDletRunner extends Applet {
 
     public static void main (String [] argv)  {
 
+	Properties param = new Properties ();
 	String midlet = null;
 	String jadfile = null;
         
 	for (int i = 0; i < argv.length; i++) {
-	    if (argv [i].indexOf (".jad") == argv [i].length() - 4)
-		jadfile = argv[i];
+
+	    if (argv [i].startsWith ("-")) {
+		param.put (argv [i].substring (1), argv [i+1]);
+		i++;
+	    }
+
+	    else if (argv [i].indexOf (".jad") == argv [i].length() - 4)
+		param.put ("jad", argv[i]);
 	    else
-		midlet = argv[i];
+		param.put ("MIDlet", argv[i]);
 	}
 
-	if (midlet == null && jadfile == null) 
+	if (param.get ("MIDlet") == null && param.get ("jad") == null) 
 	    System.err.println ("Please specify an .jad-file or a MIDlet class name.");
 	else {
-	    new ApplicationManager (null).init (jadfile, midlet);
+	    new ApplicationManager (null, param).launch ();
 	    ApplicationManager.manager.start ();
 	}
     }

@@ -28,7 +28,7 @@ public abstract class MIDlet {
     
     public MIDlet () {
 	if (ApplicationManager.manager == null) 
-	    new ApplicationManager (null);
+	    new ApplicationManager (null, new java.util.Properties ());
 
 	ApplicationManager.manager.active = this;
 	
@@ -52,7 +52,9 @@ public abstract class MIDlet {
     
     public String getAppProperty (String key) {
 
-	return ApplicationManager.manager.jad.getProperty (key);
+	return ApplicationManager.manager.jad == null 
+	    ? null : ApplicationManager.manager.jad.getProperty (key);
+
 	/*
 	if (key.equals ("microedition.configuration"))
 	    return "CLDC 1.0";
