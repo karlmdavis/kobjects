@@ -26,7 +26,7 @@ public class JadFile  {
     public JadFile (String name) throws IOException {
 
 	BufferedReader reader = new BufferedReader 
-	    ((name.indexOf (':') == -1)
+	    ((name.indexOf (':') < 2)
 	     ? new FileReader (name)
 	     : new InputStreamReader (Connector.openInputStream (name)));
 	
