@@ -22,7 +22,11 @@ As a special exception, if you link this library with other files to
 produce an executable, this library does not by itself cause the
 resulting executable to be covered by the GNU General Public License.
 This exception does not however invalidate any other reasons why the
-executable file might be covered by the GNU General Public License. */
+executable file might be covered by the GNU General Public License. 
+
+modification for midlet.org added reference of timer in scheduler and extra test not to
+add the task to the queue after canceling.
+*/
 
 package java.util;
 
@@ -131,8 +135,8 @@ public class Timer
      */
     public synchronized void enqueue(TimerTask task)
     {
-      // Check if it is legal to add another element
-      if (heap == null)
+      // Check if it is legal to add another element                  
+        if (heap == null)
 	{
 	  throw new IllegalStateException
 	    ("cannot enqueue when stop() has been called on queue");
@@ -296,20 +300,21 @@ public class Timer
   {
     // The priority queue containing all the TimerTasks.
     private TaskQueue queue;
-
+    private Timer timer;
     /**
      * Creates a new Scheduler that will schedule the tasks on the
      * given TaskQueue.
      */
-    public Scheduler(TaskQueue queue)
+    public Scheduler(Timer timer ,TaskQueue queue)
     {
+      this.timer = timer;  
       this.queue = queue;
     }
 
     public void run()
     {
       TimerTask task;
-      while ((task = queue.serve()) != null)
+      while ((!timer.canceled)&&((task = queue.serve()) != null))
 	{
 	  // If this task has not been canceled
 	  if (task.scheduled >= 0)
@@ -337,6 +342,8 @@ public class Timer
 	    }
 
 	  // Calculate next time and possibly re-enqueue
+          if(timer.canceled)
+               break;
 	  if (task.scheduled >= 0)
 	    {
 	      if (task.fixed)
@@ -408,7 +415,7 @@ public class Timer
   {
     canceled = false;
     queue = new TaskQueue();
-    scheduler = new Scheduler(queue);
+    scheduler = new Scheduler(this,queue);
     thread = new Thread(scheduler, name);
     thread.setDaemon(daemon);
     thread.setPriority(priority);

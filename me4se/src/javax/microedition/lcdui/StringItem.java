@@ -16,13 +16,26 @@ public class StringItem extends Item {
 	textPanel.removeAll ();
 
 	if (text != null) { 
-	    int i0 = 0;
-	    while (i0 < text.length ()) {
-		int i1 = text.indexOf ('\n', i0);
-		if (i1 == -1) i1 = text.length ();
-		//System.out.println ("i0: "+i0+" i1: "+i1+ " text: "+text);
-		textPanel.add (new java.awt.Label (text.substring (i0, i1)));
-		i0 = i1 + 1;
+	    int i = 0;
+	    int lastI = 0;
+	    int k = -1;
+	    while ( i < text.length() ) 
+	    {
+	    	char current = text.charAt( i );
+	    	if( current==' ' || current=='\n' || i== ( text.length() - 1 ) )
+	    		k = i;
+	    	if( ( i - lastI ) == 30 || i== ( text.length() - 1 ) )
+	    	{
+	    		if( ( k < 0 ) || ( (i-k) > 10 ) )
+					k = i;
+				i = k;
+				int iCut = i+1;
+				if( text.charAt(i) == ' ' || text.charAt(i) == '\n' )
+					iCut = i;
+				textPanel.add (new java.awt.Label (text.substring ( lastI , iCut  ) ));
+	    		lastI = i;
+	    	}
+			i++;
 	    }
 	}
     }
