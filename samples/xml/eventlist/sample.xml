@@ -1,0 +1,10 @@
+<!-- an xml sample document without meaningful content -->
+
+<root>
+  <foo>bar</foo>
+  <hugo test="true">
+    <hugochild>This is some text</hugochild>
+  </hugo>
+  <bar testattr='123abc' />
+</root>
+
