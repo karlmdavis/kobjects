@@ -2,7 +2,6 @@ package org.kobjects.samples.encoding;
 
 import java.util.*;
 import org.kobjects.isodate.*;
-import org.kobjects.base64.*;
 
 
 public class Encoding {
