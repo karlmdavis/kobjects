@@ -1,3 +1,23 @@
+// ME4SE - A MicroEdition Emulation for J2SE 
+//
+// Copyright (C) 2001 Stefan Haustein, Oberhausen (Rhld.), Germany
+//
+// Contributors:
+//
+// STATUS: API Complete
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as
+// published by the Free Software Foundation; either version 2 of the
+// License, or (at your option) any later version. This program is
+// distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+// License for more details. You should have received a copy of the
+// GNU General Public License along with this program; if not, write
+// to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+// Boston, MA 02111-1307, USA.
+
 package org.kobjects.me4se.impl;
         
 import java.io.*;
@@ -9,33 +29,128 @@ public class ConnectionImpl_http extends ConnectionImpl
     implements HttpConnection {
 
     URL url;
-    HttpURLConnection httpUrlConnection;
+    HttpURLConnection con;
     
 
     public void open (String url, int mode, 
 		      boolean timeouts) throws IOException {
 
 	this.url = new URL (url);
-	httpUrlConnection = (HttpURLConnection) this.url.openConnection ();
+	con = (HttpURLConnection) this.url.openConnection ();
 
-	httpUrlConnection.setDoOutput ((mode & Connector.WRITE) != 0);
-	httpUrlConnection.setDoInput ((mode & Connector.READ) != 0);
+	con.setDoOutput ((mode & Connector.WRITE) != 0);
+	con.setDoInput ((mode & Connector.READ) != 0);
     }
 
+
+    public long getDate () throws IOException {
+	return con.getDate ();
+    }
+
+    public String getEncoding () {
+	return con.getContentEncoding ();
+    }
+
+    public long getExpiration () throws IOException {
+	return con.getExpiration ();
+    }
+
+    public String getFile () {
+	return url.getFile ();
+    }
+
+    public String getHeaderField (String key) throws IOException {
+	return con.getHeaderField (key);
+    }
+
+    public String getHeaderField (int index) throws IOException {
+	return con.getHeaderField (index);
+    }
+
+    public int getHeaderFieldInt (String key, int def) throws IOException {
+	return con.getHeaderFieldInt (key, def);
+    }
     
+    public String getHeaderFieldKey (int index) throws IOException {
+	return con.getHeaderFieldKey (index);
+    }
+
+    public long getHeaderFieldDate (String key, long def) throws IOException {
+	return con.getHeaderFieldDate (key, def);
+    }
+
+
+    public String getHost () {
+	return url.getHost ();
+    }
+
+    public long getLength ()  {
+	return con.getContentLength ();
+    }
+
+    public long getLastModified () throws IOException {
+	return con.getLastModified ();
+    }
+
+
+    public int getPort () {
+	return url.getPort ();
+    }
+
+    public String getProtocol () {
+	return url.getProtocol ();
+    }
+
+
+    public String getQuery () {
+	return url.getQuery ();
+    }
+
+    public String getRef () {
+	return url.getRef ();
+    }
+
+    public int getResponseCode () throws IOException {
+	return con.getResponseCode ();
+    }
+
+    public String getRequestProperty (String name) {
+	return con.getRequestProperty (name);
+    }
+
+    public String getType () {
+	return con.getContentType ();
+    }
+
+    public String getURL () {
+	return url.toString ();
+    }
+
+    public String getRequestMethod () {
+	return con.getRequestMethod ();
+    }
+
+
+    public String getResponseMessage () throws IOException {
+	return con.getResponseMessage ();
+    }
+
+
+
     public void setRequestMethod (String method) throws IOException {
-	httpUrlConnection.setRequestMethod (method);
-	
+	con.setRequestMethod (method);
     }
 
 
-    public void setRequestProperty (String key, String value) throws IOException {
-	httpUrlConnection.setRequestProperty (key, value);
+    public void setRequestProperty (String key, 
+				    String value) throws IOException {
+	con.setRequestProperty (key, value);
     }
+
+
     
-
     public InputStream openInputStream () throws IOException {
-	return httpUrlConnection.getInputStream ();
+	return con.getInputStream ();
     }
 
     public DataInputStream openDataInputStream () throws IOException {
@@ -44,7 +159,7 @@ public class ConnectionImpl_http extends ConnectionImpl
 
 
     public OutputStream openOutputStream () throws IOException {
-	return httpUrlConnection.getOutputStream ();
+	return con.getOutputStream ();
     }
 
     public DataOutputStream openDataOutputStream () throws IOException {
@@ -53,25 +168,9 @@ public class ConnectionImpl_http extends ConnectionImpl
 
 
     public void close () {
-	httpUrlConnection.disconnect ();
+	con.disconnect ();
 	//getOutputStream ().close ();
-	//httpUrlConnection.getInputStream ().close ();
+	//con.getInputStream ().close ();
     }
 
-    public long getLength ()  {
-	return httpUrlConnection.getContentLength ();
-    }
-
-    public String getType () {
-	return httpUrlConnection.getContentType ();
-    }
-
-    public String getEncoding () {
-	return httpUrlConnection.getContentEncoding ();
-    }
-
-    public int getResponseCode () throws IOException {
-	return httpUrlConnection.getResponseCode ();
-    }
-    
 }
