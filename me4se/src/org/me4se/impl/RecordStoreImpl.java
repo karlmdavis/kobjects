@@ -59,7 +59,8 @@ public abstract class RecordStoreImpl extends RecordStore {
 	if (listeners == null)
 	    listeners = new Vector ();
 	
-	listeners.add (listener);
+//	listeners.add (listener);
+	listeners.insertElementAt( listener , listeners.size() );
     }
 
     
