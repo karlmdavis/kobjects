@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="kobjects" default="build" basedir=".">
+<project name="kobjects" default="build" basedir="..">
 
   <target name="init">
     <property name="dist.dir"          value="${basedir}/dist"/>
     <property name="classes.dir"       value="${basedir}/tmpclasses"/>
   </target>
   
-  <target name="javadoc">
+  <target name="javadoc" depends="build_jar">
     <delete dir="doc/api"/>
     <mkdir dir="doc/api"/>    
     <javadoc packagenames="org.kobjects.*"
@@ -23,7 +23,7 @@
   </target>
   
 
-  <target name="build" depends="init">
+  <target name="build_jar" depends="init">
     <mkdir dir="${classes.dir}"/>
     
     <javac srcdir="src;src_j2se"
@@ -52,23 +52,25 @@
     <delete dir="${dist.dir}"/>
   </target>
 
-  <!--
-      <target name="deploy" depends="build,deployinfo">
 
-	<deploy target="http://pleumann.dyndns.org/kobjects"
-		project="Infolayer"
-		login="admin"
-		password="admin"
-		tag="${tag}"
-		date=""
-		title="Version ${tag} released"
-		text="${text}">
-	  
-	  <item file="build/infolayer.jar" type="application/java-archive"/>
-	  
-	</deploy>
-	
-      </target>
-      -->
+    <target name="build_src" depends="javadoc">
+		<zip zipfile="${dist.dir}/kobjects-src.zip">
+		  <fileset dir=".">
+		    <include name="*/**" />
+		    <exclude name=".*" />
+		    <exclude name="dist/**" />
+		    <exclude name="bin/**" />
+		    <exclude name="classes/**" />
+		    <exclude name="tmpclasses/**" />
+            <exclude name="**/CVS/*" />		    
+		   </fileset>
+		</zip>    
+    
+    </target>
+
+
+	<target name="build" depends="build_src" />
+
+ 
   
 </project>
