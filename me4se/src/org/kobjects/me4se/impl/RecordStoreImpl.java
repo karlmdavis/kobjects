@@ -86,9 +86,7 @@ public class RecordStoreImpl extends RecordStore {
 	    records = new Vector ();
 	}
 	else {
-	    File dir = new File (ApplicationManager.manager.getRmsDir ());
-	    dir.mkdir ();
-	    file = new File (dir, recordStoreName + ".rms");
+	    file = new File (ApplicationManager.manager.getRmsDir (), recordStoreName);
 	    
 	    try {
 
