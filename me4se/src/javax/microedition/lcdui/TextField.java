@@ -3,7 +3,13 @@ package javax.microedition.lcdui;
 public class TextField extends Item {
 
     public static final int ANY = 0;
-    public static final int NUMERIC = 1;
+    public static final int EMAILADDR = 1;
+    public static final int NUMERIC = 2;
+    public static final int PHONENUMBER = 3;
+    public static final int URL = 4;
+    public static final int PASSWORD = 0x010000;
+    public static final int CONSTRAINT_MASK = 0x0ffff;
+
 
     java.awt.TextField field;
 
@@ -12,9 +18,11 @@ public class TextField extends Item {
 	field = new java.awt.TextField (text, maxSize);
     }
 
+
     public void setString (String text) {
 	field.setText (text);
     }
+
 
     public String getString () {
 	return field.getText ();
