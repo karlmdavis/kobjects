@@ -1,3 +1,7 @@
+/*
+ * $Id: RecordStoreImpl_file.java,v 1.7 2001/11/05 19:51:35 mkroll Exp $
+ */
+
 package org.me4se.impl;
 
 import javax.microedition.rms.*;
@@ -13,7 +17,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
     long lastModified = 0L;
 
 
-    Vector listeners;
+    //Vector listeners;
     Vector records;
     File file;
     public static File rmsDir = new File ("."); // null for applet
@@ -103,14 +107,6 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	}
 	
 	return records.size ();
-    }
-    
-
-    public void addRecordListener (RecordListener listener) {
-	if (listeners == null)
-	    listeners = new Vector ();
-	
-	listeners.add (listener);
     }
     
 
@@ -317,11 +313,6 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	return databases;
     }
     
-    public void removeRecordListener (RecordListener listener) {
-	if (listeners != null)
-	    listeners.remove (listener);
-    }
-    
 
     public void setRecord (int recordId, byte[] data, int offset, int numBytes) 
 	throws RecordStoreNotOpenException,
@@ -345,6 +336,9 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
     }
 }
 
-
-
-
+/*
+ * $Log: RecordStoreImpl_file.java,v $
+ * Revision 1.7  2001/11/05 19:51:35  mkroll
+ * Moved addListener() and removeListener() to RecordStoreImpl.
+ *
+ */

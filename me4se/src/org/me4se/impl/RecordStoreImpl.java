@@ -1,3 +1,7 @@
+/*
+ * $Id: RecordStoreImpl.java,v 1.4 2001/11/05 19:51:35 mkroll Exp $
+ */
+
 package org.me4se.impl;
 
 import javax.microedition.rms.*;
@@ -11,12 +15,27 @@ public abstract class RecordStoreImpl extends RecordStore {
 
     public static Hashtable recordStores = new Hashtable ();
     public static RecordStoreImpl metaStore = newInstance ();
-
-
+    
+    protected Vector listeners;
+    
     String recordStoreName;
     int refCount;
 
 
+    public void addRecordListener (RecordListener listener) {
+	if (listeners == null)
+	    listeners = new Vector ();
+	
+	listeners.add (listener);
+    }
+
+    
+    public void removeRecordListener (RecordListener listener) {
+	if (listeners != null)
+	    listeners.remove (listener);
+    }
+    
+       
     public abstract void deleteRecordStoreImpl () throws RecordStoreException ;
 
 
@@ -46,3 +65,11 @@ public abstract class RecordStoreImpl extends RecordStore {
     public abstract void open (String recordStoreName, 
 			       boolean create) throws RecordStoreNotFoundException;
 }
+
+
+/*
+ * $Log: RecordStoreImpl.java,v $
+ * Revision 1.4  2001/11/05 19:51:35  mkroll
+ * Moved addListener() and removeListener() to RecordStoreImpl.
+ *
+ */
