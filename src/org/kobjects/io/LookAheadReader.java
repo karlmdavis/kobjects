@@ -141,5 +141,27 @@ public class LookAheadReader extends Reader {
             read();
         return s;
     }
+    /**
+     * Method readWhile.
+     * @param string
+     */
+    public String readWhile(String chars)  throws IOException {
 
+            StringBuffer buf = new StringBuffer();
+
+            while (peek(0) != -1 && chars.indexOf((char) peek(0)) != -1) {
+                buf.append((char) read());
+            }
+
+            return buf.toString();
+                
+    }
+
+    public void skip(String chars) throws IOException{
+        StringBuffer buf = new StringBuffer();
+
+        while (peek(0) != -1 && chars.indexOf((char) peek(0)) != -1) {
+            read();
+        }
+    }
 }
