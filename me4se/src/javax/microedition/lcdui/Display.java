@@ -102,4 +102,9 @@ public class Display {
     public int numColors () {
 	return 1 << (java.awt.Toolkit.getDefaultToolkit ().getColorModel ().getPixelSize () - 1);
     }
+    
+    public Displayable getCurrent() {
+        return current;
+    }
+    
 }
