@@ -177,7 +177,8 @@ public abstract class Displayable {
 				commandButtons.addElement( extraButton );
 				extraButton.addActionListener (h);
 				moreCommandPanel.add( "North" , extraButton );		
-			}			
+			}
+			escButton.addActionListener(h);			
 			moreCommandPanel.add( "South" , escButton );							
 	}
     }
