@@ -150,9 +150,13 @@ public class Decoder {
 	public String readContent () throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream ();
 		readContent (bos);
-		return characterEncoding == null 
+		String result = characterEncoding == null 
 			? new String(bos.toByteArray()) 
 			: new String (bos.toByteArray(), characterEncoding);
+			
+			
+		System.out.println("Field content: '"+result+"'");
+		return result;
 	}
 	
 	public void readContent (OutputStream os) throws IOException {
@@ -163,7 +167,7 @@ public class Decoder {
 
 
         String contentType = getHeader("Content-Type");
-		System.out.println("header: " + header);
+//		System.out.println("header: " + header);
 //		System.out.println("Content-Type: "+contentType);
 		
 
@@ -244,12 +248,12 @@ public class Decoder {
             header.put(
                 line.substring(0, cut).trim().toLowerCase(),
                 line.substring(cut + 1).trim());
-
+/*
             System.out.println(
                 "key: '"
                     + line.substring(0, cut).trim().toLowerCase()
                     + "' value: '"
-                    + line.substring(cut + 1).trim());
+                    + line.substring(cut + 1).trim());*/
 
         }
 
