@@ -76,27 +76,46 @@ public class KSearch extends HttpServlet implements Runnable {
                     INTS.length - 1)]);
     }
 
-    public void examine(String url, String referrer, int ttl) {
+
+	public void examine(String url, String referrer, int ttl) {
+		if(ttl == 0) return;
+
+        if (!url.startsWith(root))
+            return;
+
+        int hash = url.indexOf('#');
+
+        if (hash != -1)
+            url = url.substring(0, hash);
+
+		boolean existing;
+
+        if (url.endsWith("/")) {
+            existing = examine (url + "index.html", ttl);
+            if(!existing) 
+            	existing = examine(url, ttl);
+        }
+        else {
+		    existing = examine (url + "/index.html", ttl);
+            if (!existing)
+                existing = examine (url+"/", ttl);
+            if (!existing)
+                existing = examine (url, ttl);
+		}
+
+		if (!existing)
+	        error(referrer, "Link not found: "+url);
+	}
+
+
+    public boolean examine(String url, int ttl) {
 
         try {
 
-            if (ttl == 0)
-                return;
-            ttl--;
-
-            int hash = url.indexOf('#');
-            if (hash != -1)
-                url = url.substring(0, hash);
-
-            if (!url.startsWith(root))
-                return;
-
-            if (url.endsWith("/"))
-                url = url + "index.html";
-
             if (pages.contains(url))
-                return;
+                return true;
 
+            ttl--;
             url.intern();
             pages.add(url);
 
@@ -110,7 +129,7 @@ public class KSearch extends HttpServlet implements Runnable {
                 System.out.println(
                     " - unknown content type: "
                         + con.getContentType());
-                return;
+                return true;
             }
 
             String enc = con.getContentEncoding();
@@ -226,16 +245,17 @@ public class KSearch extends HttpServlet implements Runnable {
             r.close();
         }
         catch (FileNotFoundException e) {
-            System.err.println(e.toString());
-            error(referrer, e);
+			return false;
         }
         catch (Exception e) {
             e.printStackTrace();
             error(url, e);
         }
+        
+        return true;
     }
 
-    void error(String url, Exception e) {
+    void error(String url, Object e) {
         Vector list = (Vector) errors.get(url);
         if (list == null) {
             list = new Vector();
@@ -348,26 +368,5 @@ public class KSearch extends HttpServlet implements Runnable {
 
     }
 
-    /*
-        public static void main(String[] argv) {
-            KSearch s = new KSearch();
-            s.root = "http://www-ai.cs.uni-dortmund.de";
-            s.examine(s.root, 10);
-    
-            for (Enumeration e = s.words.keys();
-                e.hasMoreElements();
-                ) {
-                String word = (String) e.nextElement();
-                System.out.println(word);
-                Hashtable pages = (Hashtable) s.words.get(word);
-                for (Enumeration f = pages.keys();
-                    f.hasMoreElements();
-                    ) {
-                    String url = (String) f.nextElement();
-                    System.out.println(
-                        " - " + pages.get(url) + " x on " + url);
-    
-                }
-            }
-        }*/
+  
 }
