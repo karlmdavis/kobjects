@@ -59,6 +59,8 @@ public class PimParser {
 			throw new RuntimeException(e.toString());
 		}
 
+        reader.read();
+
 		if (!item.getType().equals(readStringValue().toLowerCase()))
 			throw new RuntimeException("item types do not match!");
 
@@ -82,6 +84,7 @@ public class PimParser {
 			item.addField(field);
 		}
 
+        reader.read();
 		System.out.println("end:" + readStringValue());
 
 		return item;
@@ -95,7 +98,6 @@ public class PimParser {
 
 	String[] readArrayValue(int size) throws IOException {
 		Vector values = new Vector();
-		reader.read(); // :
 
 		StringBuffer buf = new StringBuffer();
 		boolean stay = true;
@@ -129,7 +131,6 @@ public class PimParser {
 	}
 
 	String readStringValue() throws IOException {
-		reader.read();
 		String value = reader.readLine();
 		while (reader.peek(0) == 32) {
 			reader.read();
@@ -139,7 +140,23 @@ public class PimParser {
 	}
 
 	void readProperties(PimField field) throws IOException {
-		reader.readTo(':');
+        int c = reader.read();
+
+        while(c == ' ') {
+            c=reader.read();
+        }
+        
+        while (c != ':') {
+            String name = reader.readTo(":;=").trim().toLowerCase();
+            c = reader.read();
+            if (c == '=') {
+                field.setProperty(name, reader.readTo(":;").trim().toLowerCase());
+                c = reader.read();
+            }
+            else {
+                field.setAttribute(name);
+            }
+        }
 	}
 
 }

@@ -32,7 +32,6 @@ public class PimField {
 
     String name;
     Object value;
-    Hashtable attributes;
     Hashtable properties;
 
     
@@ -40,6 +39,10 @@ public class PimField {
         this.name = name;
     }
 
+
+    public Enumeration propertyNames() {
+        return properties.keys();
+    }
 
     public void setProperty(String name, String value) {
         if (properties == null) { 
@@ -68,5 +71,28 @@ public class PimField {
 		return name + (properties != null ? (";" + properties) : "") + ":" + value;
 	}
 
+
+    public String getProperty(String name){
+        return properties == null ? null : (String) properties.get(name);
+    }
+
+
+    public boolean getAttribute(String name){
+        String s = getProperty("type");
+        return s == null ? false : s.indexOf(name) != -1;
+       
+    }
+
+    public void setAttribute(String name){
+        if (getAttribute(name)) return;
+        
+        String s = getProperty("type");
+        if (s == null || s.length() == 0)
+            s = name;
+        else 
+            s = s + name;
+            
+        setProperty("type", s);
+    }
 
 }
