@@ -68,7 +68,7 @@ public abstract class PimItem {
 		for (Enumeration e = fieldNames(); e.hasMoreElements();) {
 			String name = (String) e.nextElement();
 			for (Enumeration f = fields(name); f.hasMoreElements();) {
-				v.addElement(f);
+				v.addElement(f.nextElement());
 			}		 
 		}
 		return v.elements();

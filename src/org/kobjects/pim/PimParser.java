@@ -154,7 +154,7 @@ public class PimParser {
                 c = reader.read();
             }
             else {
-                field.setAttribute(name);
+                field.setAttribute(name, true);
             }
         }
 	}
