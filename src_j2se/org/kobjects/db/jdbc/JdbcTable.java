@@ -44,7 +44,7 @@ public class JdbcTable extends Table {
             open ();
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e);
+            throw ChainedRuntimeException.create (e, null);
         }
     }
 
@@ -83,7 +83,7 @@ public class JdbcTable extends Table {
             statement.close ();
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e);
+            throw ChainedRuntimeException.create (e, null);
         }
         
         existing = true;
@@ -106,7 +106,7 @@ public class JdbcTable extends Table {
             fields = new Vector ();
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e);
+            throw ChainedRuntimeException.create (e, null);
         }
     }
     
@@ -150,7 +150,7 @@ public class JdbcTable extends Table {
             existing = true;
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e, "failed: "+buf);
+            throw ChainedRuntimeException.create (e, "failed: "+buf);
         }
     }
     
@@ -206,7 +206,7 @@ public class JdbcTable extends Table {
 
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e); //, "failed: "+buf.toString () );
+            throw ChainedRuntimeException.create (e, null); //, "failed: "+buf.toString () );
         }
 
 
@@ -223,7 +223,7 @@ public class JdbcTable extends Table {
                 connection.close ();
         }
         catch (SQLException e) {
-            throw new ChainedRuntimeException (e);
+            throw ChainedRuntimeException.create (e, null);
         }
     }
 

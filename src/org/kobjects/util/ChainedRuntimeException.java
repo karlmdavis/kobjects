@@ -16,7 +16,7 @@ public class ChainedRuntimeException extends RuntimeException {
 		  	("org.kobjects.util.ChainedRuntimeExceptionSE").newInstance ())._create (e, s);
 		}
 		catch (Exception x) {
-	//	System.out.println (""+x);
+			System.out.println (""+x);
 		}
 		return new ChainedRuntimeException (e, s);
 	}

@@ -76,7 +76,7 @@ public class SpkTable extends TextFixed {
 
         }
         catch (IOException e) {
-            throw new ChainedRuntimeException (e);
+            throw ChainedRuntimeException.create (e, null);
         }
     }
 
