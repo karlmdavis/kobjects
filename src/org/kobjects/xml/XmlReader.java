@@ -9,7 +9,7 @@ package org.kobjects.xml;
 import java.io.*;
 import java.util.*;
 
-/** A minimalistic XML pul parser, similar to kXML, but
+/** A minimalistic XML pull parser, similar to kXML, but
     not supporting namespaces or legacy events. If you need
     support for namespaces, or access to XML comments or
     processing instructions, please use kXML(2) instead. */
