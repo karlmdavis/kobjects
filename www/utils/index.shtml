@@ -1,0 +1,70 @@
+<html>
+<head><title>kObjects Utilities</title></head>
+<body bgcolor="#ffffff">
+<!--#include virtual="../prolog.shtml" -->
+
+<h1>kObjects Utilities</h1>
+
+<table border="true">
+ <tr bgcolor="#000000">
+  <th><font color="white" face="Verdana,Helvetica">Class</font></th>
+  <th><font color="white" face="Verdana,Helvetica">Package</font></th>
+  <th><font color="white" face="Verdana,Helvetica">Description</font></th>
+  <th><font color="white" face="Verdana,Helvetica">Sample</font></th>
+</tr>
+
+ <tr>
+  <td valign="top"><a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/base64/Base64.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">Base64.java</a></td>
+  <td valign="top">org.kobjects.base64</td>
+  <td valign="top">Base 64 encoder / decoder</td>
+  <td valign="top">&nbsp;</td>
+ </tr>
+ 
+ <tr>
+  <td valign="top"><a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/io/BoundInputStream.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">BoundInputStream.java</a></td>
+  <td valign="top">org.kobjects.io</td>
+  <td valign="top">Input Stream wrapper that reads a fixed amount of bytes from another input stream. Useful e.g. to avoid reading beyond the HTTP content length.</td>
+ <td valign="top">&nbsp;</td>
+ </tr>
+
+<tr>
+  <td valign="top"><a target="_top" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/crypt/Crypt.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">Crypt.java</a></td>
+  <td valign="top">org.kobjects.crypt</td>
+  <td valign="top">Unix-Style password encryption</td>
+  <td valign="top">&nbsp;</td>
+ </tr>
+
+
+ <tr>
+  <td valign="top"><a target="_top" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/isodate/IsoDate.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">IsoDate.java</a></td>
+  <td valign="top">org.kobjects.isodate</td>
+  <td valign="top">Convert ISO compliant date strings to Date objects and back</td>
+  <td valign="top">&nbsp;</td>
+ </tr>
+ 
+<!--
+ <tr>
+  <td><a target="_top" href="current/serialization-src.zip">serialization-src.zip</a></td>
+  <td valign="top">org.kobjects.serialization</td>
+  <td valign="top">Common base interface for <a target="_top" href="http://ksoap.enhydra.org">kSOAP</a> and the RMS-based object store (see below)</td>
+ <td valign="top"><a target="_top" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/serialization/">CVS&nbsp;log</a></td>
+ </tr>
+-->
+
+ <tr>
+  <td valign="top"><a target="_top" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/src/org/kobjects/xml/XmlReader.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">XmlReader</a></td>
+  <td valign="top">org.kobjects.xml</td>
+  <td valign="top">A simple XML pull parser, similar to kXML, but
+    not supporting namespaces or legacy events. <em>The JAR file size is less than 5 kB</em>. If you need
+    support for namespaces, or access to XML comments or
+    processing instructions, please use kXML2 instead. </td>
+  <td valign="top"><a target="_top" href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/kobjects/kobjects/samples/org/kobjects/samples/xml/EventList.java?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">EventList</a></td>
+ </tr>
+
+</table>
+
+
+<!--#include virtual="../epilog.shtml" -->
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+# upload with the following command 
+# (from this directory -- and fix the username!):
+
+scp -r * haustein@shell.sourceforge.net:/home/groups/k/ko/kobjects/htdocs/

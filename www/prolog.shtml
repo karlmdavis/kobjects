@@ -1,0 +1,71 @@
+<table>
+ <tr>
+  <td valign="top">
+   <table width="100%" cellpadding="10px">
+    <tr>
+     <td bgcolor="#8888ff"><b><i><font color="#cccccc">k</font></i><font color="#ffffff">Objects</font></b></td>
+    </tr>
+
+    <tr>
+     <td bgcolor="#ccccff">
+       <a href="/index.shtml">About</a>
+     </td>
+    </tr>
+    
+    <tr>
+     <td bgcolor="#ccccff">Projects</a>
+      <small>
+       <ul>
+        <li><a href="/me4se/">ME4SE</a></li>
+        <li><a href="/utils/">Utilities</a></li>
+        <li><a href="/ksoap2/">kSOAP</a></li>
+       </ul>
+      </small>
+     </td>
+    </tr>
+
+    <tr>
+     <td bgcolor="#ccccff">Related</a>
+      <small>
+       <ul>
+        <li><a href="http://kxml.org">kXML</a></li>
+       </ul>
+      </small>
+     </td>
+    </tr>
+
+    <tr>
+     <td bgcolor="#ccccff"> 
+	  <a href="http://sourceforge.net/projects/kobjects/">Development</a>
+      <small>
+	   <ul>
+	    <li><a href="http://sourceforge.net/mail/?group_id=30528">Mailing Lists</a></li>
+	    <li><a href="http://cvs.sourceforge.net/viewcvs.py/kobjects/">Browse Source</a></li>
+	    <li><a href="http://sourceforge.net/cvs/?group_id=30528">CVS Access</a></li>
+	    <li><a href="http://sourceforge.net/tracker/?group_id=30528&amp;atid=400118">Bugs</a></li>
+	    </ul>
+	  </small> 
+	 </td>
+	</tr>
+
+<!--    <tr>
+     <td bgcolor="#ccccff">Links
+      <small>
+       <ul>
+	    <li><a href="http://kobjects.org">kObjects</a></li>
+	    <li><a href="http://xmlpull.org">XmlPull</a></li>
+	    <li><a href="http://stax-utils.dev.java.net">StAX</a></li>
+	   </ul>
+      </small>
+     </td>
+    </tr>-->
+
+	<tr>
+	 <td bgcolor="#ccccff">
+	  <a href="http://sourceforge.net/projects/kobjects/"><img src="http://sourceforge.net/sflogo.php?group_id=9157&amp;type=2" alt="SF Logo" /></a>
+     </td>
+    </tr>
+   </table>
+  </td>
+  <td>&nbsp;&nbsp;&nbsp;</td>
+  <td valign="top">
