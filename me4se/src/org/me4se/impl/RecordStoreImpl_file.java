@@ -48,12 +48,23 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 
     int version = 0;
     long lastModified = 0L;
-
+	
 
     //Vector listeners;
     Vector records;
     File file;
-    public static File rmsDir = new File ("."); // null for applet
+    public static File rmsDir = null;
+
+	public void RecordStoreImpl_file()
+    {
+    try
+    {
+	    rmsDir = new File ("."); // null for applet
+	}
+	catch( Exception e )
+	{
+	}
+    }
 
     boolean isApplet () {
 	return rmsDir == null;
