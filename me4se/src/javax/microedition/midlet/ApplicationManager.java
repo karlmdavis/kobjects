@@ -5,6 +5,8 @@ import java.util.Vector;
 public class ApplicationManager {
 
     public static ApplicationManager manager;
+    
+    public JAD_Parser jad;
 
     public MIDlet active;
     public java.awt.Container displayContainer; 
@@ -39,10 +41,13 @@ public class ApplicationManager {
     }
 
 
-    public void init (String name) {
+    public void init (String[] args) {
+        jad = new JAD_Parser(args[0]);
+        Object[] midletlist = jad.getMIDletList();
+        String[] firstmidlet = (String[]) midletlist[0];
 	try {
 	    //    System.out.println ("name:" +name);
-	    active = ((MIDlet) Class.forName (name).newInstance ()); 
+	    active = ((MIDlet) Class.forName (firstmidlet[2]).newInstance ()); 
 	    //  System.out.println ("midlez:" +midlet);
 	}
 	catch (Exception e) {
