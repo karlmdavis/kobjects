@@ -36,7 +36,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	
 	if (refCount++ > 0) return;
 	
-	this.recordStoreName = recordStoreName + ".rms";
+	this.recordStoreName = recordStoreName;
 
 	if (isApplet ()) { 
 	    if (!create) {
@@ -47,7 +47,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 	    records = new Vector ();
 	}
 	else {
-	    file = new File (rmsDir, this.recordStoreName);
+	    file = new File (rmsDir, this.recordStoreName + ".rms");
 	    
 	    try {
 		DataInputStream dis = new DataInputStream 
@@ -90,7 +90,7 @@ public class RecordStoreImpl_file extends RecordStoreImpl implements FilenameFil
 
 	checkOpen ();
 
-	byte[] newData = new byte[numBytes];
+	byte[] newData = new byte [numBytes];
 	System.arraycopy (data, offset, newData, 0, numBytes);
 	records.addElement (newData);
 
