@@ -2,13 +2,13 @@ package org.kobjects.objectstore;
 
 
 import java.util.*;
-import java.io.*; 
+import java.io.*;
 import javax.microedition.rms.*;
 
 import org.kobjects.serialization.*;
 
 public class ObjectStore {
-    
+
     static final byte NULL = (byte) 0;
     static final byte IDXREF = (byte) 1;
     static final byte INT = (byte) 2;
@@ -18,19 +18,17 @@ public class ObjectStore {
 
     protected RecordStore store;
 
-    
+
     public ObjectStore (String rmsName) throws RecordStoreException {
-	
 	store = RecordStore.openRecordStore (rmsName, true);
-	
     }
-    
-    
+
+
     protected String [] getName (Object obj) {
 	return new String [] {obj.getClass ().getName ()};
     }
-    
-    
+
+
     protected Object newInstance (String name, String namespace, String id) {
 	try {
 	    return Class.forName (name).newInstance ();
@@ -39,44 +37,44 @@ public class ObjectStore {
 	    throw new RuntimeException ("cannot instantiate "+name+":"+e);
 	}
     }
-    
+
     /** returns the underlying record store. use with care!  */
 
     public RecordStore getRecordStore () {
 	return store;
     }
-    
+
     public void write (Object obj) throws RecordStoreException {
-	
+
 	// clear all records?
-	
+
 	Vector multiRef = new Vector ();
 	multiRef.addElement (obj);
 	int idx = 0;
 	while (idx < multiRef.size ()) {
 	    write (idx + 1, multiRef.elementAt (idx), multiRef);
-	    idx++;
+            idx++;
 	}
     }
-    
-    
+
+
 
     /** write the record at the given index position with the given
 	object */
-    
-    public void write (int index, Object obj, 
+
+    public void write (int index, Object obj,
 		       Vector multiRef) throws RecordStoreException {
-	
+
 	try {
-	    
+
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream ();
 	    DataOutputStream dos = new DataOutputStream (bos);
-	    
+
 	    String [] name = getName (obj);
 	    dos.writeByte ((byte) name.length);
 	    for (int i = 0; i < name.length; i++)
 		dos.writeUTF (name [i]);
-	
+
 	    if (obj instanceof KvmSerializable) {
 		KvmSerializable sobj = (KvmSerializable) obj;
 		int cnt = sobj.getPropertyCount ();
@@ -92,31 +90,34 @@ public class ObjectStore {
 		Vector v = (Vector) obj;
 		int cnt = v.size ();
 		dos.writeInt (cnt);
-		for (int i = 0; i < cnt; i++)
-		    writeProperty (dos, v.elementAt (i), multiRef);
+		for (int i = 0; i < cnt; i++) {
+//                    System.out.println( i );
+                    writeProperty (dos, v.elementAt (i), multiRef);
+                }
 	    }
 	    else
-		throw new RuntimeException 
+		throw new RuntimeException
 		    ("Unsupported type: "+obj+ " / "+obj.getClass ());
-	    
+
 	    byte [] data = bos.toByteArray ();
-	    
-	    if (index == store.getNextRecordID ()) 
+
+	    if (index == store.getNextRecordID ())
 		store.addRecord (data, 0, data.length);
 	    else
 		store.setRecord (index, data, 0, data.length);
-	    
+
 	    //	    index.put (obj, new Integer (idx));
 	}
 	catch (IOException e) {
 	    throw new RuntimeException ("impossible error: "+e);
 	}
     }
-    
-    
-    public void writeProperty (DataOutputStream dos, 
-			       Object obj, Vector multiRef) throws RecordStoreException, IOException {
-	
+
+
+    public void writeProperty (DataOutputStream dos,
+			       Object obj, Vector multiRef) throws RecordStoreException, IOException
+{
+//        System.out.println( "writing prop:" + obj);
 	if (obj == null) {
 	    dos.writeByte (ObjectStore.NULL);
 	}
@@ -133,12 +134,12 @@ public class ObjectStore {
 	    Vector v = (Vector) obj;
 	    int len = v.size ();
 	    dos.writeInt (len);
-	    for (int i = 0; i < len; i++) 
+	    for (int i = 0; i < len; i++)
 		writeProperty (dos, v.elementAt (i), multiRef);
 	}
-	else { 
+	else {
 	    String [] name = getName (obj);
-	    
+
 	    if (name.length == 3) {
 		dos.writeByte (ObjectStore.IDREF);
 		dos.writeUTF (name [2]);
@@ -149,45 +150,45 @@ public class ObjectStore {
 		    idx = multiRef.size ();
 		    multiRef.addElement (obj);
 		}
-		
+
 		dos.writeByte (ObjectStore.IDXREF);
 		dos.writeInt (idx+1); // record id = vector index+1
-		
+
 		// if an id is available, write the idref,
 		// otherwise generate an id and write the idref
 	    }
 	}
     }
 
-    
+
 
     /** if the object is null, a new one will be created,
 	otherwise, the given object is filled */
-    
-    public Object read (int index, 
+
+    public Object read (int index,
 			Object obj) throws RecordStoreException {
-	
+
 	try {
-	    DataInputStream dis = new DataInputStream 
+	    DataInputStream dis = new DataInputStream
 		(new ByteArrayInputStream (store.getRecord (index)));
-	    
+
 	    String [] name =  new String [3];
 	    int ncnt = dis.readByte ();
-	    for (int i = 0; i < ncnt; i++) 
+	    for (int i = 0; i < ncnt; i++)
 		name [i] = dis.readUTF ();
 
-	    if (obj == null) 
+	    if (obj == null)
 		obj = newInstance (name[0], name[1], name [2]);
-	    
-	    
+
+
 	    if (obj instanceof KvmSerializable) {
-		KvmSerializable kobj = (KvmSerializable) obj; 
+		KvmSerializable kobj = (KvmSerializable) obj;
 		int cnt = kobj.getPropertyCount ();
 		PropertyInfo info = new PropertyInfo ();
 		for (int i = 0; i < cnt; i++) {
 		    info.nonpermanent = false;
 		    kobj.getPropertyInfo (i, info);
-		    if (!info.nonpermanent) 
+		    if (!info.nonpermanent)
 			kobj.setProperty (i, readProperty (dis));
 		}
 	    }
@@ -195,22 +196,23 @@ public class ObjectStore {
 		int cnt = dis.readInt ();
 		Vector v = (Vector) obj;
 		v.setSize (cnt);
-		for (int i = 0; i < cnt; i++) 
+		for (int i = 0; i < cnt; i++)
 		    v.setElementAt (readProperty (dis), i);
 	    }
 	    else
 		throw new RuntimeException ("Illegal type!");
-	    
+
 	    return obj;
 	}
 	catch (IOException e) {
 	    throw new RuntimeException ("Impossible: "+e);
 	}
-    }	
-    
-    Object readProperty (DataInputStream dis) throws IOException, RecordStoreException {
+    }
+
+    Object readProperty (DataInputStream dis) throws IOException,
+RecordStoreException {
 	switch (dis.readByte ()) {
-	    
+
 	case STRING: return dis.readUTF ();
 	case NULL: return null;
 	case IDXREF: return read (dis.readInt (), null);
@@ -235,4 +237,16 @@ public class ObjectStore {
     public void close () throws RecordStoreException {
 	store.closeRecordStore ();
     }
+
+    public static void delete (String rmsName) throws RecordStoreException {
+        RecordStore.deleteRecordStore(rmsName);
+    }
+
+    public boolean isNew( )  {
+        boolean isNew = false;
+        try { isNew = store.getNumRecords () == 0; }
+        catch (RecordStoreNotOpenException e ) { }
+        return isNew;
+    }
 }
+
