@@ -40,7 +40,7 @@ public final class Util {
 		if (ci > 2 && ci < 6) 
 			return local;			
 		
-		if (base == null) base = "file:///./";
+		if (base == null) base = "file:///";
 		else {
 			if (base.indexOf(':') == -1)
 				base = "file:///" + base;
