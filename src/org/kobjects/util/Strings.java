@@ -35,8 +35,19 @@ public class Strings {
 		
 		for(int i=0; i < src.length(); i++) {
 			char c = src.charAt(i);
-			switch(c){
-				default: buf.append(c);
+			if (c <= ' ') buf.append(' ');
+			else if (c < 127) buf.append(c);
+			else {
+				switch(c){
+					case '\u00c4': buf.append("Ae"); break;
+					case '\u00e4': buf.append("ae"); break;
+					case '\u00d6': buf.append("Oe"); break;
+					case '\u00f6': buf.append("oe"); break;
+					case '\u00dc': buf.append("Ue"); break;
+					case '\u00fc': buf.append("ue"); break;
+					case '\u00df': buf.append("ss"); break;
+					default: buf.append('?');
+				}
 			}
 		}	
 		
