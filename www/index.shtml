@@ -1,5 +1,8 @@
 <html>
-<head><title>kObjects.org</title></head>
+<head>
+ <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+ <title>kObjects.org</title>
+</head>
 <body bgcolor="#ffffff" >
 <!--#include virtual="prolog.shtml" -->
 
