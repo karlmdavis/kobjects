@@ -234,9 +234,23 @@ public abstract class RecordStore {
     public static String[] listRecordStores () {
         File directory = ApplicationManager.manager.getRmsDir ();
         String[] databases = null;
-        // We could add a file-extension to every saved RMS and filter then (look at private class below).
+        // SV: We could add a file-extension to every saved RMS and filter then 
+	// (look at private class below).
         // Otherwise this solution is not very intelligent because it lists every File in
         // the current Dirctory as RMS.
+
+
+	// SH: I have created a special dir for RMS, so a special extension should not
+	// be necessary. However, perhaps it would make sense to shift some of the 
+	// static functions to non-static functions in a "meta" RMS, in order to allow
+	// different "org.kobjects.me4se.impl.RecordStoreImpl_" classes for record
+	// stores in files and accessing servlets (mechanism similar to 
+	// Connection_http etc: RecordStoreImpl_file, RecordStoreImpl_http). 
+	//
+	// A command line/applet parameter specifying the RMS location/impl. would 
+	// probably also be a good idea....
+
+
         if (directory.isDirectory()) databases = directory.list();
         return databases;
     }
