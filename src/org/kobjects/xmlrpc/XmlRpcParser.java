@@ -77,7 +77,7 @@ public class XmlRpcParser {
 	// parser.require(XmlReader.START_TAG, "value");
 
 	event = parser.next();
-        if (event == parser.TEXT) {
+        if (event == XmlReader.TEXT) {
             result = parser.getText();
             event  = parser.next();                
         } 
@@ -185,10 +185,10 @@ public class XmlRpcParser {
     final private int nextTag() throws IOException {
         int type = parser.getType();
         type = parser.next();
-        if (type == parser.TEXT && parser.isWhitespace()) {
+        if (type == XmlReader.TEXT && parser.isWhitespace()) {
             type = parser.next();
         }
-        if (type != parser.END_TAG && type != parser.START_TAG) {
+        if (type != XmlReader.END_TAG && type != XmlReader.START_TAG) {
             throw new IOException ("unexpected type: " + type);
         }
         return type;
@@ -197,7 +197,7 @@ public class XmlRpcParser {
     final private String nextText() throws IOException {
         int type = parser.getType();
 
-        if (type != parser.START_TAG) {
+        if (type != XmlReader.START_TAG) {
             throw new IOException ("precondition: START_TAG");
         }
 
@@ -205,14 +205,14 @@ public class XmlRpcParser {
 
         String result;
 
-        if (type == parser.TEXT) {
+        if (type == XmlReader.TEXT) {
             result = parser.getText();
             type = parser.next();
         } else {
             result = "";
         }
 
-        if (type != parser.END_TAG) {
+        if (type != XmlReader.END_TAG) {
             throw new IOException ("END_TAG expected");
         }
 

@@ -93,17 +93,20 @@ public class Csv {
 				StringBuffer buf = new StringBuffer();
 				while (true) {
 					char c = line.charAt(p0++);
-					if (c == '"') {
-						if (p0 == len || line.charAt(p0) != '"')
-							break;
-						p0++;
-					}
-                    else if (c == '^' && p0 < len) {
+                    if (c == '^' && p0 < len) {
                         char c2 = line.charAt (p0++);
                         buf.append (c2 == '^' ? c2 : (char) (((int) c2)-64));
                     }
-                    else
-					   buf.append(c);
+					else {
+                        if (c == '"') {
+    						if (p0 == len || line.charAt(p0) != '"')
+	       						break;
+
+			     			p0++;
+				    	}
+
+                        buf.append(c);
+                    }
 				}
 
 				tmp.addElement(buf.toString());
