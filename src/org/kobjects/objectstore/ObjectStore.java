@@ -14,6 +14,7 @@ public class ObjectStore {
     static final byte INT = (byte) 2;
     static final byte STRING = (byte) 3;
     static final byte IDREF = (byte) 4;
+    static final byte VECTOR = (byte) 5;
 
     protected RecordStore store;
 
@@ -121,6 +122,14 @@ public class ObjectStore {
 	    dos.writeByte (ObjectStore.STRING);
 	    dos.writeUTF ((String) obj);
         }
+	else if (obj instanceof Vector) {
+	    dos.writeByte (ObjectStore.VECTOR);
+	    Vector v = (Vector) obj;
+	    int len = v.size ();
+	    dos.writeInt (len);
+	    for (int i = 0; i < len; i++) 
+		writeProperty (dos, v.elementAt (i), multiRef);
+	}
 	else { 
 	    String [] name = getName (obj);
 	    
@@ -194,6 +203,19 @@ public class ObjectStore {
 	    
 	case STRING: return dis.readUTF ();
 	case NULL: return null;
+	case IDXREF: return read (dis.readInt (), null);
+	case IDREF: {
+	    String id = dis.readUTF ();
+	    return newInstance (null, null, id);
+	}
+	case VECTOR:
+	    {
+		Vector v = new Vector ();
+		int len = dis.readInt ();
+		for (int i = 0; i< len; i++)
+		    v.addElement (readProperty (dis));
+		return v;
+	    }
 	default:
 	    throw new RuntimeException ("unknown type code: "+dis);
 	}
