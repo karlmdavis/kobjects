@@ -135,17 +135,37 @@ public final class Util {
 
 
 /*
-	public static String readLine(InputStream is, byte[] buf){
-		int start = ((int) buf[0]) & 255;
-		int end = ((int) buf[0]) & 255;
+	public static String readLine(InputStream is, byte[] buf) throws IOException{
+		int pos = ((int) buf[0]) & 255;
+		int end = ((int) buf[1]) & 255;
 
-		int pos = start;
+		if(pos > end) return null;
+
+		StringBuffer result = new StringBuffer();
 
 		while(true){
-
-
-			StringBuffer result =	
+			if(pos == end){
+				end = is.read(buf, 2, Math.min(buf.length-2, 250));
+				if(end == -1){
+					pos = 1;
+					end = 0;
+					break;
+				}
+				pos = 0;
+			}
+	
+			byte c =buf[(pos++)+2];
+	
+			if(c == 10)
+				break;
+			if(c != 13)
+				result.append((char) c);
 		}
+
+		buf[0] = (byte) pos;
+		buf[1] = (byte) end;
+
+		return result.toString();
 	}
 */
 }
