@@ -33,7 +33,7 @@ public abstract class Screen extends Displayable {
 
     Screen (String title) {
 	setTitle (title);
-	topPanel.add ("North", topPanel);
+	panel.add ("North", topPanel);
     }
 
     
