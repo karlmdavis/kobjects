@@ -32,6 +32,7 @@ public class PropertyInfo extends ElementType {
 
     public String name;
 
+
     /** the equivalent to transient, but named differently because
         transient is a reserved keyword */
 
