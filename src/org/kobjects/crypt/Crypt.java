@@ -565,7 +565,8 @@ public class Crypt
 	an encripted password from the given password */
 
     public static final String generate (String original) {
-	String salt = ""+Integer.toHexString ((int) (Math.random () * 0x0ffff));
+	String salt = Integer.toHexString 
+            (new java.util.Random ().nextInt () & 0x0ffff);
 	
 	return crypt (salt, original);
     }
