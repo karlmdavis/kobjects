@@ -16,9 +16,17 @@ public class ParsingException extends RuntimeException {
 
 		AbstractTokenizer tokenizer;
         
-		public ParsingException(AbstractTokenizer tokenizer, String text) {
-			super (text+"\r\n"+tokenizer.toString());
+        public ParsingException(AbstractTokenizer tokenizer, String text, Exception e){
+			super (text+"\r\n"+tokenizer.toString(), e);
 			this.tokenizer = tokenizer;
+        }
+        
+		public ParsingException(AbstractTokenizer tokenizer, Exception e) {
+				this(tokenizer, e.getClass() == RuntimeException.class ? e.getMessage() : e.toString(), e);
+			}
+        
+		public ParsingException(AbstractTokenizer tokenizer, String text) {
+			this(tokenizer, text, null);
 		}
     
     
