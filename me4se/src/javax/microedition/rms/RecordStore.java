@@ -41,6 +41,7 @@ import javax.microedition.midlet.ApplicationManager;
 import java.util.*;
 import java.io.*;
 import org.kobjects.me4se.impl.*;
+import org.kobjects.me4se.*;
 
 
 /** <font color="#ff0000">Incomplete Experimental Implementation</font>  */ 
@@ -232,6 +233,7 @@ public abstract class RecordStore {
      * @return an array of the names of record stores.
      */
     public static String[] listRecordStores () {
+        if (MIDletRunner.isApplet) return new String[0];
         File directory = ApplicationManager.manager.getRmsDir ();
         String[] databases = null;
         // SV: We could add a file-extension to every saved RMS and filter then 
