@@ -47,7 +47,7 @@ public class ChoiceGroup extends Item implements Choice {
 			String [] stringItems, Image [] imageItems) {
 	this (label, type);
 	for (int i = 0; i < stringItems.length; i++)  
-	    append (stringItems [i], imageItems [i]);
+	    append (stringItems [i], null); //imageItems [i]);
     }
 
     /** Internal method */
@@ -64,7 +64,7 @@ public class ChoiceGroup extends Item implements Choice {
     
     public int append (String stringItem, Image imageItem) {
 	insert (images.size ()-1, stringItem, imageItem);
-	return images.size () - 1;
+        return images.size () - 1;
     }
     
 
@@ -108,7 +108,9 @@ public class ChoiceGroup extends Item implements Choice {
 
     public void insert (int index, String stringItem, Image imageItem) {
 	panel.add (new java.awt.Checkbox (stringItem, group, false), index);
-	images.insertElementAt (imageItem, index);
+        if (!(imageItem == null)) {
+            images.insertElementAt (imageItem, index);
+        }
     }
     
 
