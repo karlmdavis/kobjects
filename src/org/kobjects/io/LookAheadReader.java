@@ -135,6 +135,7 @@ public class LookAheadReader extends Reader {
      * @return Object
      */
     public String readLine() throws IOException{
+        if (peek(0) == -1) return null;
         String s = readTo("\r\n");
         if (read() == '\r' && peek(0) == '\n')
             read();
