@@ -30,7 +30,7 @@ public class ConnectionImpl_http extends ConnectionImpl
 
     URL url;
     HttpURLConnection con;
-    
+
 
     public void open (String url, int mode, 
 		      boolean timeouts) throws IOException {
@@ -38,8 +38,10 @@ public class ConnectionImpl_http extends ConnectionImpl
 	this.url = new URL (url);
 	con = (HttpURLConnection) this.url.openConnection ();
 
+	con.setUseCaches (false);
 	con.setDoOutput ((mode & Connector.WRITE) != 0);
 	con.setDoInput ((mode & Connector.READ) != 0);
+	con.setRequestProperty ("connection", "close");
     }
 
 
@@ -150,7 +152,16 @@ public class ConnectionImpl_http extends ConnectionImpl
 
     
     public InputStream openInputStream () throws IOException {
-	return con.getInputStream ();
+	//	con.getOutputStream ().flush ();
+	
+	try {
+	    return con.getInputStream ();
+	}
+	catch (IOException e) {
+	    InputStream is = con.getErrorStream ();
+	    if (is == null) throw e;
+	    return is;
+	}
     }
 
     public DataInputStream openDataInputStream () throws IOException {

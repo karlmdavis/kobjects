@@ -125,27 +125,28 @@ public class IsoDate {
 	else 
 	    c.set (Calendar.MILLISECOND, 0);
 	
-	if (pos >= text.length ()) 
-	    return c.getTime ();
-	
-	if (text.charAt (pos) == '+' || text.charAt (pos) == '-') {
+	if (pos < text.length ()) {
 	    
-	    c.setTimeZone (TimeZone.getTimeZone ("GMT"));
-	    return new Date 
-		(c.getTime ().getTime () 
-		 + (Integer.parseInt 
+	    if (text.charAt (pos) == '+' || text.charAt (pos) == '-') 
+		
+		c.setTimeZone (TimeZone.getTimeZone 
+			       ("GMT"+text.substring (pos)));
+
+	    /*	    return new Date 
+		    (c.getTime ().getTime () 
+		    + (Integer.parseInt 
 		    (text.substring (pos+1, pos+3)) * 60 
 		    + Integer.parseInt 
 		    (text.substring (pos+4, pos+6)))
-		 * (text.charAt (pos) == '-' ? -60000 : 60000));
+		    * (text.charAt (pos) == '-' ? -60000 : 60000)); */
+
+	    else if (text.charAt (pos) == 'Z') 
+		c.setTimeZone (TimeZone.getTimeZone ("GMT"));
+	    else
+		throw new RuntimeException ("illegal time format!");
 	}
-	
-	if (text.charAt (pos) == 'Z') {
-	    c.setTimeZone (TimeZone.getTimeZone ("GMT"));
-	    return c.getTime ();
-	}
-	
-	throw new RuntimeException ("illegal time format!");
+   
+	return c.getTime ();
     }
 }
 
