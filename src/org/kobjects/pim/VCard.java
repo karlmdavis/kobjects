@@ -11,12 +11,17 @@ package org.kobjects.pim;
 public class VCard extends PimItem {
 
 	
-	public int getType(String name) {
-		if (name.equals("n") || name.equals("adr")) return TYPE_STRING_ARRAY;
-		return TYPE_STRING; 
-	}	
+
 	
 	public String getType() {
 		return "vcard";
+	}
+	/**
+	 * @see org.kobjects.pim.PimItem#getArraySize(java.lang.String)
+	 */
+	public int getArraySize(String name) {
+		if (name.equals("n")) return 5;
+		else if (name.equals("adr")) return 6;
+		return -1;
 	}
 }

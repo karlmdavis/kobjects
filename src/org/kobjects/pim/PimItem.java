@@ -66,9 +66,11 @@ public abstract class PimItem {
     }
 
     public abstract String getType();
+    
+    public abstract int getArraySize(String name);
 
 	public int getType(String name){
-		return TYPE_STRING;
+		return getArraySize(name) == -1 ? TYPE_STRING : TYPE_STRING_ARRAY;
 	}
 
 	public String toString() {
