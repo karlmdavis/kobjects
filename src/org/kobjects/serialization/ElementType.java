@@ -22,10 +22,14 @@
 package org.kobjects.serialization;
 
 
+
+
 public class ElementType {
 
-    public static final ElementType objectType = 
-	new ElementType (Object.class, false, null);
+    public static final Class OBJECT_CLASS = new Object ().getClass ();
+
+    public static final ElementType OBJECT_TYPE = 
+	new ElementType (OBJECT_CLASS, false, null);
 
 
     /** Type of the property/elements. Should usually be

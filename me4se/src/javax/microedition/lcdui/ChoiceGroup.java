@@ -30,7 +30,7 @@ import java.util.Vector;
 public class ChoiceGroup extends Item implements Choice {
 
 
-    java.awt.Panel panel = new java.awt.Panel (new java.awt.GridLayout (1,0));
+    java.awt.Panel panel = new java.awt.Panel (new java.awt.GridLayout (0, 1));
     int type;
     java.awt.CheckboxGroup group;
     Vector images = new Vector ();
