@@ -1,8 +1,8 @@
 package org.kobjects.crypt;
 
 /*
- * I found this on the internet, and I hope it's free. Unfortunately,
- * I did not find out the java author. The original header is as follows:
+ * I found this on the internet. Unfortunately, I did not find out the java
+ * author. The original header is as follows:
  *
  * jcrypt.java
  *
