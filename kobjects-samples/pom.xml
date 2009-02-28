@@ -17,6 +17,10 @@
 	</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.sourceforge.kobjects</groupId>
+			<artifactId>kobjects</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
