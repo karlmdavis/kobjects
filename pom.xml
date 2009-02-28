@@ -30,7 +30,7 @@
 	</issueManagement>
 
 	<modules>
-		<module>kobjects</module>
+		<module>kobjects-j2me</module>
 		<module>kobjects-j2se</module>
 		<module>kobjects-servlet</module>
 		<module>kobjects-misc</module>
@@ -99,14 +99,14 @@
 		<dependencies>
 			<dependency>
 				<groupId>net.sourceforge.kobjects</groupId>
-				<artifactId>kobjects</artifactId>
+				<artifactId>kobjects-j2me</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>net.sourceforge.kobjects</groupId>
-				<artifactId>kobjects</artifactId>
+				<artifactId>kobjects-j2me</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>

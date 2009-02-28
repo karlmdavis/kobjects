@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.sourceforge.kobjects</groupId>
-			<artifactId>kobjects</artifactId>
+			<artifactId>kobjects-j2me</artifactId>
 		</dependency>
 	</dependencies>
 
