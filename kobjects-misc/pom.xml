@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>net.sourceforge.kobjects</groupId>
+		<artifactId>kobjects-parent</artifactId>
+		<version>0.0-SNAPSHOT-20040926</version>
+	</parent>
+
+	<artifactId>kobjects-misc</artifactId>
+	<name>kobjects-misc</name>
+	<packaging>jar</packaging>
+	<description><![CDATA[
+		kObjects is a collection of small ("kilobyte") projects. Most of the projects are suitable or designed 
+		for the Java 2 Micro Edition (J2ME/MIDP).
+		]]>
+	</description>
+
+	<dependencies>
+	</dependencies>
+
+</project>
