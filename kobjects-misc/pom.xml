@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.sourceforge.kobjects</groupId>
 		<artifactId>kobjects-parent</artifactId>
-		<version>0.0-SNAPSHOT-20040926</version>
+		<version>0.0-SNAPSHOT-20040926-2</version>
 	</parent>
 
 	<artifactId>kobjects-misc</artifactId>
